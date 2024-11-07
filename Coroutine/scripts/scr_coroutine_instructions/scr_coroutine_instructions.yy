@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_coroutine_instructions",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_coroutine_instructions",
+  "parent":{
+    "name":"Runtime",
+    "path":"folders/Coroutine/Runtime.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

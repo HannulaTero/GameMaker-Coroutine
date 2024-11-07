@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_coroutine_foreach_iterator",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_coroutine_foreach_iterator",
+  "parent":{
+    "name":"Compiling",
+    "path":"folders/Coroutine/Compiling.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

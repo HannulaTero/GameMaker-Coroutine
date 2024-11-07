@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_coroutine_compiler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_coroutine_compiler",
+  "parent":{
+    "name":"Compiling",
+    "path":"folders/Coroutine/Compiling.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_coroutine_keywords",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_coroutine_keywords",
+  "parent":{
+    "name":"Settings",
+    "path":"folders/Coroutine/Settings.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

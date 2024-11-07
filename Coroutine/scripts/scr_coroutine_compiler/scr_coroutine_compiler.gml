@@ -1,0 +1,450 @@
+
+
+
+/// @func CoroutineCompiler();
+/// @desc Generates linear instructions from given nodes (abstract syntax tree).
+function CoroutineCompiler() constructor
+{
+  // Results.
+  self.code = [];
+  self.labels = {};
+  self.registerOffset = -1;
+  
+  
+  /// @func Dispatch(_root);
+  /// @desc 
+  /// @param {Struct} _root
+  static Dispatch = function(_root)
+  {
+    self.code = _root.code;
+    self.labels = _root.labels;
+    self.registerOffset = -1;
+    Compile(_root.nodes);
+    return new CoroutinePrototype(_root);
+  };
+  
+  
+  /// @func Compile(_node);
+  /// @desc 
+  /// @param {Array} _node
+  static Compile = function(_node)
+  {
+    (compilers[$ _node.name] ?? compilers[$ "<UNKNOWN>"])(_node);
+  };
+  
+  
+  /// @func Instruction(_opcode);
+  /// @desc 
+  /// @param {String} _opcode
+  static Instruction = function(_opcode)
+  {
+    // These "should" always exists, so this actually doesn't need error-check.
+    return coroutine_instruction(_opcode) ?? Error($"Instruction not implemented: '{_opcode}'");
+  };
+  
+  
+  /// @func RegisterPush();
+  /// @desc 
+  /// @returns {Real}
+  static RegisterPush = function()
+  {
+    return ++registerOffset;
+  };
+  
+  
+  /// @func RegisterPop();
+  /// @desc 
+  static RegisterPop = function()
+  {
+    --registerOffset;
+  };
+  
+  
+  /// @func ScopePush();
+  /// @desc 
+  static ScopePush = function()
+  {
+    //array_push(code, "SCP_PSH");
+  };
+  
+  
+  /// @func ScopePop();
+  /// @desc 
+  static ScopePop = function()
+  {
+    //array_push(code, "SCP_POP"); 
+  };
+  
+  
+  /// @func EmitCode();
+  /// @desc 
+  static EmitCode = function()
+  {
+    var _index = array_length(code);
+    for(var i = argument_count-1; i >= 1; i--)
+    {
+      code[_index + i] = argument[i];
+    }
+    code[_index] = Instruction(argument[0]);
+  };
+  
+  
+  /// @func EmitCall(_callback);
+  /// @desc 
+  /// @param {Function} _callback 
+  static EmitCall = function(_callback)
+  {
+    array_push(code, Instruction("CALL"), _callback); 
+  };
+  
+  
+  /// @func EmitYield(_callback);
+  /// @desc 
+  /// @param {Function} _callback 
+  static EmitYield = function(_callback)
+  {
+    array_push(code, Instruction("YIELD"), _callback); 
+  };
+  
+  
+  /// @func EmitJump(_loopBegin);
+  /// @desc 
+  static EmitJump = function(_loopBegin=-1)
+  {
+    array_push(code, Instruction("JUMP"), _loopBegin);
+    return array_length(code) - 1;
+  };
+  
+  
+  /// @func EmitJumpCond(_op, _register);
+  /// @desc 
+  /// @param {String} _op
+  /// @param {Real} _register
+  static EmitJumpCond = function(_op, _register)
+  {
+    array_push(code, Instruction(_op), _register, -1);
+    return array_length(code) - 1;
+  };
+  
+  
+  /// @func EmitJumpCondCall(_callback);
+  /// @desc 
+  /// @param {Function} _callback 
+  static EmitJumpCondCall = function(_callback)
+  {
+    array_push(code, Instruction("JUMP_COND_CALL"), _callback, -1);
+    return array_length(code) - 1;
+  };
+  
+  
+  /// @func EmitJumpCondReg(_register);
+  /// @desc 
+  /// @param {Real} _register 
+  static EmitJumpCondReg = function(_register)
+  {
+    array_push(code, Instruction("JUMP_COND_REG"), _register, -1);
+    return array_length(code) - 1;
+  };
+  
+  
+  /// @func PatchJump(_jump);
+  /// @desc 
+  /// @param {Real} _jump 
+  static PatchJump = function(_jump)
+  {
+    code[_jump] = array_length(code);
+  };
+  
+  
+  /// @func PatchJumps(_jumps);
+  /// @desc 
+  /// @param {Array<Real>} _jumps
+  static PatchJumps = function(_jumps)
+  {
+    var _position = array_length(code);
+    var _count = array_length(_jumps);
+    for(var i = 0; i < _count; i++)
+    {
+      code[_jumps[i]] = _position;
+    }
+  };
+  
+  
+  /// @func JumpTarget();
+  /// @desc 
+  static JumpTarget = function()
+  {
+    return array_length(code);
+  };
+  
+  
+  /// @func Error(_message);
+  /// @desc 
+  /// @param {String} _message
+  static Error = function(_message)
+  {
+    throw(_message);
+    return false;
+  };
+  
+  
+  // Lookup-table for compiling different node-types.
+  // Of course a switch-statement could be used instead.
+  static compilers = coroutine_mapping([ 
+  
+    // General error message.
+    // At the time of writing, this is unused. But might be used later.
+    ["<ERROR>"], 
+    function(_node)
+    {
+      Error($"Error with node-type '{_node}'");
+    },
+    
+    
+    // All cases should be covered, and this shouldn't appear.
+    // Though if new cases are added and it is forgotten to add here, then this should fire up.
+    ["<UNKNOWN>"], 
+    function(_node)
+    {
+      Error($"Unknown node-type '{_node}'");
+    },
+    
+    
+    // This is begin marker. 
+    ["BEGIN"],
+    function(_node)
+    {
+      EmitCode("BEGIN");
+    },
+    
+    
+    // This is EOF marker for the nodes.
+    ["FINISH"],
+    function(_node)
+    {
+      EmitCode("FINISH");
+    },
+    
+    
+    // THEN holds list of statements.
+    // This could also be used to push and pop out variable scopes.
+    ["THEN"],
+    function(_node)
+    {
+      ScopePush();
+      var _nodes = _node.nodes;
+      var _count = array_length(_nodes);
+      for(var i = 0; i < _count; i++)
+      {
+        Compile(_nodes[i]);
+      }
+      ScopePop();
+    },
+    
+    
+    // Way to split execution to several functions, and therefore possible positions
+    // for coroutine to wait for the next frame, so it won't exceed frame-budget.
+    // This is also requires syntax-wise with macros. 
+    ["PASS"],
+    function(_node)
+    {
+      EmitCall(_node.call);
+    },
+    
+  
+    // if-elif-else statement.
+    // This can have a long chain of elif's.
+    // For macro-syntax it was easier to make it as a chain rather than nesting structure,
+    // as otherwise it would have required equal amount of closing END's or other way managing it.
+    // But making cleaner in macro makes parsing node bit harder.
+    ["IF"], 
+    function(_node)
+    {
+      // Handle then-branch.
+      var _jumpExit = EmitJumpCondCall(_node.cond);
+      Compile(_node.nodeThen);
+      
+      // Handle then-branch
+      if (_node.nodeElse != undefined)
+      {
+        var _jumpElse = EmitJump();
+        PatchJump(_jumpExit);
+        _jumpExit = _jumpElse;
+        Compile(_node.nodeElse);
+      }
+      
+      // Exiting the statement.
+      PatchJump(_jumpExit);
+    },
+  
+  
+    // for -statement. Undefined marks whether optional parts are used.
+    // These are 
+    ["FOR"], 
+    function(_node)
+    {      
+      // Compile initialization, loop starts after it.
+      EmitCall(_node.init);
+      var _loopBegin = JumpTarget();
+      
+      // Check whether loop condition is used.
+      var _jumpExit = (_node.cond != undefined)
+        ? EmitJumpCondCall(_node.cond)
+        : undefined;
+      
+      // Compile the loop body.
+      Compile(_node.body);
+      
+      // Check whether loop iteration is used.
+      if (_node.iter != undefined)
+      {
+        EmitCall(_node.iter);
+      }
+      
+      // Restart the loop.
+      EmitJump(_loopBegin);
+      
+      // Finalization. 
+      if (_jumpExit != undefined)
+      {
+        PatchJump(_jumpExit);
+      }
+    },
+  
+  
+    // while -statement.
+    ["WHILE"], 
+    function(_node)
+    {
+      var _loopBegin = JumpTarget();
+      var _jumpExit = EmitJumpCondCall(_node.cond);
+      Compile(_node.body);
+      EmitJump(_loopBegin);
+      PatchJump(_jumpExit);
+    },
+    
+    
+    // 
+    // 
+    ["REPEAT"], 
+    function(_node)
+    {
+      // Get iteration count, loop starts after it.
+      var _regCounter = RegisterPush();
+      EmitCode("REG_CALL", _regCounter, _node.call);
+      var _loopBegin = JumpTarget();
+      var _jumpExit = EmitJumpCondReg(_regCounter);
+      
+      // Repeat body.
+      Compile(_node.body);
+      EmitCode("REG_DECR", _regCounter);
+      EmitJump(_loopBegin);
+      
+      // Finalize.
+      PatchJump(_jumpExit);
+      RegisterPop();
+    },
+    
+    
+    // Foreach construct is used to iterate over iterables. 
+    // The macro returns callback to determine variable-names, which are for storing iterations key and value.
+    // It is a bit of an hack, but it is sought only once here during the parsing.
+    ["FOREACH"],
+    function(_node)
+    {      
+      // Initialize the foreach.
+      var _regIter = RegisterPush(); 
+      var _iterator = new CoroutineForeachIterator(); 
+      EmitCode("REG_LOAD", _regIter, _iterator);
+      EmitCode("FOREACH_INIT", _regIter, _node.item, _node.key, _node.val);
+      
+      // Condition.
+      var _loopBegin = JumpTarget();
+      var _jumpExit = EmitJumpCond("FOREACH_NEXT", _regIter);
+      
+      // Foreach loop body.
+      Compile(_node.body);
+      EmitJump(_loopBegin);
+      
+      // Exit the loop.
+      PatchJump(_jumpExit);
+      RegisterPop();
+    },
+  
+  
+    // 
+    // 
+    ["PAUSE"],
+    function(_node)
+    {
+      EmitCode("PAUSE", _node.call);
+    },
+    
+    
+    // 
+    // 
+    ["YIELD"],
+    function(_node)
+    {
+      EmitYield(_node.call);
+    },
+    
+  
+    // 
+    // 
+    ["DELAY"], 
+    function(_node)
+    {
+      var _regTargetTime = RegisterPush();
+      EmitCode("DELAY_INIT", _regTargetTime, _node.call, _node.type);
+      EmitCode("DELAY_WAIT", _regTargetTime);
+      RegisterPop();
+    },
+    
+    
+    // 
+    // 
+    ["ASYNC"], 
+    function(_node)
+    {
+      EmitCode("ASYNC", _node.type);
+      Compile(_node.body);
+    },
+    
+    
+    // 
+    // 
+    ["AWAIT"], 
+    function(_node)
+    {
+      EmitCode("AWAIT", _node.type, _node.call);
+    },
+    
+    
+    // 
+    // 
+    ["TIMEOUT"], 
+    function(_node)
+    {
+      EmitCode("TIMEOUT", _node.type, _node.call);
+    },
+  
+  
+    // 
+    // 
+    ["LABEL"],
+    function(_node)
+    {
+      labels[$ _node.label] = JumpTarget();
+    },
+  ]);
+}
+
+
+
+
+
+
+
+
+
