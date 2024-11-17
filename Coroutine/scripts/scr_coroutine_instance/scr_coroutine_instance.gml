@@ -28,6 +28,8 @@ function Coroutine(_prototype, _this=other) constructor
   self.local = [];
   self.child = [];
   self.scope = { this: _this, coroutine: self };
+  self.pointBreak = [];
+  self.pointContinue = [];
   self.paused = false;
   self.finished = true;
   

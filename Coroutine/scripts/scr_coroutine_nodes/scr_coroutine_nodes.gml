@@ -1,6 +1,19 @@
 
 
 
+/// @func CO_STATIC_SET(_node);
+/// @desc
+/// @param {Struct} _node
+/// @returns {Struct}
+function CO_STATIC_SET(_node)
+{
+  gml_pragma("forceinline"); 
+  static_set(_node, COROUTINE_MANAGER);
+  return _node;
+}
+
+
+
 /// @func CO_NOP();
 /// @desc
 /// @returns {Undefined}
@@ -17,9 +30,9 @@ function CO_NOP()
 function CO_BEGIN()
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "BEGIN" 
-  }; 
+  }); 
 }
 
 
@@ -29,9 +42,9 @@ function CO_BEGIN()
 function CO_FINISH()
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "FINISH" 
-  }; 
+  }); 
 }
 
 
@@ -42,10 +55,10 @@ function CO_FINISH()
 function CO_THEN(_nodes)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "THEN", 
     nodes: _nodes 
-  }; 
+  }); 
 }
 
 
@@ -56,10 +69,10 @@ function CO_THEN(_nodes)
 function CO_PASS(_call)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "PASS", 
     call: method(undefined, _call) 
-  }; 
+  }); 
 }
 
 
@@ -70,11 +83,11 @@ function CO_PASS(_call)
 function CO_LABEL(_label)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "LABEL", 
     label: _label.name 
-  }
-};
+  });
+}
 
 
 /// @func CO_YIELD(_call);
@@ -84,10 +97,10 @@ function CO_LABEL(_label)
 function CO_YIELD(_call)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "YIELD", 
     call: method(undefined, _call) 
-  };
+  });
 }
 
 
@@ -98,10 +111,10 @@ function CO_YIELD(_call)
 function CO_PAUSE(_call)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "PAUSE", 
     call: method(undefined, _call)
-  };
+  });
 }
 
 
@@ -113,11 +126,11 @@ function CO_PAUSE(_call)
 function CO_DELAY(_call, _type)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "DELAY", 
     call: method(undefined, _call), 
     type: _type 
-  };
+  });
 }
 
 
@@ -129,11 +142,11 @@ function CO_DELAY(_call, _type)
 function CO_AWAIT(_type, _call)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "AWAIT", 
     call: method(undefined, _call), 
     type: _type 
-  }; 
+  }); 
 }
 
 
@@ -145,11 +158,11 @@ function CO_AWAIT(_type, _call)
 function CO_ASYNC(_type, _body)
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "ASYNC", 
     body: _body, 
     type: _type 
-  }; 
+  }); 
 }
 
 
@@ -161,11 +174,11 @@ function CO_ASYNC(_type, _body)
 function CO_TIMEOUT(_call, _type) 
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "TIMEOUT", 
     call: method(undefined, _call), 
     type: _type 
-  }; 
+  }); 
 }
 
 
@@ -206,12 +219,12 @@ function CO_IF_CHAIN()
 function CO_IF(_cond, _then, _else=undefined) 
 { 
   gml_pragma("forceinline");   
-  return { 
+  return CO_STATIC_SET({
     name: "IF", 
     cond: method(undefined, _cond),
     nodeThen: _then,
     nodeElse: _else,
-  }; 
+  }); 
 }
 
 
@@ -223,11 +236,11 @@ function CO_IF(_cond, _then, _else=undefined)
 function CO_WHILE(_cond, _body) 
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "WHILE", 
     cond: method(undefined, _cond),
     body: _body,
-  }; 
+  }); 
 }
 
 
@@ -239,11 +252,11 @@ function CO_WHILE(_cond, _body)
 function CO_REPEAT(_call, _body) 
 { 
   gml_pragma("forceinline"); 
-  return { 
+  return CO_STATIC_SET({
     name: "REPEAT", 
     call: method(undefined, _call),
     body: _body,
-  }; 
+  }); 
 }
 
 
@@ -269,13 +282,13 @@ function CO_FOR()
     else if (_mark == "ITER") _iter = _call;
   }
   
-  return { 
+  return CO_STATIC_SET({
     name: "FOR", 
     init: _init,
     cond: _cond,
     iter: _iter,
     body: _body,
-  }; 
+  }); 
 }
 
 
@@ -294,7 +307,7 @@ function CO_FOREACH(_names, _item, _body)
   var _nameKey = undefined;
   var _nameVal = undefined;
   var _structNames = _names();
-  var _structNameKeys = struct_get_names(_structNames);
+  var _structNameKeys = struct_get_names(_structNames); 
   var _structKeyCount = struct_names_count(_structNames);
   for(var i = 0; i < _structKeyCount; i++)
   {
@@ -305,12 +318,12 @@ function CO_FOREACH(_names, _item, _body)
   array_resize(_structNameKeys, 0);
   
   // Return the struct
-  return { 
+  return CO_STATIC_SET({
     name: "FOREACH", 
-    key: _nameKey, 
-    val: _nameVal,
     item: method(undefined, _item),
     body: _body,
-  }; 
+    key: _nameKey, 
+    val: _nameVal,
+  }); 
 }
 

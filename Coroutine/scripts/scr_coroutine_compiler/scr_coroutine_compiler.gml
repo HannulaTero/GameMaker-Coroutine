@@ -5,10 +5,11 @@
 /// @desc Generates linear instructions from given nodes (abstract syntax tree).
 function CoroutineCompiler() constructor
 {
-  // Results.
   self.code = [];
   self.labels = {};
-  self.registerOffset = -1;
+  self.indexLoop = -1;
+  self.indexRegister = -1;
+  self.loops = ds_stack_create();
   
   
   /// @func Dispatch(_root);
@@ -18,9 +19,22 @@ function CoroutineCompiler() constructor
   {
     self.code = _root.code;
     self.labels = _root.labels;
-    self.registerOffset = -1;
+    self.indexRegister = -1;
     Compile(_root.nodes);
     return new CoroutinePrototype(_root);
+  };
+  
+  
+  /// @func Free();
+  /// @desc 
+  /// @param {Struct.CoroutineCompiler}
+  static Free = function()
+  {
+    self.code = undefined;
+    self.labels = undefined;
+    self.indexRegister = undefined;
+    ds_stack_destroy(loops);
+    return self;
   };
   
   
@@ -48,7 +62,7 @@ function CoroutineCompiler() constructor
   /// @returns {Real}
   static RegisterPush = function()
   {
-    return ++registerOffset;
+    return ++indexRegister;
   };
   
   
@@ -56,7 +70,7 @@ function CoroutineCompiler() constructor
   /// @desc 
   static RegisterPop = function()
   {
-    --registerOffset;
+    --indexRegister;
   };
   
   
@@ -73,6 +87,52 @@ function CoroutineCompiler() constructor
   static ScopePop = function()
   {
     //array_push(code, "SCP_POP"); 
+  };
+  
+  
+  /// @func LoopPush();
+  /// @desc 
+  static LoopPush = function()
+  {
+    array_push(code, Instruction("LOOP_PUSH"), ++indexLoop, -1, -1);
+    ds_stack_push(loops, array_length(code));
+  };
+  
+  
+  /// @func LoopCond(_cond);
+  /// @desc 
+  static LoopCond = function(_cond)
+  {
+    array_push(code, Instruction("LOOP_COND"), indexLoop, _cond);
+  }
+  
+  
+  /// @func LoopCondReg(_register);
+  /// @desc 
+  static LoopCondReg = function(_register)
+  {
+    array_push(code, Instruction("LOOP_COND_REG"), indexLoop, _register);
+  }
+  
+  
+  /// @func LoopCondForeachNext(_register);
+  /// @desc 
+  static LoopCondForeachNext = function(_register)
+  {
+    array_push(code, Instruction("FOREACH_NEXT"), indexLoop, _register);
+  }
+  
+  
+  /// @func LoopPop();
+  /// @desc 
+  static LoopPop = function()
+  {
+    var _begin = ds_stack_pop(loops);
+    array_push(code, Instruction("JUMP"), _begin);
+    var _exit = array_length(code);
+    code[_begin - 2] = _begin; 
+    code[_begin - 1] = _exit;
+    --indexLoop;
   };
   
   
@@ -116,33 +176,12 @@ function CoroutineCompiler() constructor
   };
   
   
-  /// @func EmitJumpCond(_op, _register);
-  /// @desc 
-  /// @param {String} _op
-  /// @param {Real} _register
-  static EmitJumpCond = function(_op, _register)
-  {
-    array_push(code, Instruction(_op), _register, -1);
-    return array_length(code) - 1;
-  };
-  
-  
   /// @func EmitJumpCondCall(_callback);
   /// @desc 
   /// @param {Function} _callback 
   static EmitJumpCondCall = function(_callback)
   {
     array_push(code, Instruction("JUMP_COND_CALL"), _callback, -1);
-    return array_length(code) - 1;
-  };
-  
-  
-  /// @func EmitJumpCondReg(_register);
-  /// @desc 
-  /// @param {Real} _register 
-  static EmitJumpCondReg = function(_register)
-  {
-    array_push(code, Instruction("JUMP_COND_REG"), _register, -1);
     return array_length(code) - 1;
   };
   
@@ -282,33 +321,19 @@ function CoroutineCompiler() constructor
     // These are 
     ["FOR"], 
     function(_node)
-    {      
-      // Compile initialization, loop starts after it.
+    {            
       EmitCall(_node.init);
-      var _loopBegin = JumpTarget();
+      LoopPush();
       
-      // Check whether loop condition is used.
-      var _jumpExit = (_node.cond != undefined)
-        ? EmitJumpCondCall(_node.cond)
-        : undefined;
+      if (_node.cond != undefined)
+        LoopCond(_node.cond);
       
-      // Compile the loop body.
       Compile(_node.body);
       
-      // Check whether loop iteration is used.
       if (_node.iter != undefined)
-      {
         EmitCall(_node.iter);
-      }
       
-      // Restart the loop.
-      EmitJump(_loopBegin);
-      
-      // Finalization. 
-      if (_jumpExit != undefined)
-      {
-        PatchJump(_jumpExit);
-      }
+      LoopPop();
     },
   
   
@@ -316,11 +341,10 @@ function CoroutineCompiler() constructor
     ["WHILE"], 
     function(_node)
     {
-      var _loopBegin = JumpTarget();
-      var _jumpExit = EmitJumpCondCall(_node.cond);
+      LoopPush();
+      LoopCond(_node.cond);
       Compile(_node.body);
-      EmitJump(_loopBegin);
-      PatchJump(_jumpExit);
+      LoopPop();
     },
     
     
@@ -332,16 +356,15 @@ function CoroutineCompiler() constructor
       // Get iteration count, loop starts after it.
       var _regCounter = RegisterPush();
       EmitCode("REG_CALL", _regCounter, _node.call);
-      var _loopBegin = JumpTarget();
-      var _jumpExit = EmitJumpCondReg(_regCounter);
+      LoopPush();
+      LoopCondReg(_regCounter);
       
       // Repeat body.
       Compile(_node.body);
       EmitCode("REG_DECR", _regCounter);
-      EmitJump(_loopBegin);
       
       // Finalize.
-      PatchJump(_jumpExit);
+      LoopPop();
       RegisterPop();
     },
     
@@ -353,21 +376,16 @@ function CoroutineCompiler() constructor
     function(_node)
     {      
       // Initialize the foreach.
-      var _regIter = RegisterPush(); 
-      var _iterator = new CoroutineForeachIterator(); 
-      EmitCode("REG_LOAD", _regIter, _iterator);
-      EmitCode("FOREACH_INIT", _regIter, _node.item, _node.key, _node.val);
+      var _register = RegisterPush(); 
+      EmitCode("FOREACH_INIT", _register, _node.item, _node.key, _node.val);
       
       // Condition.
-      var _loopBegin = JumpTarget();
-      var _jumpExit = EmitJumpCond("FOREACH_NEXT", _regIter);
-      
-      // Foreach loop body.
+      LoopPush();
+      LoopCondForeachNext(_register);
       Compile(_node.body);
-      EmitJump(_loopBegin);
       
       // Exit the loop.
-      PatchJump(_jumpExit);
+      LoopPop();
       RegisterPop();
     },
   

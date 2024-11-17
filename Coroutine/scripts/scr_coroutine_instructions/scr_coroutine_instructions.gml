@@ -49,6 +49,44 @@ function coroutine_instruction(_opcode)
     },
   
   
+    ["LOOP_PUSH"],
+    function()
+    {
+      var _indexLoop = code[index++];
+      pointContinue[_indexLoop] = code[index++];
+      pointBreak[_indexLoop] = code[index++];
+      return true;
+    },
+  
+  
+    ["LOOP_COND"],
+    function()
+    {
+      var _condition;
+      var _indexLoop = code[index++];
+      var _method = code[index++];
+      with(scope) _condition = _method();
+      if ((_condition ?? 0.0) <= 0.0)
+      {
+        index = pointBreak[_indexLoop];
+      }
+      return true;
+    },
+  
+  
+    ["LOOP_COND_REG"],
+    function()
+    {
+      var _condition;
+      var _indexLoop = code[index++];
+      var _register = code[index++];
+      if (local[_register] <= 0.0)
+      {
+        index = pointBreak[_indexLoop];
+      }
+    },  
+  
+  
     // Jump to any instruction in the code.
     // This is direct jump.
     ["JUMP"],
@@ -105,7 +143,9 @@ function coroutine_instruction(_opcode)
       // Define foreach-iterator.
       var _item = undefined;
       with(scope) _item = _callItem();
-      local[_register].Initialize(_item, _nameValue, _nameKey);
+      var _iterator = new CoroutineForeachIterator(); 
+      _iterator.Initialize(_item, _nameValue, _nameKey);
+      local[_register] = _iterator;
       return true;
     },
   
@@ -113,15 +153,18 @@ function coroutine_instruction(_opcode)
     ["FOREACH_NEXT"],
     function()
     {
+      var _indexLoop = code[index++];
       var _register = code[index++];
-      var _offset = code[index++];
       var _iterator = local[_register];
-      if (_iterator.index >= _iterator.count)
+      if (_iterator.index < _iterator.count)
       {
-        index = _offset;
+        _iterator.Next(scope);
+      }
+      else
+      {
+        index = pointBreak[_indexLoop];
         _iterator.Free();
       }
-      _iterator.Next(scope);
       return true;
     },
   
@@ -208,13 +251,21 @@ function coroutine_instruction(_opcode)
     {
       var _type = code[index++];
       var _call = code[index++];
+      var _result = true;
       switch(_type)
       {
-        case "COND": with(scope) return _call();
-        case "ASYNC": with(scope) return _call();     // TODO.
-        case "BROADCAST": with(scope) return _call(); // TODO.
-        case "COROUTINE": with(scope) return _call(); // TODO.
+        case "COND": with(scope) _result = _call();
+        case "ASYNC": with(scope) _result = _call();     // TODO.
+        case "BROADCAST": with(scope) _result = _call(); // TODO.
+        case "COROUTINE": with(scope) _result = _call(); // TODO.
       }
+      
+      if (_result == false)
+      {
+        index -= 3;
+        return false;
+      }
+      
       return true;
     },
   

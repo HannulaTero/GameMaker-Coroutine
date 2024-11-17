@@ -24,6 +24,7 @@ do
   }
   catch(_error)
   {
+    show_debug_message(_error);
     with(coroutine) Execute(triggers.onError);
   }
   

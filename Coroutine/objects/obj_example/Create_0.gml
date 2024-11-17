@@ -11,7 +11,7 @@ coroutine = COROUTINE BEGIN
 
   DELAY 3_000 MICROS
   FOREACH key, value IN this.array THEN
-    show_debug_message($"{i}: {number}");
+    show_debug_message($"{key}: {value}");
     DELAY 0.1 SECONDS
   END
   
@@ -39,6 +39,7 @@ drawing = COROUTINE
     LOOP THEN
       if (device_mouse_check_button(0, mb_left))
         draw_line(x, y, mouse_x, mouse_y);
+      AWAIT (!device_mouse_check_button(0, mb_right)) PASS
       x = mouse_x;
       y = mouse_y;
       YIELD "Drawing" PASS

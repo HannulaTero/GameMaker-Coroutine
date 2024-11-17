@@ -1,3 +1,4 @@
+
 COROUTINE_SINGLETON
 
 // Set as last instance to draw.
@@ -9,3 +10,4 @@ coroutine = undefined;
 index = 0;
 code = [];
 
+ 
