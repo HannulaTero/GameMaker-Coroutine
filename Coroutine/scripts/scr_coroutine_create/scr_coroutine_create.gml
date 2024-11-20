@@ -12,9 +12,9 @@ function coroutine_create(_funcAST)
   
   // Pick coroutine prototype from cache.
   var _key = method_get_index(_funcAST);
-  if (ds_map_exists(__COROUTINE_CACHE, _key))
+  if (ds_map_exists(COROUTINE_HASH_CACHE, _key))
   {
-    return __COROUTINE_CACHE[? _key];
+    return COROUTINE_HASH_CACHE[? _key];
   }
   
   // Otherwise create a new protoptype, and add it to the cache.
@@ -22,6 +22,6 @@ function coroutine_create(_funcAST)
   var _root = _funcAST();
   transform.Dispatch(_root);
   var _prototype = new CoroutinePrototype(_root);
-  __COROUTINE_CACHE[? _key] = _prototype;
+  COROUTINE_HASH_CACHE[? _key] = _prototype;
   return _prototype;
 }

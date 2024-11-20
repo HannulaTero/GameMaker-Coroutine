@@ -2,7 +2,7 @@
 
 // Check whether request exists.
 var _id = async_load[? "id"];
-var _request = __COROUTINE_ASYNC_REQUESTS[? "http"][? _id];
+var _request = COROUTINE_HASH_ASYNC[? "http"][? _id];
 if (_request == undefined)
 {
   exit;

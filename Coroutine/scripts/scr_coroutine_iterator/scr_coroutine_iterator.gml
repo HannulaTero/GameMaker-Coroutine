@@ -12,8 +12,8 @@ function CoroutineIterator() constructor
   self.count = 0;
   self.nameVal = undefined;
   self.nameKey = undefined;
-  self.GetVal = function(_scope) { };
-  self.GetKey = function(_scope) { };
+  self.GetVal = function() {};
+  self.GetKey = function() {};
   
   
   /// @func Initialize(_item, _nameKey, _nameVal);
@@ -48,13 +48,12 @@ function CoroutineIterator() constructor
   };
   
   
-  /// @func Next(_scope);
+  /// @func Next();
   /// @desc Get the keys and values for next iteration.
-  /// @param {Struct} _scope
-  static Next = function(_scope)
+  static Next = function()
   {
-    if (nameVal != undefined) GetVal(_scope);
-    if (nameKey != undefined) GetKey(_scope); 
+    if (nameVal != undefined) GetVal();
+    if (nameKey != undefined) GetKey(); 
     index++;
     return self;
   };
@@ -81,8 +80,8 @@ function CoroutineIterator() constructor
   static asArray = function()
   {
     self.count = array_length(item);
-    self.GetVal = function(_scope) { _scope[$ nameVal] = item[index]; };
-    self.GetKey = function(_scope) { _scope[$ nameKey] = index; };
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[index]; };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -93,8 +92,8 @@ function CoroutineIterator() constructor
   {
     self.keys = struct_get_names(item);
     self.count = struct_names_count(item);
-    self.GetVal = function(_scope) { _scope[$ nameVal] = item[$ keys[index]]; };
-    self.GetKey = function(_scope) { _scope[$ nameKey] = keys[index]; };
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[$ keys[index]]; };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = keys[index]; };
     return self;
   };
   
@@ -105,8 +104,8 @@ function CoroutineIterator() constructor
   {
     self.start = item.start;
     self.count = floor((item.stop - item.start) / item.step);
-    self.GetVal = function(_scope) { _scope[$ nameVal] = start + item.step * index; };
-    self.GetKey = function(_scope) { _scope[$ nameKey] = index; };
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = start + item.step * index; };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -119,8 +118,8 @@ function CoroutineIterator() constructor
     self.dtype = item.dtype;
     self.dsize = item.dsize;
     self.count = floor((item.stop - item.start) / item.step);
-    self.GetVal = function(_scope) { _scope[$ nameVal] = buffer_peek(data, (start + item.step * index) * dsize, dtype); };
-    self.GetKey = function(_scope) { _scope[$ nameKey] = index; };
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = buffer_peek(data, (start + item.step * index) * dsize, dtype); };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -131,8 +130,8 @@ function CoroutineIterator() constructor
   {
     self.index = 1; // In GML, strings are 1-indexed.
     self.count = string_length(item) + 1;
-    self.GetVal = function(_scope) { _scope[$ nameVal] = string_char_at(item, index); };
-    self.GetKey = function(_scope) { _scope[$ nameKey] = index; };
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = string_char_at(item, index); };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -142,8 +141,8 @@ function CoroutineIterator() constructor
   static asList = function()
   {
     self.count = ds_list_size(item);
-    self.GetVal = function(_scope) { _scope[$ nameVal] = item[| index]; };
-    self.GetKey = function(_scope) { _scope[$ nameKey] = index; };
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[| index]; };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -154,8 +153,8 @@ function CoroutineIterator() constructor
   {
     self.keys = ds_map_keys_to_array(item);
     self.count = ds_map_size(item);
-    self.GetVal = function(_scope) { _scope[$ nameVal] = item[? keys[index]]; };
-    self.GetKey = function(_scope) { _scope[$ nameKey] = keys[index]; };
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[? keys[index]]; };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = keys[index]; };
     return self;
   };
 }

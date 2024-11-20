@@ -1,11 +1,23 @@
 
 
+
+/// @func coroutine_execute(_callback);
+/// @desc Executes given callback in current coroutines scope.
+/// @param {Function} _callback
+function coroutine_execute(_callback)
+{
+  gml_pragma("forceinline");
+  with(COROUTINE_SCOPE) return _callback();
+}
+
+
 /// @func coroutine_mapping(_array);
 /// @desc
 /// @param {Array<Any>} _array
 /// @returns {Struct}
 function coroutine_mapping(_array)
 {
+  gml_pragma("forceinline");
   var _mapping = {};
   var _countOuter = array_length(_array);
   for(var i = 0; i < _countOuter; i+=2)
@@ -29,7 +41,8 @@ function coroutine_mapping(_array)
 /// @returns {Real}
 function coroutine_frame_time_get()
 {
-  return (get_timer() - __COROUTINE_FRAME_TIME_BEGIN);
+  gml_pragma("forceinline");
+  return (current_time - COROUTINE_FRAME_TIME_BEGIN);
 }
 
 
@@ -38,6 +51,17 @@ function coroutine_frame_time_get()
 /// @returns {Real}
 function coroutine_frame_time_usage()
 {
-  return coroutine_frame_time_get() / game_get_speed(gamespeed_microseconds);
+  gml_pragma("forceinline");
+  return (current_time - COROUTINE_FRAME_TIME_BEGIN) / game_get_speed(gamespeed_microseconds);
 }
+
+
+
+
+
+
+
+
+
+
 

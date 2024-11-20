@@ -232,7 +232,7 @@ function CO_IF(_cond, _then, _else=undefined)
 function CO_SWITCH()
 {
   gml_pragma("forceinline"); 
-  var _item = argument[1];
+  var _item = argument[0][0]; // Macro uses array to avoid extra THEN.
   var _cases = [];
   var _default = undefined;
   for(var i = 1; i < argument_count; i+=2)
@@ -249,6 +249,7 @@ function CO_SWITCH()
       body: _body 
     });
   }
+  
   return {
     name: "SWITCH",
     item: _item,

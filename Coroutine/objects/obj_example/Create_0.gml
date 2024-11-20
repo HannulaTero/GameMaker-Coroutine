@@ -15,10 +15,31 @@ coroutine = COROUTINE BEGIN
     DELAY 0.1 SECONDS
   END
   
+  
+  LOOP
+    result = 0;
+    REPEAT 1000 THEN
+      SWITCH irandom(1000) 
+        CASE 0 THEN result += 0;
+        CASE 1 THEN result += 1;
+        CASE 2 THEN result += 2;
+        CASE 3 THEN result += 3;
+        CASE 4 THEN result += 4;
+        CASE 5 THEN result += 5;
+        CASE 6 THEN result += 6;
+        CASE 7 THEN result += 7;
+        CASE 8 THEN result += 8;
+        CASE 9 THEN result += 9;
+      END
+    END
+    show_debug_message(result);
+    YIELD PASS
+  END
+  
 FINISH DISPATCH
 
-
 surface = -1;
+/*
 
 coroutine = COROUTINE
     name: @'Drawing Coroutine',
@@ -69,8 +90,6 @@ FINISH DISPATCH
 
 // Create a coroutine.
 COROUTINE BEGIN
-
-  QUIT
 
   // Coroutine scoped variables.
   url = "https://www.google.com";
@@ -147,47 +166,22 @@ COROUTINE BEGIN
 
   // Await all subcoroutines to be finished.
   AWAIT_CHILDRENS
-  show_debug_message("Parent coroutine");
+  show_debug_message("Parent coroutine");  
   
-  buffer = buffer_create(1024, 4, 4);
-  FOREACH key, value IN VIEW({ data: buffer, dtype: buffer_f32 }) THEN
-  
-  END
+
+FINISH DISPATCH 
   
   
-  LOOP
-    SWITCH random(10) 
-      CASE 0 THEN show_debug_message("0");
-      CASE 1 THEN show_debug_message("1");
-      CASE 2 THEN show_debug_message("2");
-      CASE 3 THEN show_debug_message("3");
-      CASE 4 THEN show_debug_message("4");
-      CASE 5 THEN show_debug_message("5");
-      CASE 6 THEN show_debug_message("6");
-      CASE 7 THEN show_debug_message("7");
-      CASE 8 THEN show_debug_message("8");
-      CASE 9 THEN show_debug_message("9");
-      DEFAULT BREAK
-    END
-  END
   
-  SWITCH choose(0, 1)
-  END
   
-  SWITCH choose(0, 1)
-  CASE 0 THEN
-  END
-  
-  SWITCH choose(0, 1)
-  DEFAULT
-  END
-  
+COROUTINE BEGIN
   
   FOREACH i: key, ival: value IN RANGE(0, 1024, +16) THEN
   FOREACH j: key, jval: value IN RANGE(0, 1024, +32) THEN
   FOREACH k: key, kval: value IN RANGE(1024, 0, -10) THEN
   FOREACH l: key, lval: value IN RANGE(1024, 0, -20) THEN
     show_debug_message($"[{i}][{j}][{k}][{l}] = [{ival}][{jval}][{kval}][{lval}]");
+    DELAY 1.0 SECONDS
   END END END END
     
 FINISH DISPATCH 

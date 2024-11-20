@@ -2,14 +2,14 @@
 
 
 // Loop over all async request types.
-var _keys = ds_map_keys_to_array(__COROUTINE_ASYNC_REQUESTS);
+var _keys = ds_map_keys_to_array(COROUTINE_HASH_ASYNC);
 var _count = array_length(_keys);
 
 for(var i = 0; i < _count; i++)
 {
   // Look up specific async type.
   var _key = _keys[i];
-  var _requests = __COROUTINE_ASYNC_REQUESTS[? _key];
+  var _requests = COROUTINE_HASH_ASYNC[? _key];
   var _requestKeys = ds_map_keys_to_array(_requests);
   var _requestCount = array_length(_requestKeys);
   

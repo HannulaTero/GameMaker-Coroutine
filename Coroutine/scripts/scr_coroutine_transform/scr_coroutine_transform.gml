@@ -69,10 +69,10 @@ function CoroutineTransform() constructor
     {
       return { 
         next: _next.execute,
-        execute: function(coroutine)
+        execute: function()
         {
-          coroutine.onInit();
-          return next;
+          COROUTINE_CURRENT.onInit();
+          COROUTINE_EXECUTE = next;
         }
       };
     },
@@ -84,14 +84,15 @@ function CoroutineTransform() constructor
     function(_node, _next, _break, _continue)
     {
       return { 
-        execute: function(coroutine)
+        execute: function()
         {
-          with(coroutine)
+          with(COROUTINE_CURRENT)
           {
             Execute(trigger.onComplete);
             Return(undefined);
           }
-          return execute;
+          COROUTINE_EXECUTE = execute;
+          COROUTINE_YIELD = true;
         }
       };
     },
@@ -122,9 +123,9 @@ function CoroutineTransform() constructor
         call: _node.call, 
         onBreak: _break.execute,
         onContinue: _continue.execute,
-        execute: function(coroutine)
+        execute: function()
         {
-          return coroutine.Execute(call) ?? next;
+          COROUTINE_EXECUTE = coroutine_execute(call) ?? next;
         }
       };
     },
@@ -148,14 +149,11 @@ function CoroutineTransform() constructor
       return { 
         next: _next.execute,
         call: _node.call, 
-        execute: function(coroutine)
+        execute: function()
         {
-          with(coroutine)
-          {
-            result = Execute(other.call);
-            yield = true;
-          }
-          return next;
+          COROUTINE_CURRENT.result = coroutine_execute(call);
+          COROUTINE_EXECUTE = next;
+          COROUTINE_YIELD = true;
         }
       };
     },
@@ -169,17 +167,16 @@ function CoroutineTransform() constructor
       return { 
         next: _next.execute,
         call: _node.call,
-        execute: function(coroutine)
+        execute: function()
         {
-          with(coroutine)
+          with(COROUTINE_CURRENT)
           {
-            __COROUTINE_PAUSED.InsertTail(link);
+            COROUTINE_LIST_PAUSED.InsertTail(link);
             result = Execute(other.call);
-            paused = true;
-            yield = true;
             Execute(trigger.onPause);
           }
-          return next;
+          COROUTINE_EXECUTE = next;
+          COROUTINE_YIELD = true;
         }
       };
     },
@@ -204,12 +201,12 @@ function CoroutineTransform() constructor
         call: _node.call,
         rate: rates[$ _node.type],
         register,
-        execute: function(coroutine)
+        execute: function()
         {
           var _begin = get_timer();
-          var _delay = coroutine.Execute(call);
-          coroutine.local[register] = _begin + rate(_delay);
-          return next;
+          var _delay = coroutine_execute(call);
+          COROUTINE_LOCAL[register] = _begin + rate(_delay);
+          COROUTINE_EXECUTE = next;
         }
       };
       
@@ -217,14 +214,14 @@ function CoroutineTransform() constructor
       var _wait = {
         next: _next.execute,
         register,
-        execute: function(coroutine)
+        execute: function()
         {
-          if (get_timer() < coroutine.local[register])
+          if (get_timer() < COROUTINE_LOCAL[register])
           {
-            coroutine.yield = true;
-            return execute;
+            COROUTINE_EXECUTE = execute;
+            COROUTINE_YIELD = true;
           }
-          return next;
+          COROUTINE_EXECUTE = next;
         }
       };
       
@@ -250,14 +247,14 @@ function CoroutineTransform() constructor
         next: _next.execute,
         call: _node.call,
         cond: conditions[$ _node.type],
-        execute: function(coroutine)
+        execute: function()
         {
-          if (cond(coroutine.Execute(call)))
+          if (cond(coroutine_execute(call)))
           {
-            return next;
+            COROUTINE_EXECUTE = next;
           }
-          coroutine.yield = true;
-          return execute;
+          COROUTINE_EXECUTE = execute;
+          COROUTINE_YIELD = true;
         }
       };
     },
@@ -270,14 +267,14 @@ function CoroutineTransform() constructor
     {
       return {
         next: _next.execute,
-        execute: function(coroutine)
+        execute: function()
         {
-          if (coroutine.hasChilds() == false)
+          if (COROUTINE_CURRENT.hasChilds() == false)
           {
-            return next;
+            COROUTINE_EXECUTE = next;
           }
-          coroutine.yield = true;
-          return execute;
+          COROUTINE_EXECUTE = execute;
+          COROUTINE_YIELD = true;
         }
       };
     },
@@ -292,10 +289,10 @@ function CoroutineTransform() constructor
         next: _next.execute,
         call: _node.call,
         type: _node.type,
-        execute: function(coroutine)
+        execute: function()
         {
           // TODO
-          return next;
+          COROUTINE_EXECUTE = next;
         }
       };
     },
@@ -316,9 +313,9 @@ function CoroutineTransform() constructor
         next: _then.execute, 
         jump: _else.execute,
         cond: _node.cond,
-        execute: function(coroutine)
+        execute: function()
         {
-          return coroutine.Execute(cond) ? next : jump;
+          COROUTINE_EXECUTE = coroutine_execute(cond) ? next : jump;
         }
       };
     },
@@ -329,6 +326,11 @@ function CoroutineTransform() constructor
     ["SWITCH"],
     function(_node, _next, _break, _continue)
     {
+      // Check whether there is default case.
+      var _def = (_node.def != undefined)
+        ? Generate(_node.def, _next, _break, _continue)
+        : undefined;
+        
       // Solve all cases into jump-table.
       var _table = ds_map_create();
       var _cases = _node.cases;
@@ -337,32 +339,23 @@ function CoroutineTransform() constructor
       {
         var _case = _cases[i];
         var _cond = _case.cond(); // Compile-time, no dynamic cases.
+        if (ds_map_exists(_table, _cond))
+        {
+          throw($"SWITCH duplicate case '{_cond}'");
+        }
         var _body = Generate(_case.body, _next, _break, _continue);
-        _table[? _case] = _body.execute;
+        _table[? _cond] = _body.execute;
       }
       
-      // Check whether there is default case.
-      var _def = (_case.def != undefined)
-        ? Generate(_case.def, _next, _break, _continue)
-        : undefined;
-        
+      // Create executor.
       return {
         next: _next.execute, 
         item: _node.item,
         table: _table,
-        def: _def,
-        execute: function(coroutine)
-        {
-          var _case = coroutine.Execute(cond);
-          if (ds_map_exists(table, _case))
-          {
-            return table[? _case];
-          }
-          if (def != undefined)
-          {
-            return def.execute;
-          }
-          return next;
+        def: (_def != undefined) ? _def.execute : _next.execute,
+        execute: function() 
+        { 
+          COROUTINE_EXECUTE = table[? coroutine_execute(item)] ?? def; 
         }
       };
     },
@@ -375,7 +368,10 @@ function CoroutineTransform() constructor
     {
       var _loop = {
         next: undefined,
-        execute: function(coroutine) { return next; }
+        execute: function() 
+        { 
+          COROUTINE_EXECUTE = next;
+        }
       };
       
       // Solve body and then patch, as loop target must be known beforehand.
@@ -394,9 +390,9 @@ function CoroutineTransform() constructor
         next: undefined,
         jump: _next.execute,
         cond: _node.cond,
-        execute: function(coroutine)
+        execute: function()
         {
-          return coroutine.Execute(cond) ? next : jump;
+          COROUTINE_EXECUTE = coroutine_execute(cond) ? next : jump;
         }
       };
       
@@ -420,10 +416,10 @@ function CoroutineTransform() constructor
         next: undefined,
         call: _node.call,
         register: _register,
-        execute: function(coroutine)
+        execute: function()
         {
-          coroutine.local[register] = coroutine.Execute(call);
-          return next;
+          COROUTINE_LOCAL[register] = coroutine_execute(call);
+          COROUTINE_EXECUTE = next;
         }
       };
       
@@ -432,10 +428,9 @@ function CoroutineTransform() constructor
         next: undefined,
         jump: _next.execute,
         register: _register,
-        execute: function(coroutine)
+        execute: function()
         {
-          var _counter = --coroutine.local[register];
-          return (_counter >= 0) ? next : jump;
+          COROUTINE_EXECUTE = (--COROUTINE_LOCAL[register] >= 0) ? next : jump;
         }
       };
       
@@ -459,10 +454,10 @@ function CoroutineTransform() constructor
       var _init = {
         next: undefined,
         call: _node.init,
-        execute: function(coroutine)
+        execute: function()
         {
-          coroutine.Execute(call);
-          return next;
+          coroutine_execute(call);
+          COROUTINE_EXECUTE = next;
         }
       }
       
@@ -471,9 +466,9 @@ function CoroutineTransform() constructor
         next: undefined,
         jump: undefined,
         cond: _node.cond,
-        execute: function(coroutine)
+        execute: function()
         {
-          return coroutine.Execute(cond) ? next : jump;
+          COROUTINE_EXECUTE = coroutine_execute(cond) ? next : jump;
         }
       };
       
@@ -481,10 +476,10 @@ function CoroutineTransform() constructor
       var _iter = {
         next: undefined,
         call: _node.iter,
-        execute: function(coroutine)
+        execute: function()
         {
-          coroutine.Execute(call);
-          return next;
+          coroutine_execute(call);
+          COROUTINE_EXECUTE = next;
         }
       };
       
@@ -514,13 +509,13 @@ function CoroutineTransform() constructor
         val: _node.val,
         key: _node.key,
         register: _register,
-        execute: function(coroutine)
+        execute: function()
         {
-          var _item = coroutine.Execute(call);
+          var _item = coroutine_execute(call);
           var _iterator = new CoroutineIterator();
           _iterator.Initialize(_item, key, val);
-          coroutine.local[register] = _iterator;
-          return next;
+          COROUTINE_LOCAL[register] = _iterator;
+          COROUTINE_EXECUTE = next;
         }
       }
       
@@ -529,17 +524,17 @@ function CoroutineTransform() constructor
         next: undefined,
         jump: undefined,
         register: _register,
-        execute: function(coroutine)
+        execute: function()
         {
-          var _iterator = coroutine.local[register];
+          var _iterator = COROUTINE_LOCAL[register];
           if (_iterator.index < _iterator.count)
           {
-            _iterator.Next(coroutine.scope);
-            return next;
+            _iterator.Next();
+            COROUTINE_EXECUTE = next;
           }
           else
           {
-            return jump;
+            COROUTINE_EXECUTE = jump;
           }
         }
       };

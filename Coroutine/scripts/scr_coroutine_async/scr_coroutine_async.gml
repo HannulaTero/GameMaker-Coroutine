@@ -29,7 +29,7 @@ function CoroutineAsync(_params) constructor
   }
   
   type = string_lower(type);
-  if (ds_map_exists(__COROUTINE_ASYNC_REQUESTS, type) == false)
+  if (ds_map_exists(COROUTINE_HASH_ASYNC, type) == false)
   {
     throw($"ASYNC: async event type is invalid: '{type}'.");
   }
@@ -40,7 +40,7 @@ function CoroutineAsync(_params) constructor
   /// @returns {Bool} 
   static isFinished = function()
   {
-    var _requests = __COROUTINE_ASYNC_REQUESTS[? type];
+    var _requests = COROUTINE_HASH_ASYNC[? type];
     return !ds_map_exists(_requests, handle);
   };
   
@@ -77,7 +77,7 @@ function CoroutineAsync(_params) constructor
     }
     
     self.timeInitialized = current_time;
-    __COROUTINE_ASYNC_REQUESTS[? type][? handle] = self;
+    COROUTINE_HASH_ASYNC[? type][? handle] = self;
     return self;
   };
   
@@ -86,7 +86,7 @@ function CoroutineAsync(_params) constructor
   /// @desc
   static SetFinished = function()
   {
-    ds_map_delete(__COROUTINE_ASYNC_REQUESTS[? type], handle);
+    ds_map_delete(COROUTINE_HASH_ASYNC[? type], handle);
     return self;
   };
   

@@ -7,10 +7,10 @@
 /// @returns {Function}
 function CO_RUNTIME_RESTART()
 {
-  with(obj_coroutine_manager.oroutine)
+  with(COROUTINE_CURRENT)
   {
     Restart();
-    return current;
+    COROUTINE_EXECUTE = execute;
   }
 }
 
@@ -20,7 +20,7 @@ function CO_RUNTIME_RESTART()
 /// @returns {Function}
 function CO_RUNTIME_CONTINUE()
 {
-  return method_get_self(obj_coroutine_manager.coroutine.current).onContinue;
+  COROUTINE_EXECUTE = method_get_self(COROUTINE_EXECUTE).onContinue;
 }
 
 
@@ -29,7 +29,7 @@ function CO_RUNTIME_CONTINUE()
 /// @returns {Function}
 function CO_RUNTIME_BREAK()
 {
-  return method_get_self(obj_coroutine_manager.coroutine.current).onBreak;
+  COROUTINE_EXECUTE = method_get_self(COROUTINE_EXECUTE).onBreak;
 }
 
 
@@ -39,8 +39,8 @@ function CO_RUNTIME_BREAK()
 /// @returns {Undefined}
 function CO_RUNTIME_RETURN(_return)
 {
-  obj_coroutine_manager.coroutine.Return(_return);
-  return undefined;
+  COROUTINE_CURRENT.Return(_return);
+  COROUTINE_EXECUTE = undefined;
 }
 
 
@@ -50,13 +50,13 @@ function CO_RUNTIME_RETURN(_return)
 /// @returns {Function}
 function CO_RUNTIME_GOTO(_label)
 {
-  with(obj_coroutine_manager.coroutine)
+  with(COROUTINE_CURRENT)
   {
     if (struct_exists(label, _label) == false)
     {
       throw($"{name}, Unknown GOTO -target: '{_label}'.");
     }
-    return label[$ _label];
+    COROUTINE_EXECUTE = label[$ _label];
   }
 }
 

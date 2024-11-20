@@ -29,18 +29,19 @@ function CoroutinePrototype(_root) constructor
   
   
   // Get the triggers.
+  var _nop = function() {};
   var _define = _root.define;
   self.trigger = {};
   with(trigger)
   {
-    onInit = _define[$ "onInit"];
-    onYield = _define[$ "onYield"];
-    onPause = _define[$ "onPause"];
-    onCancel = _define[$ "onCancel"];
-    onResume = _define[$ "onResume"];
-    onLaunch = _define[$ "onLaunch"];
-    onComplete = _define[$ "onComplete"];
-    onError = _define[$ "onError"];
+    onInit = _define[$ "onInit"] ?? _nop;
+    onYield = _define[$ "onYield"] ?? _nop;
+    onPause = _define[$ "onPause"] ?? _nop;
+    onCancel = _define[$ "onCancel"] ?? _nop;
+    onResume = _define[$ "onResume"] ?? _nop;
+    onLaunch = _define[$ "onLaunch"] ?? _nop;
+    onComplete = _define[$ "onComplete"] ?? _nop;
+    onError = _define[$ "onError"] ?? _nop;
   }
   
   

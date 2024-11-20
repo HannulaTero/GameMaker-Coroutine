@@ -1,2 +1,2 @@
 /// @desc GET THE FRAME BEGIN TIME.
-__COROUTINE_FRAME_TIME_BEGIN = get_timer();
+COROUTINE_FRAME_TIME_BEGIN = current_time;

@@ -1,16 +1,20 @@
 
 
 // Initialize globals.
-__COROUTINE_MANAGER = {};
-__COROUTINE_ACTIVE = new CoroutineDoubleLinkedList();
-__COROUTINE_PAUSED = new CoroutineDoubleLinkedList();
-__COROUTINE_CURRENT = 0;
-__COROUTINE_CACHE = ds_map_create();
+COROUTINE_LIST_ACTIVE = new CoroutineDoubleLinkedList();
+COROUTINE_LIST_PAUSED = new CoroutineDoubleLinkedList();
+COROUTINE_HASH_CACHE = ds_map_create();
+COROUTINE_HASH_ASYNC = ds_map_create();
 
-__COROUTINE_FLAG_EXECUTING = false;
-__COROUTINE_FRAME_TIME_BEGIN = 0;
+COROUTINE_CURRENT = undefined;
+COROUTINE_EXECUTE = undefined;
+COROUTINE_SCOPE = undefined;
+COROUTINE_YIELD = undefined;
 
-__COROUTINE_ASYNC_REQUESTS = ds_map_create();
+COROUTINE_FRAME_TIME_BEGIN = 0;
+
+
+// Initialize async event types.
 array_foreach([
   "Image Loaded",
   "HTTP",
@@ -29,7 +33,7 @@ array_foreach([
 ], function(_name, i) 
 {
   _name = string_lower(_name);
-  __COROUTINE_ASYNC_REQUESTS[? _name] = ds_map_create();
+  COROUTINE_HASH_ASYNC[? _name] = ds_map_create();
 });
 
 

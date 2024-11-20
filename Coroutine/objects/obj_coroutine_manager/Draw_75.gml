@@ -2,67 +2,70 @@
 
 
 // No active coroutines, quit early.
-if (__COROUTINE_ACTIVE.head == undefined)
+if (COROUTINE_LIST_ACTIVE.head == undefined)
 {
   exit;
 }
 
 
-// Flag that manager is executing coroutines.
-__COROUTINE_FLAG_EXECUTING = true;
-
-
 // Fetch and launch the coroutine.
-link = __COROUTINE_ACTIVE.head;
-coroutine = link.item;
-with(coroutine)
+var _link = COROUTINE_LIST_ACTIVE.head;
+var _coroutine = _link.item;
+COROUTINE_CURRENT = _coroutine;
+COROUTINE_EXECUTE = _coroutine.execute;
+COROUTINE_LOCAL = _coroutine.local;
+COROUTINE_SCOPE = _coroutine.scope;
+COROUTINE_YIELD = false;
+
+with(_coroutine)
 {
-  Execute(trigger.onLaunch);
-  yield = false;
+  coroutine_execute(trigger.onLaunch);
+  COROUTINE_YIELD = false;
 }
 
 // Do-until to ensure something happens, even if frame-budget is exceeded.
 do 
 {
-  // Get the op-code and execute it. 
-  // Return value tells whether continue with current coroutine.
-  try
-  {
-    with(coroutine) 
-    {
-      current = current(self);
-    }
-  }
-  
-  // Something wrong happened while executing coroutine.
-  catch(_error)
-  {
-    var _line = string_repeat("=", 64);
-    show_debug_message(_line);
-    show_debug_message(_error);
-    show_debug_message(_line);
-    with coroutine Execute(trigger.onError);
-  }
+  //try
+  //{
+  //  COROUTINE_EXECUTE();
+  //}
+  //
+  //// Something wrong happened while executing coroutine.
+  //catch(_error)
+  //{
+  //  var _line = string_repeat("=", 64);
+  //  show_debug_message(_line);
+  //  show_debug_message(_error);
+  //  show_debug_message(_line);
+  //  coroutine_execute(_coroutine.trigger.onError);
+  //}
   
   // Check whether coroutine yielded.
-  if (coroutine.yield == true)
+  COROUTINE_EXECUTE();
+  if (COROUTINE_YIELD)
   {
     // Yield current coroutine.
-    with coroutine Execute(trigger.onYield);
+    coroutine_execute(_coroutine.trigger.onYield);
+    _coroutine.execute = COROUTINE_EXECUTE;
         
-    // No more active coroutines.
-    if (link.next == undefined)
+    // Check whether there is next action.
+    _link = _link.next;
+    if (_link == undefined)
     {
       break;
     }
     
     // Launch the coroutine.
-    link = link.next;
-    coroutine = link.item;
-    with(coroutine)
+    _coroutine = _link.item;
+    COROUTINE_CURRENT = _coroutine;
+    COROUTINE_EXECUTE = _coroutine.execute;
+    COROUTINE_LOCAL = _coroutine.local;
+    COROUTINE_SCOPE = _coroutine.scope;
+    with(COROUTINE_CURRENT)
     {
-      Execute(trigger.onLaunch);
-      yield = false;
+      coroutine_execute(trigger.onLaunch);
+      COROUTINE_YIELD = false;
     }
   }
 }
@@ -70,11 +73,14 @@ until(coroutine_frame_time_usage() >= margin);
 
 
 // Check if time ran out and Coroutine was forced to yield.
-if (coroutine.yield == false)
+if (COROUTINE_YIELD == false)
 {
-  with coroutine Execute(trigger.onYield);
+  coroutine_execute(_coroutine.trigger.onYield);
+  _coroutine.execute = COROUTINE_EXECUTE;
 }
 
-
-// Flag that manager is not executing coroutines anymore.
-__COROUTINE_FLAG_EXECUTING = false;
+COROUTINE_CURRENT = undefined;
+COROUTINE_EXECUTE = undefined;
+COROUTINE_LOCAL = undefined;
+COROUTINE_SCOPE = undefined;
+COROUTINE_YIELD = undefined;

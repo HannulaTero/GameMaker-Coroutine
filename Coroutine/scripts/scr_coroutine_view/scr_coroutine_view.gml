@@ -66,7 +66,7 @@ function CoroutineView() constructor
     }
   
     // Data, dtype, offset and length are set.
-    case 3:
+    case 4:
     {
       self.data = argument[0];
       self.dtype = argument[1];
@@ -78,7 +78,7 @@ function CoroutineView() constructor
     }
   
     // All are set (data, dtype, start, stop, step)
-    case 3:
+    case 5:
     {
       self.data = argument[0];
       self.dtype = argument[1];

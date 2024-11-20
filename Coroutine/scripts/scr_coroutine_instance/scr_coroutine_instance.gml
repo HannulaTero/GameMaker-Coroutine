@@ -20,7 +20,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   self.label = _prototype.label;
   self.option = _prototype.option;
   self.trigger = _prototype.trigger;
-  self.current = graph.execute;
+  self.execute = graph.execute;
   
   
   // Execution states.
@@ -32,8 +32,6 @@ function CoroutineInstance(_prototype, _this=other) constructor
   self.childs = { };
   self.result = undefined;
   self.finished = false;
-  self.paused = false;
-  self.yield = false;
   
   
   // Call initializer -trigger of the coroutine.
@@ -45,13 +43,13 @@ function CoroutineInstance(_prototype, _this=other) constructor
   
   
   // Add to the instances list.
-  __COROUTINE_ACTIVE.InsertTail(link);
+  COROUTINE_LIST_ACTIVE.InsertTail(link);
   
   
   // Mark the as children, if initializd within coroutine.
-  if (__COROUTINE_FLAG_EXECUTING)
+  if (COROUTINE_CURRENT != undefined)
   {
-    parent = obj_coroutine_manager.coroutine;
+    parent = COROUTINE_CURRENT;
     struct_set(parent.childs, identifier, self);
   }
   
@@ -79,7 +77,6 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Any}
   static Execute = function(_func)
   {
-    if (_func == undefined) return undefined;
     with(scope) return _func();
   };
   
@@ -89,9 +86,8 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Pause = function()
   {
-    __COROUTINE_PAUSED.InsertTail(link);
+    COROUTINE_LIST_PAUSED.InsertTail(link);
     Execute(trigger.onPause);
-    self.paused = true;
     return self;
   };
   
@@ -101,9 +97,8 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Resume = function()
   {
-    __COROUTINE_ACTIVE.InsertTail(link);
+    COROUTINE_LIST_ACTIVE.InsertTail(link);
     Execute(trigger.onResume);
-    self.paused = false;
     return self;
   };
   
@@ -113,11 +108,9 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Restart = function()
   {
-    __COROUTINE_ACTIVE.InsertTail(link);
-    self.current = graph.execute;
+    COROUTINE_LIST_ACTIVE.InsertTail(link);
+    self.execute = graph.execute;
     self.finished = false;
-    self.paused = false;
-    self.yield = false;
     return self;
   };
   
@@ -143,7 +136,6 @@ function CoroutineInstance(_prototype, _this=other) constructor
     }
     self.finished = true;
     self.result = _value;
-    self.yield = true;
     return self;
   };
   
@@ -172,7 +164,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Bool}
   static isPaused = function()
   {
-    return paused;
+    return (link.list == COROUTINE_LIST_PAUSED);
   };
   
   
