@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"XX_scr_coroutine_keywords_array",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"XX_scr_coroutine_keywords_array",
+  "parent":{
+    "name":"XX_Discard",
+    "path":"folders/Coroutine/XX_Discard.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

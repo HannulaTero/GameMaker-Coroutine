@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_coroutine_double_linked_list",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_coroutine_double_linked_list",
+  "parent":{
+    "name":"General",
+    "path":"folders/Coroutine/General.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

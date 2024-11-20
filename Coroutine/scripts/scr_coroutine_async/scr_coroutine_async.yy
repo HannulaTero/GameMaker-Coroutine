@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_coroutine_instructions",
+  "%Name":"scr_coroutine_async",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_coroutine_instructions",
+  "name":"scr_coroutine_async",
   "parent":{
     "name":"Runtime",
     "path":"folders/Coroutine/Runtime.yy",

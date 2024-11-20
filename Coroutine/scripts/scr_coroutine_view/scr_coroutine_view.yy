@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_coroutine_runtime",
+  "%Name":"scr_coroutine_view",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_coroutine_runtime",
+  "name":"scr_coroutine_view",
   "parent":{
-    "name":"Runtime",
-    "path":"folders/Coroutine/Runtime.yy",
+    "name":"Iterator",
+    "path":"folders/Coroutine/Runtime/Iterator.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

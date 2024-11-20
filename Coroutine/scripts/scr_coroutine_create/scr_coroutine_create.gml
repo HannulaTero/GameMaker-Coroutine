@@ -1,26 +1,27 @@
 
 
-/// @func coroutine_create(_funcNodeCreator);
+/// @func coroutine_create(_funcAST);
 /// @desc Creates coroutine prototype, which has linear instructions.
-/// @param {Function} _funcNodeCreator
-function coroutine_create(_funcNodeCreator)
+/// @param {Function} _funcAST
+function coroutine_create(_funcAST)
 {
   // Parameter is function, which generates nodes (abstract syntax tree).
-  // Nodes are compiled into linearized instructions, 
+  // Nodes are parsed into linearized instructions, 
   // and finally coroutine is created to handle execution state.
-  static compiler = new CoroutineCompiler();
+  static transform = new CoroutineTransform();
   
   // Pick coroutine prototype from cache.
-  var _key = method_get_index(_funcNodeCreator);
-  if (ds_map_exists(COROUTINE_CACHE, _key))
+  var _key = method_get_index(_funcAST);
+  if (ds_map_exists(__COROUTINE_CACHE, _key))
   {
-    return COROUTINE_CACHE[? _key];
+    return __COROUTINE_CACHE[? _key];
   }
   
   // Otherwise create a new protoptype, and add it to the cache.
-  // This compiles the nodes into linear instructions.
-  var _root = _funcNodeCreator();
-  var _prototype = compiler.Dispatch(_root);
-  COROUTINE_CACHE[? _key] = _prototype;
+  // This parses the nodes into linear instructions.
+  var _root = _funcAST();
+  transform.Dispatch(_root);
+  var _prototype = new CoroutinePrototype(_root);
+  __COROUTINE_CACHE[? _key] = _prototype;
   return _prototype;
 }

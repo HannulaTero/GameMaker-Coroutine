@@ -1,109 +1,187 @@
 
 
 
-/// @func Coroutine(_prototype, _this);
-/// @desc 
+/// @func CoroutineInstance(_prototype, _this);
+/// @desc Creates new executable coroutine instance of given prototype.
 /// @param {Struct.CoroutinePrototype} _prototype
 /// @param {Any} _this
-function Coroutine(_prototype, _this=other) constructor
+function CoroutineInstance(_prototype, _this=other) constructor
 {
+  // General variables.
+  self.prototype = _prototype;
+  self.identifier = string(ptr(self));
+  self.parent = undefined;
+  self.link = new CoroutineDoubleLinkedListNode(self);
+  
+  
   // Get references to data from the prototype.
-  // These should not be modified, as they affect all.
-  self.code = _prototype.code;
-  self.labels = _prototype.labels;
-  self.options = _prototype.options;
-  self.triggers = _prototype.triggers;
-  self.count = _prototype.count;
+  // These should not be modified, otherwise it affects all instances of prototype.
+  self.graph = _prototype.graph;
+  self.label = _prototype.label;
+  self.option = _prototype.option;
+  self.trigger = _prototype.trigger;
+  self.current = graph.execute;
   
   
   // Execution states.
-  // Next & Prev are for double linked list.
-  // Index tells the current position in instructions/code.
-  // Children tells coroutines created within coroutine, which can be used to await them.
   // Locals are used up-keeping of timers and iterations for the execution.
   // Scope holds variables of coroutine, and reference to original self.
-  self.next = undefined;
-  self.prev = undefined;
-  self.index = 0;
+  var _self = self;
   self.local = [];
-  self.child = [];
-  self.scope = { this: _this, coroutine: self };
-  self.pointBreak = [];
-  self.pointContinue = [];
+  self.scope = { this: _this, coroutine: _self };
+  self.childs = { };
+  self.result = undefined;
+  self.finished = false;
   self.paused = false;
-  self.finished = true;
+  self.yield = false;
   
+  
+  // Call initializer -trigger of the coroutine.
+  var _onInit = trigger.onInit;
+  if (_onInit != undefined)
+  {
+    with(scope) _onInit();
+  }
+  
+  
+  // Add to the instances list.
+  __COROUTINE_ACTIVE.InsertTail(link);
+  
+  
+  // Mark the as children, if initializd within coroutine.
+  if (__COROUTINE_FLAG_EXECUTING)
+  {
+    parent = obj_coroutine_manager.coroutine;
+    struct_set(parent.childs, identifier, self);
+  }
+  
+  /// @func Get();
+  /// @desc Returns current result of coroutine.
+  /// @returns {Any}
+  static Get = function()
+  {
+    return result;
+  };
   
   /// @func Dispatch(_this);
   /// @desc Creates new instance of same prototype.
-  /// @param {Struct} _this
-  /// @returns {Struct.Coroutine}
-  self.Dispatch = function(_this=other)
+  /// @param {Id.Instance|Struct} _this
+  /// @returns {Struct.CoroutineInstance}
+  static Dispatch = function(_this=other)
   {
-    var _coroutine = new Coroutine(static_get(self), _this);
-    COROUTINE_ACTIVE.InsertTail(_coroutine);
-    return _coroutine;
+    return new CoroutineInstance(prototype, _this);
   };
   
   
-  self.Execute = function(_func)
+  /// @func Execute(_func);
+  /// @desc 
+  /// @param {Function} _func
+  /// @returns {Any}
+  static Execute = function(_func)
   {
-    if (_func == undefined) return;
+    if (_func == undefined) return undefined;
     with(scope) return _func();
   };
   
   
-  self.Pause = function()
+  /// @func Pause();
+  /// @desc 
+  /// @returns {Struct.CoroutineInstance}
+  static Pause = function()
   {
-    if (paused == false)
-    && (finished == false)
-    {
-      COROUTINE_ACTIVE.Detach(self);
-      COROUTINE_PAUSED.InsertTail(self);
-      Execute(triggers.onPause);
-    }
+    __COROUTINE_PAUSED.InsertTail(link);
+    Execute(trigger.onPause);
     self.paused = true;
     return self;
   };
   
   
-  self.Resume = function()
+  /// @func Resume();
+  /// @desc 
+  /// @returns {Struct.CoroutineInstance}
+  static Resume = function()
   {
-    if (paused == true)
-    && (finished == false)
-    {
-      COROUTINE_PAUSED.Detach(self);
-      COROUTINE_ACTIVE.InsertTail(self);
-      Execute(triggers.onResume);
-    }
+    __COROUTINE_ACTIVE.InsertTail(link);
+    Execute(trigger.onResume);
     self.paused = false;
     return self;
   };
   
   
-  self.isPaused = function()
+  /// @func Restart();
+  /// @desc Restarts the coroutine execution.
+  /// @returns {Struct.CoroutineInstance}
+  static Restart = function()
+  {
+    __COROUTINE_ACTIVE.InsertTail(link);
+    self.current = graph.execute;
+    self.finished = false;
+    self.paused = false;
+    self.yield = false;
+    return self;
+  };
+  
+  
+  /// @func Return(_value);
+  /// @desc Finishes the coroutine, and calls complete-trigger.
+  /// @param {Any} _value
+  /// @returns {Struct.CoroutineInstance}
+  static Return = function(_value)
+  {
+    if (finished == false)
+    {
+      link.Detach();
+      Execute(trigger.onComplete);
+      if (parent != undefined)
+      {
+        struct_remove(parent.childs, identifier);
+      }
+    }
+    else
+    {
+      show_debug_message("Coroutine is already finished.");
+    }
+    self.finished = true;
+    self.result = _value;
+    self.yield = true;
+    return self;
+  };
+  
+  
+  /// @func Cancel();
+  /// @desc Cancels the coroutine, and calls both complete and cancel-trigger.
+  /// @returns {Struct.CoroutineInstance}
+  static Cancel = function()
+  {
+    Execute(trigger.onCancel);
+    return Return(undefined);
+  };
+  
+  
+  /// @func hasChilds();
+  /// @desc 
+  /// @returns {Bool}
+  static hasChilds = function()
+  {
+    return (struct_names_count(childs) > 0);
+  };
+  
+  
+  /// @func isPaused();
+  /// @desc 
+  /// @returns {Bool}
+  static isPaused = function()
   {
     return paused;
   };
   
   
-  self.isFinished = function()
+  /// @func isFinished();
+  /// @desc 
+  /// @returns {Bool}
+  static isFinished = function()
   {
     return finished;
-  };
-  
-  
-  self.Cancel = function()
-  {
-    self.index = count;
-    if (finished == false)
-    {
-      COROUTINE_PAUSED.Detach(self);
-      COROUTINE_ACTIVE.InsertTail(self);
-      Execute(triggers.onCancel);
-    }
-    self.finished = true;
-    return self;
   };
 }
 

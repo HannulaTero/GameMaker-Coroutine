@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_coroutine_compiler",
+  "%Name":"scr_coroutine_range",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_coroutine_compiler",
+  "name":"scr_coroutine_range",
   "parent":{
-    "name":"Compiling",
-    "path":"folders/Coroutine/Compiling.yy",
+    "name":"Iterator",
+    "path":"folders/Coroutine/Runtime/Iterator.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

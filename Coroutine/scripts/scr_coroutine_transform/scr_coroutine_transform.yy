@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_coroutine_prototype",
+  "%Name":"scr_coroutine_transform",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_coroutine_prototype",
+  "name":"scr_coroutine_transform",
   "parent":{
     "name":"Parsing",
     "path":"folders/Coroutine/Parsing.yy",

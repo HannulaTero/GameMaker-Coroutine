@@ -1,12 +1,12 @@
 
 
-
-/// @func CoroutineCompiler();
+/*
+/// @func CoroutineParser();
 /// @desc Generates linear instructions from given nodes (abstract syntax tree).
-function CoroutineCompiler() constructor
+function CoroutineParser() constructor
 {
   self.code = [];
-  self.labels = {};
+  self.label = {};
   self.indexLoop = -1;
   self.indexRegister = -1;
   self.loops = ds_stack_create();
@@ -18,32 +18,32 @@ function CoroutineCompiler() constructor
   static Dispatch = function(_root)
   {
     self.code = _root.code;
-    self.labels = _root.labels;
+    self.label = _root.label;
     self.indexRegister = -1;
-    Compile(_root.nodes);
+    Parse(_root.nodes);
     return new CoroutinePrototype(_root);
   };
   
   
   /// @func Free();
   /// @desc 
-  /// @param {Struct.CoroutineCompiler}
+  /// @param {Struct.CoroutineParser}
   static Free = function()
   {
     self.code = undefined;
-    self.labels = undefined;
+    self.label = undefined;
     self.indexRegister = undefined;
     ds_stack_destroy(loops);
     return self;
   };
   
   
-  /// @func Compile(_node);
+  /// @func Parse(_node);
   /// @desc 
   /// @param {Array} _node
-  static Compile = function(_node)
+  static Parse = function(_node)
   {
-    (compilers[$ _node.name] ?? compilers[$ "<UNKNOWN>"])(_node);
+    (parsers[$ _node.name] ?? parsers[$ "<UNKNOWN>"])(_node);
   };
   
   
@@ -227,9 +227,9 @@ function CoroutineCompiler() constructor
   };
   
   
-  // Lookup-table for compiling different node-types.
+  // Lookup-table for parsing different node-types.
   // Of course a switch-statement could be used instead.
-  static compilers = coroutine_mapping([ 
+  static parsers = coroutine_mapping([ 
   
     // General error message.
     // At the time of writing, this is unused. But might be used later.
@@ -275,7 +275,7 @@ function CoroutineCompiler() constructor
       var _count = array_length(_nodes);
       for(var i = 0; i < _count; i++)
       {
-        Compile(_nodes[i]);
+        Parse(_nodes[i]);
       }
       ScopePop();
     },
@@ -301,7 +301,7 @@ function CoroutineCompiler() constructor
     {
       // Handle then-branch.
       var _jumpExit = EmitJumpCondCall(_node.cond);
-      Compile(_node.nodeThen);
+      Parse(_node.nodeThen);
       
       // Handle then-branch
       if (_node.nodeElse != undefined)
@@ -309,7 +309,7 @@ function CoroutineCompiler() constructor
         var _jumpElse = EmitJump();
         PatchJump(_jumpExit);
         _jumpExit = _jumpElse;
-        Compile(_node.nodeElse);
+        Parse(_node.nodeElse);
       }
       
       // Exiting the statement.
@@ -328,7 +328,7 @@ function CoroutineCompiler() constructor
       if (_node.cond != undefined)
         LoopCond(_node.cond);
       
-      Compile(_node.body);
+      Parse(_node.body);
       
       if (_node.iter != undefined)
         EmitCall(_node.iter);
@@ -343,7 +343,7 @@ function CoroutineCompiler() constructor
     {
       LoopPush();
       LoopCond(_node.cond);
-      Compile(_node.body);
+      Parse(_node.body);
       LoopPop();
     },
     
@@ -360,7 +360,7 @@ function CoroutineCompiler() constructor
       LoopCondReg(_regCounter);
       
       // Repeat body.
-      Compile(_node.body);
+      Parse(_node.body);
       EmitCode("REG_DECR", _regCounter);
       
       // Finalize.
@@ -382,7 +382,7 @@ function CoroutineCompiler() constructor
       // Condition.
       LoopPush();
       LoopCondForeachNext(_register);
-      Compile(_node.body);
+      Parse(_node.body);
       
       // Exit the loop.
       LoopPop();
@@ -426,7 +426,7 @@ function CoroutineCompiler() constructor
     function(_node)
     {
       EmitCode("ASYNC", _node.type);
-      Compile(_node.body);
+      Parse(_node.body);
     },
     
     
@@ -453,7 +453,7 @@ function CoroutineCompiler() constructor
     ["LABEL"],
     function(_node)
     {
-      labels[$ _node.label] = JumpTarget();
+      label[$ _node.label] = JumpTarget();
     },
   ]);
 }

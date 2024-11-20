@@ -1,27 +1,27 @@
-
+/*
 /// @func coroutine_instruction(_opcode);
 /// @desc Returns executable function from given instruction name.
 /// @param {String} _opcode
 /// @returns {Function}
 function coroutine_instruction(_opcode)
 {
-  /*
-    Lookup-table for different instructions.
-    -> Of course a switch-statement could have been used instead.
-    
-    Execution scope is assumed to be the the coroutine. 
-    Returning "true" means coroutine will continue executing next instruction.
-  */
+  //
+  //Lookup-table for different instructions.
+  //-> Of course a switch-statement could have been used instead.
+  //
+  //Execution scope is assumed to be the the coroutine. 
+  //Returning "true" means coroutine will continue executing next instruction.
+  //
+  
   static instructions = coroutine_mapping([ 
     // feather ignore GM1049
     // feather ignore GM1041
-    
     
   
     ["BEGIN"],
     function()
     {
-      Execute(triggers.onInit);
+      Execute(trigger.onInit);
       return false;
     },
     
@@ -29,10 +29,16 @@ function coroutine_instruction(_opcode)
     ["FINISH"],
     function()
     {
-      COROUTINE_ACTIVE.Detach(self);
-      finished = true;
+      ds_list_delete(__COROUTINE_INSTANCES, __COROUTINE_CURRENT--);
+      if (parent != undefined)
+      {
+        struct_remove(parent.childs, identifier);
+      }
       
-      Execute(triggers.onComplete);
+      finished = true;
+      result = undefined;
+      
+      Execute(trigger.onComplete);
       
       return false;
     },
@@ -143,7 +149,7 @@ function coroutine_instruction(_opcode)
       // Define foreach-iterator.
       var _item = undefined;
       with(scope) _item = _callItem();
-      var _iterator = new CoroutineForeachIterator(); 
+      var _iterator = new CoroutineIterator(); 
       _iterator.Initialize(_item, _nameValue, _nameKey);
       local[_register] = _iterator;
       return true;
@@ -172,16 +178,13 @@ function coroutine_instruction(_opcode)
     ["PAUSE"],
     function()
     {
-      COROUTINE_ACTIVE.Detach(coroutine);
-      COROUTINE_PAUSED.InsertTail(coroutine);
-      
       var _result = undefined;
       var _method = code[index++];
       with(scope) _result = _method();
       result = _result;
       paused = true;
       
-      Execute(triggers.onPause);
+      Execute(trigger.onPause);
       
       return true;
     },
@@ -195,7 +198,7 @@ function coroutine_instruction(_opcode)
       with(scope) _result = _method();
       result = _result;
       
-      // Manager handles yield-trigger.
+      // Manager handles yield-trigger!
       return false;
     },
     

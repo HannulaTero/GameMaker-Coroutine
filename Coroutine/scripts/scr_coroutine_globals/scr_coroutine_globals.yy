@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_coroutine_globals",
   "parent":{
-    "name":"Settings",
-    "path":"folders/Coroutine/Settings.yy",
+    "name":"Initialization",
+    "path":"folders/Coroutine/Initialization.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

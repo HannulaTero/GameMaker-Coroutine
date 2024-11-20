@@ -1,19 +1,5 @@
 
 
-
-/// @func CO_STATIC_SET(_node);
-/// @desc
-/// @param {Struct} _node
-/// @returns {Struct}
-function CO_STATIC_SET(_node)
-{
-  gml_pragma("forceinline"); 
-  static_set(_node, COROUTINE_MANAGER);
-  return _node;
-}
-
-
-
 /// @func CO_NOP();
 /// @desc
 /// @returns {Undefined}
@@ -30,9 +16,9 @@ function CO_NOP()
 function CO_BEGIN()
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "BEGIN" 
-  }); 
+  }; 
 }
 
 
@@ -42,37 +28,37 @@ function CO_BEGIN()
 function CO_FINISH()
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "FINISH" 
-  }); 
+  }; 
 }
 
 
-/// @func CO_THEN(_nodes);
+/// @func CO_BLOCK(_nodes);
 /// @desc
 /// @param {Array<Struct>} _nodes
 /// @returns {Struct}
-function CO_THEN(_nodes)
+function CO_BLOCK(_nodes)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
-    name: "THEN", 
+  return {
+    name: "BLOCK", 
     nodes: _nodes 
-  }); 
+  }; 
 }
 
 
-/// @func CO_PASS(_call);
+/// @func CO_STMT(_call);
 /// @desc
 /// @param {Function} _call
 /// @returns {Struct}
-function CO_PASS(_call)
+function CO_STMT(_call)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
-    name: "PASS", 
+  return {
+    name: "STMT", 
     call: method(undefined, _call) 
-  }); 
+  }; 
 }
 
 
@@ -83,10 +69,10 @@ function CO_PASS(_call)
 function CO_LABEL(_label)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "LABEL", 
-    label: _label.name 
-  });
+    label: _label.label 
+  };
 }
 
 
@@ -97,10 +83,10 @@ function CO_LABEL(_label)
 function CO_YIELD(_call)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "YIELD", 
     call: method(undefined, _call) 
-  });
+  };
 }
 
 
@@ -111,10 +97,10 @@ function CO_YIELD(_call)
 function CO_PAUSE(_call)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "PAUSE", 
     call: method(undefined, _call)
-  });
+  };
 }
 
 
@@ -126,11 +112,11 @@ function CO_PAUSE(_call)
 function CO_DELAY(_call, _type)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "DELAY", 
     call: method(undefined, _call), 
     type: _type 
-  });
+  };
 }
 
 
@@ -142,11 +128,23 @@ function CO_DELAY(_call, _type)
 function CO_AWAIT(_type, _call)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "AWAIT", 
     call: method(undefined, _call), 
     type: _type 
-  }); 
+  }; 
+}
+
+
+/// @func CO_AWAIT_CHILDRENS();
+/// @desc
+/// @returns {Struct}
+function CO_AWAIT_CHILDRENS()
+{ 
+  gml_pragma("forceinline"); 
+  return {
+    name: "AWAIT_CHILDRENS", 
+  }; 
 }
 
 
@@ -158,11 +156,11 @@ function CO_AWAIT(_type, _call)
 function CO_ASYNC(_type, _body)
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "ASYNC", 
     body: _body, 
     type: _type 
-  }); 
+  }; 
 }
 
 
@@ -174,11 +172,11 @@ function CO_ASYNC(_type, _body)
 function CO_TIMEOUT(_call, _type) 
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "TIMEOUT", 
     call: method(undefined, _call), 
     type: _type 
-  }); 
+  }; 
 }
 
 
@@ -219,12 +217,58 @@ function CO_IF_CHAIN()
 function CO_IF(_cond, _then, _else=undefined) 
 { 
   gml_pragma("forceinline");   
-  return CO_STATIC_SET({
+  return {
     name: "IF", 
     cond: method(undefined, _cond),
     nodeThen: _then,
     nodeElse: _else,
-  }); 
+  }; 
+}
+
+
+/// @func CO_SWITCH();
+/// @desc Switch-statement, which allows arbitrary number of cases. 
+/// @returns {Struct}
+function CO_SWITCH()
+{
+  gml_pragma("forceinline"); 
+  var _item = argument[1];
+  var _cases = [];
+  var _default = undefined;
+  for(var i = 1; i < argument_count; i+=2)
+  {
+    var _cond = argument[i + 0];
+    var _body = argument[i + 1];
+    if (_cond == CO_NOP)
+    {
+      _default = _body;
+      break;
+    }
+    array_push(_cases, { 
+      cond: _cond, 
+      body: _body 
+    });
+  }
+  return {
+    name: "SWITCH",
+    item: _item,
+    cases: _cases,
+    def: _default,
+  };
+}
+
+
+/// @func CO_LOOP(_body);
+/// @desc
+/// @param {Struct} _body
+/// @returns {Struct}
+function CO_LOOP(_body) 
+{ 
+  gml_pragma("forceinline"); 
+  return {
+    name: "LOOP", 
+    body: _body,
+  }; 
 }
 
 
@@ -236,11 +280,11 @@ function CO_IF(_cond, _then, _else=undefined)
 function CO_WHILE(_cond, _body) 
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "WHILE", 
     cond: method(undefined, _cond),
     body: _body,
-  }); 
+  }; 
 }
 
 
@@ -252,43 +296,31 @@ function CO_WHILE(_cond, _body)
 function CO_REPEAT(_call, _body) 
 { 
   gml_pragma("forceinline"); 
-  return CO_STATIC_SET({
+  return {
     name: "REPEAT", 
     call: method(undefined, _call),
     body: _body,
-  }); 
+  }; 
 }
 
 
-/// @func CO_FOR();
-/// @desc Init is always first. Cond and iter are optional. Last argument should be the body.
+/// @func CO_FOR(_init, _cond, _iter, _body);
+/// @desc 
+/// @param {Function} _init
+/// @param {Function} _cond
+/// @param {Function} _iter
+/// @param {Struct} _body
 /// @returns {Struct}
-function CO_FOR() 
+function CO_FOR(_init, _cond, _iter, _body) 
 { 
   gml_pragma("forceinline"); 
-  
-  // Handle optional parts.
-  var _init = method(undefined, argument[0]);
-  var _cond = undefined;
-  var _iter = undefined;
-  var _body = argument[argument_count - 1];
-  var _count = argument_count - 2;
-  for(var i = 1; i < _count; i+=2)
-  {
-    var _mark = argument[i];
-    var _call = method(undefined, argument[i+1]);
-    if (_mark == "INIT") _init = _call;
-    else if (_mark == "COND") _cond = _call;
-    else if (_mark == "ITER") _iter = _call;
-  }
-  
-  return CO_STATIC_SET({
+  return {
     name: "FOR", 
-    init: _init,
-    cond: _cond,
-    iter: _iter,
+    init: method(undefined, _init),
+    cond: method(undefined, _cond),
+    iter: method(undefined, _iter),
     body: _body,
-  }); 
+  }; 
 }
 
 
@@ -318,12 +350,14 @@ function CO_FOREACH(_names, _item, _body)
   array_resize(_structNameKeys, 0);
   
   // Return the struct
-  return CO_STATIC_SET({
+  return {
     name: "FOREACH", 
     item: method(undefined, _item),
     body: _body,
     key: _nameKey, 
     val: _nameVal,
-  }); 
+  }; 
 }
+
+
 

@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_coroutine_macros",
   "parent":{
-    "name":"General",
-    "path":"folders/Coroutine/General.yy",
+    "name":"Initialization",
+    "path":"folders/Coroutine/Initialization.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

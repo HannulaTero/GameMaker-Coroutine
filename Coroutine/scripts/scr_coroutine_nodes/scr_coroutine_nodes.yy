@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_coroutine_nodes",
   "parent":{
-    "name":"Compiling",
-    "path":"folders/Coroutine/Compiling.yy",
+    "name":"Parsing",
+    "path":"folders/Coroutine/Parsing.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

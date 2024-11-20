@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_coroutine_prototype",
+  "%Name":"scr_test_suite",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_coroutine_prototype",
+  "name":"scr_test_suite",
   "parent":{
-    "name":"Parsing",
-    "path":"folders/Coroutine/Parsing.yy",
+    "name":"Coroutine Example",
+    "path":"folders/Coroutine Example.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

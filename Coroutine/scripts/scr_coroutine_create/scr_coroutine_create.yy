@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_coroutine_create",
   "parent":{
-    "name":"General",
-    "path":"folders/Coroutine/General.yy",
+    "name":"Parsing",
+    "path":"folders/Coroutine/Parsing.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -1,5 +1,5 @@
-
-COROUTINE_SINGLETON
+/// @desc SINGLETON.
+__COROUTINE_SINGLETON
 
 // Set as last instance to draw.
 depth = -15_999; // Note that execution order based on depth is undefined behaviour!
@@ -7,7 +7,4 @@ depth = -15_999; // Note that execution order based on depth is undefined behavi
 
 margin = 0.9;
 coroutine = undefined;
-index = 0;
-code = [];
-
- 
+link = undefined;
