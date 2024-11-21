@@ -52,10 +52,10 @@ try
       }
         
       // Check whether there are more coroutines available.
-      if (_index >= _count) break;
+      if (++_index >= _count) break;
     
       // Fetch next coroutine.
-      _coroutine = _coroutines[_index++];
+      _coroutine = _coroutines[_index];
       with(_coroutine)
       {
         // Preparations.

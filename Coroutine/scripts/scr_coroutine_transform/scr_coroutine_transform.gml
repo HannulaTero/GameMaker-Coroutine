@@ -210,20 +210,20 @@ function CoroutineTransform() constructor
         unit: units[$ _node.type](),
         execute: function()
         {
+          // Delete from active and yield. 
+          ds_map_delete(COROUTINE_POOL_ACTIVE, COROUTINE_CURRENT);
+          COROUTINE_POOL_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
+          COROUTINE_EXECUTE = next;
+          COROUTINE_YIELD = true;
+          
           // Return back to active after delay.
           var _delay = coroutine_execute(call) / rate;
           COROUTINE_CURRENT.delayTimer = call_later(_delay, unit, method(COROUTINE_CURRENT, function()
           {
-            ds_map_delete(COROUTINE_POOL_PAUSED, COROUTINE_CURRENT);
+            ds_map_delete(COROUTINE_POOL_PAUSED, self);
             COROUTINE_POOL_ACTIVE[? self] = self;
             delayTimer = undefined;
           }));
-          
-          // Delete from active and yield. 
-          ds_map_delete(COROUTINE_POOL_ACTIVE, COROUTINE_CURRENT);
-          COROUTINE_POOL_PAUSED[? self] = self;
-          COROUTINE_EXECUTE = next;
-          COROUTINE_YIELD = true;
         }
       };
     },

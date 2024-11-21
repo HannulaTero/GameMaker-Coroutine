@@ -1,10 +1,12 @@
 show_debug_overlay(true, false);
 
-var i = 0; 
-repeat(1000)
+var _count = 1000;
+for(var i = 0; i < _count; i++)
 {
-  
-  instance_create_depth(lerp(0, room_width, i++/1000), random(room_height), 0, obj_example_thing);
+  var _rate = (i + 0.5) / _count;
+  var _x = lerp(0, room_width, _rate);
+  var _y = lerp(0, room_height, random(1));
+  instance_create_depth(_x, _y, 0, obj_example_thing);
 }
 
 /*

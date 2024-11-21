@@ -1,7 +1,7 @@
 show_debug_overlay(true, true);
 
 surface = -1;
-
+/*
 
 array = array_create_ext(30, function()
 {

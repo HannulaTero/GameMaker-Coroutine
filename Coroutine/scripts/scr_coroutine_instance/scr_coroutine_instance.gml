@@ -81,6 +81,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Pause = function()
   {
+    if (delayTimer != undefined) call_cancel(delayTimer);
     ds_map_delete(COROUTINE_POOL_ACTIVE, self);
     COROUTINE_POOL_PAUSED[? self] = self;
     Execute(trigger.onPause);
@@ -149,10 +150,8 @@ function CoroutineInstance(_prototype, _this=other) constructor
   static Cancel = function()
   {
     if (delayTimer != undefined) call_cancel(delayTimer);
-    if (coroutine_paused_remove(self) == false)
-    {
-      coroutine_active_remove(self);
-    }
+    ds_map_delete(COROUTINE_POOL_PAUSED, self);
+    ds_map_delete(COROUTINE_POOL_ACTIVE, self);
     Execute(trigger.onCancel);
     return self;
   };
