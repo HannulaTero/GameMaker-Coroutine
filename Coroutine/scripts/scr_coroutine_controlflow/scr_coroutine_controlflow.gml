@@ -11,7 +11,7 @@ function CO_RUNTIME_RESTART()
   with(COROUTINE_CURRENT)
   {
     Restart();
-    COROUTINE_EXECUTE = execute;
+    return execute;
   }
 }
 
@@ -21,7 +21,7 @@ function CO_RUNTIME_RESTART()
 /// @returns {Function}
 function CO_RUNTIME_CONTINUE()
 {
-  COROUTINE_EXECUTE = method_get_self(COROUTINE_EXECUTE).onContinue;
+  return method_get_self(COROUTINE_EXECUTE).onContinue;
 }
 
 
@@ -30,7 +30,7 @@ function CO_RUNTIME_CONTINUE()
 /// @returns {Function}
 function CO_RUNTIME_BREAK()
 {
-  COROUTINE_EXECUTE = method_get_self(COROUTINE_EXECUTE).onBreak;
+  return method_get_self(COROUTINE_EXECUTE).onBreak;
 }
 
 
@@ -41,8 +41,8 @@ function CO_RUNTIME_BREAK()
 function CO_RUNTIME_RETURN(_return)
 {
   COROUTINE_CURRENT.Finish(_return);
-  COROUTINE_EXECUTE = undefined;
   COROUTINE_YIELD = true;
+  return undefined;
 }
 
 
@@ -52,8 +52,8 @@ function CO_RUNTIME_RETURN(_return)
 function CO_RUNTIME_CANCEL()
 {
   COROUTINE_CURRENT.Cancel();
-  COROUTINE_EXECUTE = undefined;
   COROUTINE_YIELD = true;
+  return undefined;
 }
 
 
@@ -70,7 +70,7 @@ function CO_RUNTIME_GOTO(_label)
     {
       throw($"{name}, Unknown GOTO -target: '{_label}'.");
     }
-    COROUTINE_EXECUTE = labels[$ _label];
+    return labels[$ _label];
   }
 }
 

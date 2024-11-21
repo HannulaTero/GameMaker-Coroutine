@@ -72,7 +72,6 @@
 #macro CANCEL           return CO_RUNTIME_CANCEL() 
 #macro RETURN           for(var ____;; { return CO_RUNTIME_RETURN(____); }) ____ =
 #macro GOTO             for(var ____;; { return CO_RUNTIME_GOTO(____); }) ____ =
-#macro MATCH            CO_RUNTIME_MATCH(function() { return 
 
 
 // Runtime async request, and its triggers.

@@ -1,7 +1,7 @@
 
 
 /// @func CO_NOP();
-/// @desc
+/// @desc No operation, works as a marker.
 /// @returns {Undefined}
 function CO_NOP()
 {

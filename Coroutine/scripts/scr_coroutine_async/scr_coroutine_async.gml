@@ -11,8 +11,6 @@ function CoroutineAsync(_params) constructor
   self.desc = _params[$ "desc"] ?? $"";
   self.timeout = _params[$ "timeout"] ?? 300.0; // in seconds.
   self.retries = _params[$ "retries"] ?? 0;
-  self.pending = _params[$ "pending"] ?? true;
-  self.listen = _params[$ "listen"] ?? false;
   self.timeInitialized = current_time;
   
   

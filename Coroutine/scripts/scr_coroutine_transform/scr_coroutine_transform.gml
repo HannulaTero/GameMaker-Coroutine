@@ -92,12 +92,7 @@ function CoroutineTransform() constructor
       return { 
         execute: function()
         {
-          // feather ignore GM1049
-          with(COROUTINE_CURRENT)
-          {
-            Execute(trigger.onComplete);
-            Finish(undefined);
-          }
+          COROUTINE_CURRENT.Finish(undefined);
           COROUTINE_EXECUTE = execute;
           COROUTINE_YIELD = true;
         }
@@ -132,6 +127,7 @@ function CoroutineTransform() constructor
         onContinue: _continue.execute,
         execute: function()
         {
+          // Return value sohuld be from calling coroutine control flow statements.
           COROUTINE_EXECUTE = coroutine_execute(call) ?? next;
         }
       };
