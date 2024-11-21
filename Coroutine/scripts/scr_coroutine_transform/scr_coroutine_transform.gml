@@ -172,7 +172,7 @@ function CoroutineTransform() constructor
         call: _node.call,
         execute: function()
         {
-          COROUTINE_LIST_PAUSED.InsertTail(link);
+          COROUTINE_LIST_PAUSED.InsertTail(COROUTINE_CURRENT.link);
           COROUTINE_RESULT = coroutine_execute(call);
           coroutine_execute(COROUTINE_CURRENT.trigger.onPause);
           COROUTINE_EXECUTE = next;
@@ -189,46 +189,72 @@ function CoroutineTransform() constructor
     {
       // Cases for different delay-types.
       static rates = coroutine_mapping([
-        ["MICROS"], function(_value) { return _value; }, 
-        ["MILLIS"], function(_value) { return _value * 1_000.0; }, 
-        ["FRAMES"], function(_value) { return _value * game_get_speed(gamespeed_microseconds); }, 
-        ["SECONDS"], function(_value) { return _value * 1_000_000.0; }, 
+        ["MICROS"], function() { return 1_000_000.0; }, 
+        ["MILLIS"], function() { return 1_000.0; }, 
+        ["FRAMES"], function() { return 1.0; }, 
+        ["SECONDS"], function() { return 1.0; }, 
       ]);
       
-      // Split into two parts, first get initial value.
-      var _init = {
-        next: undefined,
-        call: _node.call,
-        rate: rates[$ _node.type],
-        register,
-        execute: function()
-        {
-          var _begin = get_timer();
-          var _delay = coroutine_execute(call);
-          COROUTINE_LOCAL[register] = _begin + rate(_delay);
-          COROUTINE_EXECUTE = next;
-        }
-      };
+      static units = coroutine_mapping([
+        ["MICROS"], function() { return time_source_units_seconds; }, 
+        ["MILLIS"], function() { return time_source_units_seconds; }, 
+        ["FRAMES"], function() { return time_source_units_frames; }, 
+        ["SECONDS"], function() { return time_source_units_seconds; }, 
+      ]);
       
-      // Second part is yield-loop until the time is met.
-      var _wait = {
+      return {
         next: _next.execute,
-        register,
+        call: _node.call,
+        rate: rates[$ _node.type](),
+        unit: units[$ _node.type](),
         execute: function()
         {
-          if (get_timer() < COROUTINE_LOCAL[register])
+          var _delay = coroutine_execute(call) / rate;
+          COROUTINE_CURRENT.delayTimer = call_later(250, time_source_units_frames, method(COROUTINE_CURRENT, function()
           {
-            COROUTINE_EXECUTE = execute;
-            COROUTINE_YIELD = true;
-            return;
-          }
+            COROUTINE_LIST_ACTIVE.InsertTail(link);
+            show_debug_message(ptr(self));
+          }));
+          COROUTINE_LIST_PAUSED.InsertTail(COROUTINE_CURRENT.link);
           COROUTINE_EXECUTE = next;
+          COROUTINE_YIELD = true;
         }
       };
       
-      // Patch as now second part is known.
-      _init.next = _wait.execute;
-      return _init;
+      // Split into two parts, first get initial value.
+      //var _init = {
+      //  next: undefined,
+      //  call: _node.call,
+      //  rate: rates[$ _node.type],
+      //  register,
+      //  execute: function()
+      //  {
+      //    var _begin = get_timer();
+      //    var _delay = coroutine_execute(call);
+      //    COROUTINE_LOCAL[register] = _begin + rate(_delay);
+      //    COROUTINE_EXECUTE = next;
+      //  }
+      //};
+      //
+      //// Second part is yield-loop until the time is met.
+      //var _wait = {
+      //  next: _next.execute,
+      //  register,
+      //  execute: function()
+      //  {
+      //    if (get_timer() < COROUTINE_LOCAL[register])
+      //    {
+      //      COROUTINE_EXECUTE = execute;
+      //      COROUTINE_YIELD = true;
+      //      return;
+      //    }
+      //    COROUTINE_EXECUTE = next;
+      //  }
+      //};
+      //
+      //// Patch as now second part is known.
+      //_init.next = _wait.execute;
+      //return _init;
     },
     
     

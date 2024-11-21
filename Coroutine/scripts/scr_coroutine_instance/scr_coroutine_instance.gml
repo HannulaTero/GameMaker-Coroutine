@@ -23,6 +23,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   self.option = _prototype.option;
   self.trigger = _prototype.trigger;
   self.execute = graph.execute;
+  self.delayTimer = undefined;
   
   
   // Execution states.

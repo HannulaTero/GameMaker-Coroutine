@@ -1,5 +1,7 @@
 show_debug_overlay(true, true);
 
+surface = -1;
+/*
 
 array = array_create_ext(30, function()
 {
@@ -43,7 +45,6 @@ coroutine = COROUTINE BEGIN
   
 FINISH DISPATCH
 
-surface = -1;
 
 coroutine = COROUTINE
     name: @'Drawing Coroutine',

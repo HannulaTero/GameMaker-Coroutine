@@ -1,11 +1,13 @@
 show_debug_overlay(true, false);
 
-repeat(100)
+var i = 0; 
+repeat(500)
 {
-  instance_create_depth(random(room_width), random(room_height), 0, obj_example_thing);
+  
+  instance_create_depth(lerp(0, room_width, i++/500), random(room_height), 0, obj_example_thing);
 }
 
-
+/*
 COROUTINE BEGIN
 
 ASYNC_BEGIN 
@@ -20,7 +22,7 @@ var _async = new CoroutineAsync({
   show_debug_message(async_load[? "result"] * 10);
 }).AsyncDispatch();
 
-
+/*
 LOOP
 DELAY 500 MILLIS
 time = get_timer();
