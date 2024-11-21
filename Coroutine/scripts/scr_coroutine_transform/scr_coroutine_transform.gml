@@ -154,7 +154,7 @@ function CoroutineTransform() constructor
         call: _node.call, 
         execute: function()
         {
-          COROUTINE_RESULT = coroutine_execute(call);
+          COROUTINE_CURRENT.result = coroutine_execute(call);
           COROUTINE_EXECUTE = next;
           COROUTINE_YIELD = true;
         }
@@ -172,10 +172,10 @@ function CoroutineTransform() constructor
         call: _node.call,
         execute: function()
         {
-          ds_list_delete(COROUTINE_LIST_ACTIVE, COROUTINE_INDEX--);
-          COROUTINE_LIST_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
-          COROUTINE_RESULT = coroutine_execute(call);
+          COROUTINE_CURRENT.result = coroutine_execute(call);
           coroutine_execute(COROUTINE_CURRENT.trigger.onPause);
+          ds_map_delete(COROUTINE_POOL_ACTIVE, COROUTINE_CURRENT);
+          COROUTINE_POOL_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
           COROUTINE_EXECUTE = next;
           COROUTINE_YIELD = true;
         }
@@ -214,53 +214,18 @@ function CoroutineTransform() constructor
           var _delay = coroutine_execute(call) / rate;
           COROUTINE_CURRENT.delayTimer = call_later(_delay, unit, method(COROUTINE_CURRENT, function()
           {
-            coroutine_paused_remove(self);
-            ds_list_add(COROUTINE_LIST_ACTIVE, self);
+            ds_map_delete(COROUTINE_POOL_PAUSED, COROUTINE_CURRENT);
+            COROUTINE_POOL_ACTIVE[? self] = self;
             delayTimer = undefined;
           }));
           
           // Delete from active and yield. 
-          ds_list_delete(COROUTINE_LIST_ACTIVE, COROUTINE_INDEX--);
-          COROUTINE_LIST_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
+          ds_map_delete(COROUTINE_POOL_ACTIVE, COROUTINE_CURRENT);
+          COROUTINE_POOL_PAUSED[? self] = self;
           COROUTINE_EXECUTE = next;
           COROUTINE_YIELD = true;
         }
       };
-      
-      // Split into two parts, first get initial value.
-      //var _init = {
-      //  next: undefined,
-      //  call: _node.call,
-      //  rate: rates[$ _node.type],
-      //  register,
-      //  execute: function()
-      //  {
-      //    var _begin = get_timer();
-      //    var _delay = coroutine_execute(call);
-      //    COROUTINE_LOCAL[register] = _begin + rate(_delay);
-      //    COROUTINE_EXECUTE = next;
-      //  }
-      //};
-      //
-      //// Second part is yield-loop until the time is met.
-      //var _wait = {
-      //  next: _next.execute,
-      //  register,
-      //  execute: function()
-      //  {
-      //    if (get_timer() < COROUTINE_LOCAL[register])
-      //    {
-      //      COROUTINE_EXECUTE = execute;
-      //      COROUTINE_YIELD = true;
-      //      return;
-      //    }
-      //    COROUTINE_EXECUTE = next;
-      //  }
-      //};
-      //
-      //// Patch as now second part is known.
-      //_init.next = _wait.execute;
-      //return _init;
     },
     
     

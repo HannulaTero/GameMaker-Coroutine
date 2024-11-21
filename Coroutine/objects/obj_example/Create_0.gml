@@ -1,7 +1,7 @@
 show_debug_overlay(true, true);
 
 surface = -1;
-/*
+
 
 array = array_create_ext(30, function()
 {
@@ -140,7 +140,7 @@ COROUTINE BEGIN
   ITER i++;
   THEN
     show_debug_message(i);
-    if (keyboard_check_pressed(vk_enter)) QUIT;
+    if (keyboard_check_pressed(vk_enter)) EXIT;
     if (keyboard_check_pressed(vk_space)) GOTO "restart";
     YIELD "Looping" PASS
   END
@@ -190,7 +190,11 @@ COROUTINE BEGIN
   FOREACH k: key, kval: value IN RANGE(1024, 0, -10) THEN
   FOREACH l: key, lval: value IN RANGE(1024, 0, -20) THEN
     show_debug_message($"[{i}][{j}][{k}][{l}] = [{ival}][{jval}][{kval}][{lval}]");
-    DELAY 1.0 SECONDS
+    if (keyboard_check(ord("1"))) CONTINUE
+    if (keyboard_check(ord("2"))) BREAK
+    if (keyboard_check(ord("3"))) EXIT
+    if (keyboard_check(ord("5"))) RETURN 100;
+    DELAY 0.1 SECONDS
   END END END END
     
 FINISH DISPATCH 

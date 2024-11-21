@@ -40,7 +40,6 @@
 #macro ASYNC            }), CO_ASYNC((function() { return
 
 #macro IF               }), CO_IF_CHAIN((function() { return
-#macro WHEN             }), CO_IF_CHAIN((function() { return
 #macro ELIF             })]), (function() { return
 #macro ELSE             })]), (CO_NOP), CO_BLOCK([CO_STMT(function() {
   
@@ -68,7 +67,7 @@
 #macro RESTART          return CO_RUNTIME_RESTART()
 #macro CONTINUE         return CO_RUNTIME_CONTINUE()
 #macro BREAK            return CO_RUNTIME_BREAK()
-#macro QUIT             return CO_RUNTIME_RETURN(undefined) 
+#macro EXIT             return CO_RUNTIME_RETURN(undefined) 
 #macro CANCEL           return CO_RUNTIME_CANCEL() 
 #macro RETURN           for(var ____;; { return CO_RUNTIME_RETURN(____); }) ____ =
 #macro GOTO             for(var ____;; { return CO_RUNTIME_GOTO(____); }) ____ =
@@ -83,6 +82,16 @@
 #macro ON_TIMEOUT       })).SetTimeout((function() {
 #macro ON_LISTEN        })).SetListen((function() {
 #macro ASYNC_END        })).AsyncDispatch())
+
+
+
+
+
+
+
+
+
+
 
 
 

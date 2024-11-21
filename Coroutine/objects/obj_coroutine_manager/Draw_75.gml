@@ -2,24 +2,22 @@
 
 
 // No active coroutines, quit early.
-if (ds_list_size(COROUTINE_LIST_ACTIVE) <= 0)
+var _count = ds_map_size(COROUTINE_POOL_ACTIVE);
+if (_count <= 0)
 {
   exit;
 }
 
-// Fetch these beforehand for slight optimization.
-var _gameSpeed = game_get_speed(gamespeed_microseconds) / 1_000.0;
-var _timeBegin = COROUTINE_FRAME_TIME_BEGIN;
 
 // Fetch the coroutine.
-COROUTINE_INDEX = 0;
-var _coroutine = COROUTINE_LIST_ACTIVE[| COROUTINE_INDEX];
+var _index = 0;
+var _coroutines = ds_map_keys_to_array(COROUTINE_POOL_ACTIVE);
+var _coroutine = _coroutines[_index];
 with(_coroutine)
 {
   // Preparations.
   COROUTINE_CURRENT = self;
   COROUTINE_EXECUTE = execute;
-  COROUTINE_RESULT = undefined;
   COROUTINE_LOCAL = local;
   COROUTINE_SCOPE = scope;
   COROUTINE_YIELD = false;
@@ -27,6 +25,11 @@ with(_coroutine)
   // Launch the coroutine.
   coroutine_execute(trigger.onLaunch);
 }
+
+
+// Fetch these beforehand for slight optimization.
+var _gameSpeed = game_get_speed(gamespeed_microseconds) / 1_000.0;
+var _timeBegin = COROUTINE_FRAME_TIME_BEGIN;
 
 
 // Do-until to ensure something happens, even if frame-budget is exceeded.
@@ -46,23 +49,18 @@ try
       {
         coroutine_execute(trigger.onYield);
         execute = COROUTINE_EXECUTE;
-        result = COROUTINE_RESULT;
       }
         
       // Check whether there are more coroutines available.
-      if (++COROUTINE_INDEX >= ds_list_size(COROUTINE_LIST_ACTIVE))
-      {
-        break;
-      }
+      if (_index >= _count) break;
     
       // Fetch next coroutine.
-      _coroutine = COROUTINE_LIST_ACTIVE[| COROUTINE_INDEX];
+      _coroutine = _coroutines[_index++];
       with(_coroutine)
       {
         // Preparations.
         COROUTINE_CURRENT = self;
         COROUTINE_EXECUTE = execute;
-        COROUTINE_RESULT = undefined;
         COROUTINE_LOCAL = local;
         COROUTINE_SCOPE = scope;
         COROUTINE_YIELD = false;
@@ -79,8 +77,11 @@ try
 } 
 
 // Something wrong happened while executing coroutine.
+// Store error in coroutine result, and jump over action which caused error.
 catch(_error)
 {
+  COROUTINE_CURRENT.result = _error;
+  COROUTINE_CURRENT.execute = method_get_self(COROUTINE_EXECUTE).next;
   var _line = string_repeat("=", 64);
   show_debug_message(_line);
   show_debug_message(_error);
@@ -99,10 +100,20 @@ if (COROUTINE_YIELD == false)
   }
 }
 
-// Clear the globals.
+
+// Clear up the things.
 COROUTINE_CURRENT = undefined;
 COROUTINE_EXECUTE = undefined;
-COROUTINE_RESULT = undefined;
 COROUTINE_LOCAL = undefined;
 COROUTINE_SCOPE = undefined;
 COROUTINE_YIELD = undefined;
+array_resize(_coroutines, 0);
+
+
+
+
+
+
+
+
+

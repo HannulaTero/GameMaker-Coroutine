@@ -39,7 +39,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   // Initialize the coroutine, check whether is subcoroutine.
   // feather ignore GM2043
   Execute(trigger.onInit);
-  ds_list_add(COROUTINE_LIST_ACTIVE, self);
+  COROUTINE_POOL_ACTIVE[? self] = self;
   if (COROUTINE_CURRENT != undefined)
   {
     parent = COROUTINE_CURRENT;
@@ -81,11 +81,9 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Pause = function()
   {
-    if (coroutine_active_remove(self))
-    {
-      COROUTINE_LIST_PAUSED[? self] = self;
-      Execute(trigger.onPause);
-    }
+    ds_map_delete(COROUTINE_POOL_ACTIVE, self);
+    COROUTINE_POOL_PAUSED[? self] = self;
+    Execute(trigger.onPause);
     return self;
   };
   
@@ -95,12 +93,10 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Resume = function()
   {
-    if (coroutine_paused_remove(self))
-    {
-      if (delayTimer != undefined) call_cancel(delayTimer);
-      ds_list_add(COROUTINE_LIST_ACTIVE, self);
-      Execute(trigger.onResume);
-    }
+    if (delayTimer != undefined) call_cancel(delayTimer);
+    ds_map_delete(COROUTINE_POOL_PAUSED, self);
+    COROUTINE_POOL_ACTIVE[? self] = self;
+    Execute(trigger.onResume);
     return self;
   };
   
@@ -111,10 +107,8 @@ function CoroutineInstance(_prototype, _this=other) constructor
   static Restart = function()
   {
     if (delayTimer != undefined) call_cancel(delayTimer);
-    coroutine_active_remove(self);
-    coroutine_paused_remove(self);
-    
-    ds_list_add(COROUTINE_LIST_ACTIVE, self);
+    ds_map_delete(COROUTINE_POOL_PAUSED, self);
+    COROUTINE_POOL_ACTIVE[? self] = self;
     self.execute = graph.execute;
     self.finished = false;
     return self;
@@ -130,10 +124,8 @@ function CoroutineInstance(_prototype, _this=other) constructor
     if (finished == false)
     {
       if (delayTimer != undefined) call_cancel(delayTimer);
-      if (coroutine_paused_remove(self) == false)
-      {
-        coroutine_active_remove(self);
-      }
+      ds_map_delete(COROUTINE_POOL_PAUSED, self);
+      ds_map_delete(COROUTINE_POOL_ACTIVE, self);
       Execute(trigger.onComplete);
       if (parent != undefined)
       {
@@ -180,7 +172,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Bool}
   static isPaused = function()
   {
-    return ds_map_exists(COROUTINE_LIST_PAUSED, self);
+    return ds_map_exists(COROUTINE_POOL_PAUSED, self);
   };
   
   

@@ -16,8 +16,8 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   self.keys = undefined;
   self.index = 0;
   self.count = 0;
-  self.nameVal = _nameKey;
-  self.nameKey = _nameVal;
+  self.nameVal = _nameVal;
+  self.nameKey = _nameKey;
   self.GetVal = function() {};
   self.GetKey = function() {};
 

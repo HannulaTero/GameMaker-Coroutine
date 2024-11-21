@@ -34,7 +34,6 @@
     {"id":{"name":"room_example","path":"rooms/room_example/room_example.yy",},},
     {"id":{"name":"scr_coroutine_async","path":"scripts/scr_coroutine_async/scr_coroutine_async.yy",},},
     {"id":{"name":"scr_coroutine_controlflow","path":"scripts/scr_coroutine_controlflow/scr_coroutine_controlflow.yy",},},
-    {"id":{"name":"scr_coroutine_double_linked_list","path":"scripts/scr_coroutine_double_linked_list/scr_coroutine_double_linked_list.yy",},},
     {"id":{"name":"scr_coroutine_helpers","path":"scripts/scr_coroutine_helpers/scr_coroutine_helpers.yy",},},
     {"id":{"name":"scr_coroutine_initialize","path":"scripts/scr_coroutine_initialize/scr_coroutine_initialize.yy",},},
     {"id":{"name":"scr_coroutine_instance","path":"scripts/scr_coroutine_instance/scr_coroutine_instance.yy",},},
