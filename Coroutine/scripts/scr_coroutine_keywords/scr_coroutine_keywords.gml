@@ -77,11 +77,13 @@
 
 // Runtime async request, and its triggers.
 #macro ASYNC_BEGIN      ((new CoroutineAsync({
+#macro ASYNC_WEB        ((new CoroutineAsync({ type: ev_async_web, 
 #macro GET_REQUEST      })).SetRequest((function() {
 #macro ON_WAITING       })).SetWaiting((function() {
 #macro ON_SUCCESS       })).SetSuccess((function() {
 #macro ON_FAILURE       })).SetFailure((function() {
 #macro ON_TIMEOUT       })).SetTimeout((function() {
+#macro ON_TRIGGED       })).SetTrigged((function() {
 #macro ASYNC_END        })).DoRequest())
 
 

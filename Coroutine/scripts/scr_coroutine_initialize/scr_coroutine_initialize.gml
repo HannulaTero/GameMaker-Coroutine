@@ -3,8 +3,9 @@
 // Initialize globals.
 COROUTINE_LIST_ACTIVE = new CoroutineDoubleLinkedList();
 COROUTINE_LIST_PAUSED = new CoroutineDoubleLinkedList();
-COROUTINE_HASH_CACHE = ds_map_create();
-COROUTINE_HASH_ASYNC = ds_map_create();
+COROUTINE_CACHE_PROTOTYPES = ds_map_create();
+COROUTINE_ASYNC_REQUESTS = ds_map_create();
+COROUTINE_ASYNC_LISTENERS = ds_map_create();
 
 COROUTINE_CURRENT = undefined;
 COROUTINE_EXECUTE = undefined;
@@ -16,24 +17,24 @@ COROUTINE_FRAME_TIME_BEGIN = 0;
 
 // Initialize async event types.
 array_foreach([
-  "Image Loaded",
-  "HTTP",
-  "Dialog",
-  "In-App Purchase",
-  "Cloud",
-  "Networking",
-  "Steam",
-  "Social",
-  "Push Notification",
-  "Save/Load",
-  "Audio Recording",
-  "Audio Playback",
-  "System",
-  "Audio Playback Ended",
-], function(_name, i) 
+  ev_async_web_image_load,
+  ev_async_web,
+  ev_async_dialog,
+  ev_async_web_iap,
+  ev_async_web_cloud,
+  ev_async_web_networking,
+  ev_async_web_steam,
+  ev_async_social,
+  ev_async_push_notification,
+  ev_async_save_load,
+  ev_async_audio_recording,
+  ev_async_audio_playback,
+  ev_async_audio_playback_ended,
+  ev_async_system_event,
+], function(_type, i) 
 {
-  _name = string_lower(_name);
-  COROUTINE_HASH_ASYNC[? _name] = ds_map_create();
+  COROUTINE_ASYNC_REQUESTS[? _type] = ds_map_create();
+  COROUTINE_ASYNC_LISTENERS[? _type] = ds_map_create();
 });
 
 

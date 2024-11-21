@@ -2,7 +2,7 @@
 
 // Check whether request exists.
 var _id = async_load[? "id"];
-var _request = COROUTINE_HASH_ASYNC[? "image loaded"][? _id];
+var _request = COROUTINE_ASYNC_REQUESTS[? event_number][? _id];
 if (_request == undefined)
 {
   exit;

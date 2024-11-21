@@ -100,8 +100,8 @@ COROUTINE BEGIN
   data = undefined;
   
   // Make HTTP request.
-  request = ASYNC_BEGIN
-      type: "http",
+  request = ASYNC_BEGIN 
+      type: ev_async_web,
       desc: $"Request for http_get({url})",
       timeout: 3.0,
   

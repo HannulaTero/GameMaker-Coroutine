@@ -11,6 +11,8 @@ function CoroutineAsync(_params) constructor
   self.desc = _params[$ "desc"] ?? $"";
   self.timeout = _params[$ "timeout"] ?? 300.0; // in seconds.
   self.retries = _params[$ "retries"] ?? 0;
+  self.pending = _params[$ "pending"] ?? true;
+  self.listen = _params[$ "listen"] ?? false;
   self.timeInitialized = current_time;
   
   
@@ -20,6 +22,7 @@ function CoroutineAsync(_params) constructor
   self.onSuccess = function() {};
   self.onFailure = function() {};
   self.onTimeout = function() {};
+  self.onTrigged = function() {};
   
   
   // Sanity check .
@@ -27,9 +30,7 @@ function CoroutineAsync(_params) constructor
   {
     throw("ASYNC: async event type is required.");
   }
-  
-  type = string_lower(type);
-  if (ds_map_exists(COROUTINE_HASH_ASYNC, type) == false)
+  if (ds_map_exists(COROUTINE_ASYNC_REQUESTS, type) == false)
   {
     throw($"ASYNC: async event type is invalid: '{type}'.");
   }
@@ -40,7 +41,7 @@ function CoroutineAsync(_params) constructor
   /// @returns {Bool} 
   static isFinished = function()
   {
-    var _requests = COROUTINE_HASH_ASYNC[? type];
+    var _requests = COROUTINE_ASYNC_REQUESTS[? type];
     return !ds_map_exists(_requests, handle);
   };
   
@@ -77,16 +78,16 @@ function CoroutineAsync(_params) constructor
     }
     
     self.timeInitialized = current_time;
-    COROUTINE_HASH_ASYNC[? type][? handle] = self;
+    COROUTINE_ASYNC_REQUESTS[? type][? handle] = self;
     return self;
   };
   
   
   /// @func SetFinished();
-  /// @desc
+  /// @desc Async action is finished, and is deleted from pending actions.
   static SetFinished = function()
   {
-    ds_map_delete(COROUTINE_HASH_ASYNC[? type], handle);
+    ds_map_delete(COROUTINE_ASYNC_REQUESTS[? type], handle);
     return self;
   };
   
@@ -139,4 +140,18 @@ function CoroutineAsync(_params) constructor
     self.onTimeout = _func;
     return self;
   };
+  
+  
+  /// @func SetTrigged(_func);
+  /// @desc 
+  /// @param {Function} _func
+  static SetTrigged = function(_func)
+  {
+    self.onTrigged = _func;
+    return self;
+  };
 }
+
+
+
+
