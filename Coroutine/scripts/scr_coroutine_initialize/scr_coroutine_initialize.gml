@@ -48,12 +48,15 @@ call_later(1, time_source_units_frames, function()
   // Warm-up the pipeline.
   // This way statics and lookup tables are initialized.
   COROUTINE BEGIN 
-    DELAY 2.0 SECONDS
-    show_debug_message("Welcome using Coroutine!");
-    DELAY 0.1 SECONDS
-    show_debug_message(" - You are in version: ");
-    DELAY 0.1 SECONDS
-    show_debug_message($" - {COROUTINE_VERSION}");
+    DELAY 3.0 SECONDS
+    show_debug_message(string("\n{4}\n\nWelcome using {0}! \n - You are in version: {1} \n - Provided by {2} \n\n{3}\n\n{4}\n", 
+      COROUTINE_NAME, 
+      COROUTINE_VERSION, 
+      COROUTINE_CREDITS,
+      "https://github.com/HannulaTero/GameMaker-Coroutine",
+      string_repeat("=", 92)
+    ));
+
   FINISH DISPATCH;
 });
 

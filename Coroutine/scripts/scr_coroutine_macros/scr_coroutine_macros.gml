@@ -1,6 +1,6 @@
 
 #macro COROUTINE_NAME       ("Coroutine for GML")
-#macro COROUTINE_CREDIT     ("by Tero Hannula")
+#macro COROUTINE_CREDITS    ("Tero Hannula")
 #macro COROUTINE_VERSION    ("v2024.11.21.0")
 
 #macro COROUTINE_SINGLETON  if (instance_number(object_index) > 1) { instance_destroy(); exit; }

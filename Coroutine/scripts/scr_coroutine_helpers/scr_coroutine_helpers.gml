@@ -38,6 +38,22 @@ function coroutine_execute(_callback)
 }
 
 
+/// @func coroutine_async_listen();
+/// @desc When async event is fired, this will trigger listeners.
+function coroutine_async_listen()
+{
+  gml_pragma("forceinline");
+  // Keys are same as values, so no need to read the map itself.
+  var _listeners = ds_map_keys_to_array(COROUTINE_ASYNC_LISTENERS[? event_number]);
+  var _count = array_length(_listeners);
+  for(var i = 0; i < _count; i++)
+  {
+    _listeners[i].onListen();
+  }
+  array_resize(_listeners, 0);
+}
+
+
 /// @func coroutine_mapping(_array);
 /// @desc
 /// @param {Array<Any>} _array

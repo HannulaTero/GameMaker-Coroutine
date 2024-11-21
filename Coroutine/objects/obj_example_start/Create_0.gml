@@ -1,12 +1,25 @@
 show_debug_overlay(true, false);
 
-repeat(1_000)
+repeat(100)
 {
   instance_create_depth(random(room_width), random(room_height), 0, obj_example_thing);
 }
 
 
 COROUTINE BEGIN
+
+ASYNC_BEGIN 
+  type: ev_async_social,
+ON_LISTEN
+  show_debug_message(async_load[? "result"]);
+ASYNC_END
+
+var _async = new CoroutineAsync({
+  type: ev_async_social
+}).SetListen(function() {
+  show_debug_message(async_load[? "result"] * 10);
+}).AsyncDispatch();
+
 
 LOOP
 DELAY 500 MILLIS

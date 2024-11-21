@@ -96,17 +96,21 @@ FINISH DISPATCH
 COROUTINE BEGIN
 
   // Coroutine scoped variables.
-  url = "https://www.google.com";
+  url = "https://www.google.fi/";
   data = undefined;
   
   // Make HTTP request.
   request = ASYNC_BEGIN 
       type: ev_async_web,
       desc: $"Request for http_get({url})",
-      timeout: 3.0,
+      timeout: 5.0,
+      retries: 3,
   
     GET_REQUEST
       return http_get(url);
+      
+    ON_LISTEN 
+      show_debug_message($"HTTP Async ID: {async_load[? "id"]}");
     
     ON_SUCCESS
       data = async_load[? "result"];  
