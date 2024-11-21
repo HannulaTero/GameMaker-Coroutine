@@ -13,7 +13,6 @@ function CoroutineInstance(_prototype, _this=other) constructor
   self.prototype = _prototype;
   self.identifier = counter++;
   self.parent = undefined;
-  self.link = new CoroutineDoubleLinkedListNode(self);
   
   
   // Get references to data from the prototype.
@@ -40,7 +39,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   // Initialize the coroutine, check whether is subcoroutine.
   // feather ignore GM2043
   Execute(trigger.onInit);
-  COROUTINE_LIST_ACTIVE.InsertTail(link);
+  ds_list_add(COROUTINE_LIST_ACTIVE, self);
   if (COROUTINE_CURRENT != undefined)
   {
     parent = COROUTINE_CURRENT;
@@ -82,8 +81,11 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Pause = function()
   {
-    COROUTINE_LIST_PAUSED.InsertTail(link);
-    Execute(trigger.onPause);
+    if (coroutine_active_remove(self))
+    {
+      COROUTINE_LIST_PAUSED[? self] = self;
+      Execute(trigger.onPause);
+    }
     return self;
   };
   
@@ -93,18 +95,26 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Struct.CoroutineInstance}
   static Resume = function()
   {
-    COROUTINE_LIST_ACTIVE.InsertTail(link);
-    Execute(trigger.onResume);
+    if (coroutine_paused_remove(self))
+    {
+      if (delayTimer != undefined) call_cancel(delayTimer);
+      ds_list_add(COROUTINE_LIST_ACTIVE, self);
+      Execute(trigger.onResume);
+    }
     return self;
   };
   
   
   /// @func Restart();
-  /// @desc Restarts the coroutine execution.
+  /// @desc Restarts the coroutine execution, doesn't trigger onComplete or onInit.
   /// @returns {Struct.CoroutineInstance}
   static Restart = function()
   {
-    COROUTINE_LIST_ACTIVE.InsertTail(link);
+    if (delayTimer != undefined) call_cancel(delayTimer);
+    coroutine_active_remove(self);
+    coroutine_paused_remove(self);
+    
+    ds_list_add(COROUTINE_LIST_ACTIVE, self);
     self.execute = graph.execute;
     self.finished = false;
     return self;
@@ -119,7 +129,11 @@ function CoroutineInstance(_prototype, _this=other) constructor
   {
     if (finished == false)
     {
-      link.Detach();
+      if (delayTimer != undefined) call_cancel(delayTimer);
+      if (coroutine_paused_remove(self) == false)
+      {
+        coroutine_active_remove(self);
+      }
       Execute(trigger.onComplete);
       if (parent != undefined)
       {
@@ -138,12 +152,17 @@ function CoroutineInstance(_prototype, _this=other) constructor
   
   
   /// @func Cancel();
-  /// @desc Cancels the coroutine, and calls both complete and cancel-trigger.
+  /// @desc Cancels the coroutine, and calls onCancel -trigger.
   /// @returns {Struct.CoroutineInstance}
   static Cancel = function()
   {
+    if (delayTimer != undefined) call_cancel(delayTimer);
+    if (coroutine_paused_remove(self) == false)
+    {
+      coroutine_active_remove(self);
+    }
     Execute(trigger.onCancel);
-    return Finish(undefined);
+    return self;
   };
   
   
@@ -161,7 +180,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   /// @returns {Bool}
   static isPaused = function()
   {
-    return (link.list == COROUTINE_LIST_PAUSED);
+    return ds_map_exists(COROUTINE_LIST_PAUSED, self);
   };
   
   

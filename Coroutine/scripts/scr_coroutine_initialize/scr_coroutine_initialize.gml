@@ -1,16 +1,17 @@
 
 
 // Initialize globals.
-COROUTINE_LIST_ACTIVE = new CoroutineDoubleLinkedList();
-COROUTINE_LIST_PAUSED = new CoroutineDoubleLinkedList();
-COROUTINE_CACHE_PROTOTYPES = ds_map_create();
-COROUTINE_ASYNC_REQUESTS = ds_map_create();
-COROUTINE_ASYNC_LISTENERS = ds_map_create();
+COROUTINE_LIST_ACTIVE       = ds_list_create();
+COROUTINE_LIST_PAUSED       = ds_map_create();
+COROUTINE_CACHE_PROTOTYPES  = ds_map_create();
+COROUTINE_ASYNC_REQUESTS    = ds_map_create();
+COROUTINE_ASYNC_LISTENERS   = ds_map_create();
 
 COROUTINE_CURRENT = undefined;
 COROUTINE_EXECUTE = undefined;
 COROUTINE_SCOPE = undefined;
 COROUTINE_YIELD = false;
+COROUTINE_INDEX = 0;
 
 COROUTINE_FRAME_TIME_BEGIN = 0;
 

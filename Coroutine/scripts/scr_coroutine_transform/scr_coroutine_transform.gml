@@ -172,7 +172,8 @@ function CoroutineTransform() constructor
         call: _node.call,
         execute: function()
         {
-          COROUTINE_LIST_PAUSED.InsertTail(COROUTINE_CURRENT.link);
+          ds_list_delete(COROUTINE_LIST_ACTIVE, COROUTINE_INDEX--);
+          COROUTINE_LIST_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
           COROUTINE_RESULT = coroutine_execute(call);
           coroutine_execute(COROUTINE_CURRENT.trigger.onPause);
           COROUTINE_EXECUTE = next;
@@ -209,13 +210,18 @@ function CoroutineTransform() constructor
         unit: units[$ _node.type](),
         execute: function()
         {
+          // Return back to active after delay.
           var _delay = coroutine_execute(call) / rate;
-          COROUTINE_CURRENT.delayTimer = call_later(250, time_source_units_frames, method(COROUTINE_CURRENT, function()
+          COROUTINE_CURRENT.delayTimer = call_later(_delay, unit, method(COROUTINE_CURRENT, function()
           {
-            COROUTINE_LIST_ACTIVE.InsertTail(link);
-            show_debug_message(ptr(self));
+            coroutine_paused_remove(self);
+            ds_list_add(COROUTINE_LIST_ACTIVE, self);
+            delayTimer = undefined;
           }));
-          COROUTINE_LIST_PAUSED.InsertTail(COROUTINE_CURRENT.link);
+          
+          // Delete from active and yield. 
+          ds_list_delete(COROUTINE_LIST_ACTIVE, COROUTINE_INDEX--);
+          COROUTINE_LIST_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
           COROUTINE_EXECUTE = next;
           COROUTINE_YIELD = true;
         }

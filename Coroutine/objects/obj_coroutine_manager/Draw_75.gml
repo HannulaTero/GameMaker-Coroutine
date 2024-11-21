@@ -2,7 +2,7 @@
 
 
 // No active coroutines, quit early.
-if (COROUTINE_LIST_ACTIVE.head == undefined)
+if (ds_list_size(COROUTINE_LIST_ACTIVE) <= 0)
 {
   exit;
 }
@@ -12,8 +12,8 @@ var _gameSpeed = game_get_speed(gamespeed_microseconds) / 1_000.0;
 var _timeBegin = COROUTINE_FRAME_TIME_BEGIN;
 
 // Fetch the coroutine.
-var _link = COROUTINE_LIST_ACTIVE.head;
-var _coroutine = _link.item;
+COROUTINE_INDEX = 0;
+var _coroutine = COROUTINE_LIST_ACTIVE[| COROUTINE_INDEX];
 with(_coroutine)
 {
   // Preparations.
@@ -49,15 +49,14 @@ try
         result = COROUTINE_RESULT;
       }
         
-      // Check whether there is next action.
-      _link = _link.next;
-      if (_link == undefined)
+      // Check whether there are more coroutines available.
+      if (++COROUTINE_INDEX >= ds_list_size(COROUTINE_LIST_ACTIVE))
       {
         break;
       }
     
       // Fetch next coroutine.
-      _coroutine = _link.item;
+      _coroutine = COROUTINE_LIST_ACTIVE[| COROUTINE_INDEX];
       with(_coroutine)
       {
         // Preparations.
@@ -78,6 +77,7 @@ try
   // So even though separate function exists, this is how it's done now.
   until(((current_time - _timeBegin) / _gameSpeed) >= margin);
 } 
+
 // Something wrong happened while executing coroutine.
 catch(_error)
 {

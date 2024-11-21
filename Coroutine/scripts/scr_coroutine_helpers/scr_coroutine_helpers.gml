@@ -38,6 +38,35 @@ function coroutine_execute(_callback)
 }
 
 
+/// @func coroutine_active_remove(_coroutine);
+/// @desc Removes from active list. Returns whether value was removed (existed in list)
+/// @param {Struct.CoroutineInstance} _coroutine
+/// @returns {Bool} 
+function coroutine_active_remove(_coroutine)
+{
+  gml_pragma("forceinline");
+  var _index = ds_list_find_index(COROUTINE_LIST_ACTIVE, _coroutine);
+  if (_index < 0) 
+    return false;
+  ds_list_delete(COROUTINE_LIST_ACTIVE, _index);
+  return true;
+}
+
+
+/// @func coroutine_paused_remove(_coroutine);
+/// @desc Removes from paused list. Returns whether value was removed (existed in list)
+/// @param {Struct.CoroutineInstance} _coroutine
+/// @returns {Bool} 
+function coroutine_paused_remove(_coroutine)
+{
+  gml_pragma("forceinline");
+  if (ds_map_exists(COROUTINE_LIST_PAUSED, _coroutine) == false) 
+    return false;
+  ds_map_delete(COROUTINE_LIST_PAUSED, _coroutine);
+  return true;
+}
+
+
 /// @func coroutine_async_listen();
 /// @desc When async event is fired, this will trigger listeners.
 function coroutine_async_listen()

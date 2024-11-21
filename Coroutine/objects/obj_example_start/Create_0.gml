@@ -1,10 +1,10 @@
 show_debug_overlay(true, false);
 
 var i = 0; 
-repeat(500)
+repeat(1000)
 {
   
-  instance_create_depth(lerp(0, room_width, i++/500), random(room_height), 0, obj_example_thing);
+  instance_create_depth(lerp(0, room_width, i++/1000), random(room_height), 0, obj_example_thing);
 }
 
 /*
