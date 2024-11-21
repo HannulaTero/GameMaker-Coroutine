@@ -15,11 +15,11 @@ function CoroutineAsync(_params) constructor
   
   
   // Callbacks.
-  self.onRequest = function() { };
-  self.onWaiting = function() { };
-  self.onSuccess = function() { };
-  self.onFailure = function() { };
-  self.onTimeout = function() { };
+  self.onRequest = function() {};
+  self.onWaiting = function() {};
+  self.onSuccess = function() {};
+  self.onFailure = function() {};
+  self.onTimeout = function() {};
   
   
   // Sanity check .

@@ -3,6 +3,7 @@
 /// @func coroutine_create(_funcAST);
 /// @desc Creates coroutine prototype, which has linear instructions.
 /// @param {Function} _funcAST
+/// @returns {Struct.CoroutinePrototype}
 function coroutine_create(_funcAST)
 {
   // Parameter is function, which generates nodes (abstract syntax tree).

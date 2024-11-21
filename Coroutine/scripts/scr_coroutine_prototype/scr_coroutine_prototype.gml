@@ -14,7 +14,7 @@ function CoroutinePrototype(_root) constructor
   self.root = _root;
   self.nodes = _root.nodes;
   self.graph = _root.graph;
-  self.label = _root.label;
+  self.labels = _root.labels;
   
   
   // Get the options.
@@ -25,6 +25,7 @@ function CoroutinePrototype(_root) constructor
     name = _option[$ "name"] ?? $"CoroutinePrototype_{counter++}";
     desc = _option[$ "desc"] ?? "";
     slot = _option[$ "slot"] ?? 1.0;
+    scoped = _option[$ "scoped"] ?? true;
   }
   
   
@@ -54,3 +55,10 @@ function CoroutinePrototype(_root) constructor
     return new CoroutineInstance(self, _this);
   };
 }
+
+
+
+
+
+
+

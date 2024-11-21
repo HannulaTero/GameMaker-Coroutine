@@ -1,51 +1,55 @@
 
 
 
-/// @func CoroutineIterator();
+/// @func CoroutineIterator(_item, _nameKey, _nameVal);
 /// @desc Helper structure for iterating over iterable items in FOREACH.
+/// @param {Any} _item
+/// @param {String} _nameKey
+/// @param {String} _nameVal
 /// feather ignore GM1041
-function CoroutineIterator() constructor
+/// feather ignore GM1044
+/// feather ignore GM1049
+/// feather ignore GM2043
+function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefined) constructor
 {
-  self.item = undefined;
+  self.item = _item;
   self.keys = undefined;
   self.index = 0;
   self.count = 0;
-  self.nameVal = undefined;
-  self.nameKey = undefined;
+  self.nameVal = _nameKey;
+  self.nameKey = _nameVal;
   self.GetVal = function() {};
   self.GetKey = function() {};
-  
-  
-  /// @func Initialize(_item, _nameKey, _nameVal);
-  /// @desc Howing initializer allows creation and initialization at different time.
-  /// @param {Any} _item
-  /// @param {String} _nameKey
-  /// @param {String} _nameVal
-  static Initialize = function(_item=undefined, _nameKey=undefined, _nameVal=undefined)
+
+
+  // Find correct methods for iterating the given item.
+  switch(typeof(item))
   {
-    item = _item;
-    nameKey = _nameKey;
-    nameVal = _nameVal;
-    
-    switch(typeof(_item))
-    {
-      case "array": return asArray();
-      case "struct": {
-        if (is_instanceof(_item, CoroutineRange)) return asRange();
-        if (is_instanceof(_item, CoroutineView)) return asView();
-        return asStruct();
-      }
-      case "string": return asString();
-      case "ref": {
-        if (ds_exists(_item, ds_type_list)) return asList();
-        if (ds_exists(_item, ds_type_map)) return asMap();
-      }
-      default: throw($"FOREACH: not iterable '{typeof(_item)}'");
-      break;
+    case "array": return asArray();
+    case "struct": {
+      if (is_instanceof(item, CoroutineRange)) return asRange();
+      if (is_instanceof(item, CoroutineView)) return asView();
+      return asStruct();
     }
-    
-    return self;
-  };
+    case "ref": {
+      if (ds_exists(item, ds_type_list)) return asList();
+      if (ds_exists(item, ds_type_map)) return asMap();
+      if (object_exists(item)) return asObject();
+      if (buffer_exists(item)) {
+        item = new CoroutineView(item, buffer_u8);
+        return asView();
+      }
+    }
+    case "string": return asString();
+    case "number": 
+    case "int64": 
+    case "int32": { 
+      item = new CoroutineRange(item);
+      return asRange();
+    }
+    default: throw($"FOREACH: not iterable '{typeof(item)}'");
+    break;
+  }
   
   
   /// @func Next();
@@ -55,22 +59,6 @@ function CoroutineIterator() constructor
     if (nameVal != undefined) GetVal();
     if (nameKey != undefined) GetKey(); 
     index++;
-    return self;
-  };
-  
-  
-  /// @func Free();
-  /// @desc Remove references.
-  static Free = function()
-  {
-    self.item = undefined;
-    self.keys = undefined;
-    self.index = 0;
-    self.count = 0;
-    self.nameVal = undefined;
-    self.nameKey = undefined;
-    self.GetVal = undefined;
-    self.GetKey = undefined;
     return self;
   };
   
@@ -94,6 +82,23 @@ function CoroutineIterator() constructor
     self.count = struct_names_count(item);
     self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[$ keys[index]]; };
     self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = keys[index]; };
+    return self;
+  };
+  
+  
+  /// @func asObject();
+  /// @desc Sets iterator state for object.
+  static asObject = function()
+  {
+    var _index = 0;
+    var _object = item;
+    var _instances = array_create(instance_number(item));
+    with(_object) _instances[_index++] = self;
+    
+    self.item = _instances;
+    self.count = array_length(item);
+    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[index]; };
+    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
     return self;
   };
   

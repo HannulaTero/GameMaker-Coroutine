@@ -7,6 +7,7 @@
 /// @returns {Function}
 function CO_RUNTIME_RESTART()
 {
+  // feather ignore GM1049
   with(COROUTINE_CURRENT)
   {
     Restart();
@@ -39,8 +40,20 @@ function CO_RUNTIME_BREAK()
 /// @returns {Undefined}
 function CO_RUNTIME_RETURN(_return)
 {
-  COROUTINE_CURRENT.Return(_return);
+  COROUTINE_CURRENT.Finish(_return);
   COROUTINE_EXECUTE = undefined;
+  COROUTINE_YIELD = true;
+}
+
+
+/// @func CO_RUNTIME_CANCEL();
+/// @desc 
+/// @returns {Undefined}
+function CO_RUNTIME_CANCEL()
+{
+  COROUTINE_CURRENT.Cancel();
+  COROUTINE_EXECUTE = undefined;
+  COROUTINE_YIELD = true;
 }
 
 
@@ -50,13 +63,14 @@ function CO_RUNTIME_RETURN(_return)
 /// @returns {Function}
 function CO_RUNTIME_GOTO(_label)
 {
+  // feather ignore GM1049
   with(COROUTINE_CURRENT)
   {
-    if (struct_exists(label, _label) == false)
+    if (struct_exists(labels, _label) == false)
     {
       throw($"{name}, Unknown GOTO -target: '{_label}'.");
     }
-    COROUTINE_EXECUTE = label[$ _label];
+    COROUTINE_EXECUTE = labels[$ _label];
   }
 }
 

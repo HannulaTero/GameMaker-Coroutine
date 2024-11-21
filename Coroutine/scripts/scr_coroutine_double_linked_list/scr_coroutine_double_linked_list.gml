@@ -1,7 +1,7 @@
 
 
 /// @func CoroutineDoubleLinkedList();
-/// @desc 
+/// @desc Double-linked lists, so it is easier to remove and add items without messing with indexes.
 function CoroutineDoubleLinkedList() constructor
 {
   self.head = undefined;

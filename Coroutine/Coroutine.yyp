@@ -28,6 +28,8 @@
   "resources":[
     {"id":{"name":"obj_coroutine_manager","path":"objects/obj_coroutine_manager/obj_coroutine_manager.yy",},},
     {"id":{"name":"obj_coroutine_timer","path":"objects/obj_coroutine_timer/obj_coroutine_timer.yy",},},
+    {"id":{"name":"obj_example_start","path":"objects/obj_example_start/obj_example_start.yy",},},
+    {"id":{"name":"obj_example_thing","path":"objects/obj_example_thing/obj_example_thing.yy",},},
     {"id":{"name":"obj_example","path":"objects/obj_example/obj_example.yy",},},
     {"id":{"name":"room_example","path":"rooms/room_example/room_example.yy",},},
     {"id":{"name":"scr_coroutine_async","path":"scripts/scr_coroutine_async/scr_coroutine_async.yy",},},
@@ -48,6 +50,7 @@
     {"id":{"name":"scr_coroutine_transform","path":"scripts/scr_coroutine_transform/scr_coroutine_transform.yy",},},
     {"id":{"name":"scr_coroutine_view","path":"scripts/scr_coroutine_view/scr_coroutine_view.yy",},},
     {"id":{"name":"scr_test_suite","path":"scripts/scr_test_suite/scr_test_suite.yy",},},
+    {"id":{"name":"spr_example_thing","path":"sprites/spr_example_thing/spr_example_thing.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",

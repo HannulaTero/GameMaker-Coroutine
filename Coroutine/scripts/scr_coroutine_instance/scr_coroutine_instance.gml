@@ -7,9 +7,11 @@
 /// @param {Any} _this
 function CoroutineInstance(_prototype, _this=other) constructor
 {
+  static counter = 0;
+  
   // General variables.
   self.prototype = _prototype;
-  self.identifier = string(ptr(self));
+  self.identifier = counter++;
   self.parent = undefined;
   self.link = new CoroutineDoubleLinkedListNode(self);
   
@@ -17,7 +19,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   // Get references to data from the prototype.
   // These should not be modified, otherwise it affects all instances of prototype.
   self.graph = _prototype.graph;
-  self.label = _prototype.label;
+  self.labels = _prototype.labels;
   self.option = _prototype.option;
   self.trigger = _prototype.trigger;
   self.execute = graph.execute;
@@ -28,30 +30,22 @@ function CoroutineInstance(_prototype, _this=other) constructor
   // Scope holds variables of coroutine, and reference to original self.
   var _self = self;
   self.local = [];
-  self.scope = { this: _this, coroutine: _self };
+  self.scope = _prototype.option.scoped ? { this: _this, coroutine: _self } : _this;
   self.childs = { };
   self.result = undefined;
   self.finished = false;
   
   
-  // Call initializer -trigger of the coroutine.
-  var _onInit = trigger.onInit;
-  if (_onInit != undefined)
-  {
-    with(scope) _onInit();
-  }
-  
-  
-  // Add to the instances list.
+  // Initialize the coroutine, check whether is subcoroutine.
+  // feather ignore GM2043
+  Execute(trigger.onInit);
   COROUTINE_LIST_ACTIVE.InsertTail(link);
-  
-  
-  // Mark the as children, if initializd within coroutine.
   if (COROUTINE_CURRENT != undefined)
   {
     parent = COROUTINE_CURRENT;
     struct_set(parent.childs, identifier, self);
   }
+  
   
   /// @func Get();
   /// @desc Returns current result of coroutine.
@@ -61,8 +55,9 @@ function CoroutineInstance(_prototype, _this=other) constructor
     return result;
   };
   
+  
   /// @func Dispatch(_this);
-  /// @desc Creates new instance of same prototype.
+  /// @desc Creates new coroutine instance of same prototype.
   /// @param {Id.Instance|Struct} _this
   /// @returns {Struct.CoroutineInstance}
   static Dispatch = function(_this=other)
@@ -71,13 +66,13 @@ function CoroutineInstance(_prototype, _this=other) constructor
   };
   
   
-  /// @func Execute(_func);
-  /// @desc 
-  /// @param {Function} _func
+  /// @func Execute(_callback);
+  /// @desc Executes function in the coroutine's scope.
+  /// @param {Function} _callback
   /// @returns {Any}
-  static Execute = function(_func)
+  static Execute = function(_callback)
   {
-    with(scope) return _func();
+    with(scope) return _callback();
   };
   
   
@@ -115,11 +110,11 @@ function CoroutineInstance(_prototype, _this=other) constructor
   };
   
   
-  /// @func Return(_value);
+  /// @func Finish(_value);
   /// @desc Finishes the coroutine, and calls complete-trigger.
   /// @param {Any} _value
   /// @returns {Struct.CoroutineInstance}
-  static Return = function(_value)
+  static Finish = function(_value)
   {
     if (finished == false)
     {
@@ -127,6 +122,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
       Execute(trigger.onComplete);
       if (parent != undefined)
       {
+        // feather ignore GM1041
         struct_remove(parent.childs, identifier);
       }
     }
@@ -146,7 +142,7 @@ function CoroutineInstance(_prototype, _this=other) constructor
   static Cancel = function()
   {
     Execute(trigger.onCancel);
-    return Return(undefined);
+    return Finish(undefined);
   };
   
   

@@ -10,11 +10,11 @@
 #macro ON_RESUME        }), onResume: method(undefined, function() {
 #macro ON_LAUNCH        }), onLaunch: method(undefined, function() {
 #macro ON_COMPLETE      }), onComplete: method(undefined, function() {
-#macro ON_ERROR         }), onError: method(undefined, function(_error) {
+#macro ON_ERROR         }), onError: method(undefined, function(error) {
 
 
 // Coroutine statements.
-#macro BEGIN            })}), graph: {}, label: {}, nodes: CO_BLOCK([CO_STMT(function() {
+#macro BEGIN            })}), graph: {}, tables: [], labels: {}, nodes: CO_BLOCK([CO_STMT(function() {
 #macro FINISH           }), CO_FINISH()] )}; })
 #macro THEN             }), CO_BLOCK([CO_STMT(function() {
 #macro PASS             }), CO_STMT(function() {
@@ -45,13 +45,14 @@
 #macro ELSE             })]), (CO_NOP), CO_BLOCK([CO_STMT(function() {
   
 #macro SWITCH           }), CO_SWITCH(([(function() { return 
-#macro MATCH            }), CO_MATCH(([(function() { return 
 #macro CASE             })]), (function() { return
 #macro DEFAULT          })]), (CO_NOP), CO_BLOCK([CO_STMT(function() {
 
 #macro LOOP             }), CO_LOOP(CO_BLOCK([CO_STMT(function() {
 #macro WHILE            }), CO_WHILE((function() { return
 #macro REPEAT           }), CO_REPEAT((function() { return
+#macro DO               }), CO_DO(CO_BLOCK([CO_STMT(function() {
+#macro UNTIL            })]), ([(function() { return
   
 #macro FOR              }), CO_FOR((function() { 
 #macro COND             }), (function() { return
@@ -68,8 +69,10 @@
 #macro CONTINUE         return CO_RUNTIME_CONTINUE()
 #macro BREAK            return CO_RUNTIME_BREAK()
 #macro QUIT             return CO_RUNTIME_RETURN(undefined) 
-#macro RETURN           for(var __;; { return CO_RUNTIME_RETURN(__); }) __ =
-#macro GOTO             for(var __;; { return CO_RUNTIME_GOTO(__); }) __ =
+#macro CANCEL           return CO_RUNTIME_CANCEL() 
+#macro RETURN           for(var ____;; { return CO_RUNTIME_RETURN(____); }) ____ =
+#macro GOTO             for(var ____;; { return CO_RUNTIME_GOTO(____); }) ____ =
+#macro MATCH            CO_RUNTIME_MATCH(function() { return 
 
 
 // Runtime async request, and its triggers.
@@ -80,10 +83,6 @@
 #macro ON_FAILURE       })).SetFailure((function() {
 #macro ON_TIMEOUT       })).SetTimeout((function() {
 #macro ASYNC_END        })).DoRequest())
-
-
-
-
 
 
 

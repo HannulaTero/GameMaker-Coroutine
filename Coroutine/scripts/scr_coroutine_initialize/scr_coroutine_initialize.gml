@@ -9,7 +9,7 @@ COROUTINE_HASH_ASYNC = ds_map_create();
 COROUTINE_CURRENT = undefined;
 COROUTINE_EXECUTE = undefined;
 COROUTINE_SCOPE = undefined;
-COROUTINE_YIELD = undefined;
+COROUTINE_YIELD = false;
 
 COROUTINE_FRAME_TIME_BEGIN = 0;
 

@@ -305,6 +305,24 @@ function CO_REPEAT(_call, _body)
 }
 
 
+/// @func CO_DO(_body, _cond);
+/// @desc 
+/// @param {Struct} _body
+/// @param {Array<Function>} _cond 
+/// @returns {Struct}
+function CO_DO(_body, _cond) 
+{ 
+  gml_pragma("forceinline"); 
+  // Condition is in array to work with macro syntax.
+  _cond = _cond[0];
+  return {
+    name: "DO", 
+    cond: method(undefined, _cond),
+    body: _body,
+  }; 
+}
+
+
 /// @func CO_FOR(_init, _cond, _iter, _body);
 /// @desc 
 /// @param {Function} _init
@@ -359,6 +377,7 @@ function CO_FOREACH(_names, _item, _body)
     val: _nameVal,
   }; 
 }
+
 
 
 

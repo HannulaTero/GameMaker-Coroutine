@@ -4,8 +4,35 @@
 /// @desc For transforming AST nodes into directed graph.
 function CoroutineTransform() constructor
 {
-  self.label = {};
+  self.labels = {};
+  self.tables = [];
   self.register = 0;
+  
+  
+  // Dummy final node.
+  static final = { 
+    execute: function() {
+      return execute; // Dummy.
+    }
+  };
+    
+  // Don't allow breaking outside the loop.
+  static errorBreak = { 
+    execute: function() 
+    { 
+      throw("BREAK used outside a loop."); 
+      return execute; 
+    }
+  };
+    
+  // Don't allow breaking
+  static errorContinue = { 
+    execute: function() 
+    { 
+      throw("CONTINUE used outside a loop."); 
+      return execute; 
+    }
+  };
   
   
   /// @func Dispatch(_root);
@@ -13,29 +40,8 @@ function CoroutineTransform() constructor
   /// @param {Struct} _root
   static Dispatch = function(_root)
   {
-    static final = { 
-      execute: function() {
-        return execute; // Dummy.
-      }
-    };
-    
-    static errorBreak = { 
-      execute: function() 
-      { 
-        throw("BREAK used outside a loop."); 
-        return execute; 
-      }
-    };
-    
-    static errorContinue = { 
-      execute: function() 
-      { 
-        throw("CONTINUE used outside a loop."); 
-        return execute; 
-      }
-    };
-    
-    self.label = _root.label;
+    self.tables = _root.tables;
+    self.labels = _root.labels;
     self.register = 0;
     
     _root.graph = Generate(_root.nodes, final, errorBreak, errorContinue);
@@ -86,10 +92,11 @@ function CoroutineTransform() constructor
       return { 
         execute: function()
         {
+          // feather ignore GM1049
           with(COROUTINE_CURRENT)
           {
             Execute(trigger.onComplete);
-            Return(undefined);
+            Finish(undefined);
           }
           COROUTINE_EXECUTE = execute;
           COROUTINE_YIELD = true;
@@ -136,7 +143,7 @@ function CoroutineTransform() constructor
     ["LABEL"],
     function(_node, _next, _break, _continue)
     {
-      label[$ _node.label] = _next.execute;
+      labels[$ _node.label] = _next.execute;
       return _next;
     },
     
@@ -151,7 +158,7 @@ function CoroutineTransform() constructor
         call: _node.call, 
         execute: function()
         {
-          COROUTINE_CURRENT.result = coroutine_execute(call);
+          COROUTINE_RESULT = coroutine_execute(call);
           COROUTINE_EXECUTE = next;
           COROUTINE_YIELD = true;
         }
@@ -169,12 +176,9 @@ function CoroutineTransform() constructor
         call: _node.call,
         execute: function()
         {
-          with(COROUTINE_CURRENT)
-          {
-            COROUTINE_LIST_PAUSED.InsertTail(link);
-            result = Execute(other.call);
-            Execute(trigger.onPause);
-          }
+          COROUTINE_LIST_PAUSED.InsertTail(link);
+          COROUTINE_RESULT = coroutine_execute(call);
+          coroutine_execute(COROUTINE_CURRENT.trigger.onPause);
           COROUTINE_EXECUTE = next;
           COROUTINE_YIELD = true;
         }
@@ -220,6 +224,7 @@ function CoroutineTransform() constructor
           {
             COROUTINE_EXECUTE = execute;
             COROUTINE_YIELD = true;
+            return;
           }
           COROUTINE_EXECUTE = next;
         }
@@ -337,15 +342,40 @@ function CoroutineTransform() constructor
       var _count = array_length(_cases);
       for(var i = 0; i < _count; i++)
       {
+        // Fetch case information.
         var _case = _cases[i];
         var _cond = _case.cond(); // Compile-time, no dynamic cases.
-        if (ds_map_exists(_table, _cond))
-        {
-          throw($"SWITCH duplicate case '{_cond}'");
-        }
         var _body = Generate(_case.body, _next, _break, _continue);
-        _table[? _cond] = _body.execute;
+        
+        // Check whether multiple case-conditions.
+        if (is_array(_cond))
+        {
+          var _condArray = _cond;
+          var _condCount = array_length(_cond);
+          for(var j = 0; j < _condCount; j++)
+          {
+            _cond = _condArray[j];
+            if (ds_map_exists(_table, _cond))
+            {
+              throw($"SWITCH duplicate case '{_cond}'");
+            }
+            _table[? _cond] = _body.execute;
+          }
+        }
+        
+        // Only single case-condition.
+        else
+        {
+          if (ds_map_exists(_table, _cond))
+          {
+            throw($"SWITCH duplicate case '{_cond}'");
+          }
+          _table[? _cond] = _body.execute;
+        }
       }
+      
+      // Push dsmap reference for easier cleaning when prototype is destroyed.
+      array_push(tables, _table);
       
       // Create executor.
       return {
@@ -445,6 +475,28 @@ function CoroutineTransform() constructor
     },
     
     
+    // Do-until loop statement.
+    // Almost same as While-loop, but the body is executed first and condition is reversed.
+    ["DO"],
+    function(_node, _next, _break, _continue)
+    {
+      var _loop = {
+        next: undefined,
+        jump: _next.execute,
+        cond: _node.cond,
+        execute: function()
+        {
+          COROUTINE_EXECUTE = coroutine_execute(cond) ? jump : next;
+        }
+      };
+      
+      // Solve body and then patch, as loop target must be known beforehand.
+      var _body = Generate(_node.body, _loop, _next, _loop);
+      _loop.next = _body.execute;
+      return _body;
+    },
+    
+    
     // For-statement.
     // 
     ["FOR"],
@@ -512,8 +564,7 @@ function CoroutineTransform() constructor
         execute: function()
         {
           var _item = coroutine_execute(call);
-          var _iterator = new CoroutineIterator();
-          _iterator.Initialize(_item, key, val);
+          var _iterator = new CoroutineIterator(_item, key, val);
           COROUTINE_LOCAL[register] = _iterator;
           COROUTINE_EXECUTE = next;
         }
@@ -534,6 +585,7 @@ function CoroutineTransform() constructor
           }
           else
           {
+            COROUTINE_LOCAL[register] = undefined;
             COROUTINE_EXECUTE = jump;
           }
         }
@@ -549,7 +601,6 @@ function CoroutineTransform() constructor
       register--;
       return _init;
     },
-    
   ]);
 }
 
