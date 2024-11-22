@@ -1,9 +1,17 @@
 
-draw_sprite_ext(spr_example_thing, 0, room_width - 64, room_height - 64, 1, 1, current_time, c_white, 1);
+var _x = room_width - 64;
+var _y = room_height - 64;
+var _c = c_red;
+draw_sprite_ext(spr_example_thing, 0, _x, _y, 1, 1, current_time, _c, 1);
 
 var _active = ds_map_size(COROUTINE_POOL_ACTIVE);
 var _paused = ds_map_size(COROUTINE_POOL_PAUSED);
 draw_text(32, 256, $"active : {_active}");
 draw_text(32, 288, $"paused : {_paused}");
 draw_text(32, 320, $"all    : {_active + _paused}");
+draw_text(32, 400, $"coroutine : {coroutine.Get()}");
 
+if (keyboard_check_pressed(vk_enter))
+{
+  coroutine.Resume();
+}

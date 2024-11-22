@@ -129,9 +129,8 @@ function CO_AWAIT(_type, _call)
 { 
   gml_pragma("forceinline"); 
   return {
-    name: "AWAIT", 
+    name: $"AWAIT_{_type}", 
     call: method(undefined, _call), 
-    type: _type 
   }; 
 }
 

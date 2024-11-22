@@ -30,6 +30,7 @@
     {"id":{"name":"obj_coroutine_timer","path":"objects/obj_coroutine_timer/obj_coroutine_timer.yy",},},
     {"id":{"name":"obj_example_start","path":"objects/obj_example_start/obj_example_start.yy",},},
     {"id":{"name":"obj_example_thing","path":"objects/obj_example_thing/obj_example_thing.yy",},},
+    {"id":{"name":"obj_example_thung","path":"objects/obj_example_thung/obj_example_thung.yy",},},
     {"id":{"name":"obj_example","path":"objects/obj_example/obj_example.yy",},},
     {"id":{"name":"room_example","path":"rooms/room_example/room_example.yy",},},
     {"id":{"name":"scr_coroutine_async","path":"scripts/scr_coroutine_async/scr_coroutine_async.yy",},},

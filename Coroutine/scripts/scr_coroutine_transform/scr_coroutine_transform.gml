@@ -231,25 +231,72 @@ function CoroutineTransform() constructor
     
     // Pauses execution until given condition is met.
     // Usual condition is boolean value, but it can be several other types.
-    ["AWAIT"],
+    ["AWAIT_COND"],
     function(_node, _next, _break, _continue)
     {
-      static conditions = coroutine_mapping([
-        ["COND"], function(_value) { return _value ?? true; }, 
-        ["ASYNC"], function(_value) { return true; /* TODO */ }, 
-        ["BROADCAST"], function(_value) { return true; /* TODO */ }, 
-        ["COROUTINE"], function(_value) { return true; /* TODO */ }, 
-      ]);
-      
       return {
         next: _next.execute,
         call: _node.call,
-        cond: conditions[$ _node.type],
         execute: function()
         {
-          if (cond(coroutine_execute(call)))
+          if (coroutine_execute(call))
           {
             COROUTINE_EXECUTE = next;
+            return;
+          }
+          COROUTINE_EXECUTE = execute;
+          COROUTINE_YIELD = true;
+        }
+      };
+    },
+    
+    
+    ["AWAIT_ASYNC", "AWAIT_COROUTINE"],
+    function(_node, _next, _break, _continue)
+    {
+      var _init = {
+        next: undefined,
+        call: _node.call,
+        register,
+        execute: function()
+        {
+          COROUTINE_LOCAL[register] = coroutine_execute(call);
+          COROUTINE_EXECUTE = next;
+        }
+      };
+      
+      var _wait = {
+        next: _next.execute,
+        register,
+        execute: function()
+        {
+          if (COROUTINE_LOCAL[register].isFinished())
+          {
+            COROUTINE_EXECUTE = next;
+            return;
+          }
+          COROUTINE_EXECUTE = execute;
+          COROUTINE_YIELD = true;
+        }
+      };
+      
+      _init.next = _wait;
+      return _init;
+    },
+    
+    
+    ["AWAIT_BROADCAST"],
+    function(_node, _next, _break, _continue)
+    {
+      return {
+        next: _next.execute,
+        call: _node.call,
+        execute: function()
+        {
+          if (coroutine_execute(call))
+          {
+            COROUTINE_EXECUTE = next;
+            return;
           }
           COROUTINE_EXECUTE = execute;
           COROUTINE_YIELD = true;
@@ -270,6 +317,7 @@ function CoroutineTransform() constructor
           if (COROUTINE_CURRENT.hasChilds() == false)
           {
             COROUTINE_EXECUTE = next;
+            return;
           }
           COROUTINE_EXECUTE = execute;
           COROUTINE_YIELD = true;

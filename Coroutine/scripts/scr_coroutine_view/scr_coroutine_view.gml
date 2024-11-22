@@ -13,7 +13,6 @@ function CoroutineView() constructor
   self.step = 1;
   
   
-  // Single argument.
   switch(argument_count)
   {
     // Either only buffer is set, or parameters are given as struct.

@@ -1,7 +1,7 @@
 show_debug_overlay(true, true);
 
 surface = -1;
-/*
+
 
 array = array_create_ext(30, function()
 {
@@ -18,20 +18,21 @@ coroutine = COROUTINE BEGIN
   END
   
   
-  REPEAT 1 THEN
+  REPEAT 10 THEN
     result = 0;
     SWITCH irandom(11) 
-      CASE 0 THEN result += 0;
-      CASE 1 THEN result += 1;
-      CASE 2 THEN result += 2;
-      CASE 3 THEN result += 3;
-      CASE 4 THEN result += 4;
-      CASE 5 THEN result += 5;
-      CASE 6 THEN result += 6;
-      CASE 7 THEN result += 7;
-      CASE 8 THEN result += 8;
-      CASE 9 THEN result += 9;
+      CASE 0 THEN result += random_range(0, 10); YIELD "case 0 yielded" PASS
+      CASE 1 THEN result += random_range(1, 10); PAUSE "case 1 paused" PASS
+      CASE 2 THEN result += random_range(2, 10); DELAY 100 MILLIS
+      CASE 3 THEN result += random_range(3, 10); GOTO "label case 7";
+      CASE 4 THEN result += random_range(4, 10); CONTINUE
+      CASE 5 THEN result += random_range(5, 10); RETURN "return value";
+      CASE 6 THEN result += random_range(6, 10); 
+      CASE 7 THEN result += random_range(7, 10); LABEL "label case 7" 
+      CASE 8 THEN result += random_range(8, 10); BREAK
+      CASE 9 THEN result += random_range(9, 10); YIELD "case 9 yielded" PASS
     END
+    DELAY 100 MILLIS
     show_debug_message(result);
   END
   
@@ -44,6 +45,96 @@ coroutine = COROUTINE BEGIN
 
   
 FINISH DISPATCH
+
+
+
+coroutine = COROUTINE BEGIN
+
+  LABEL "loop" PASS
+  IF choose(true, false) THEN
+    YIELD "let other coroutines do their thing" PASS
+    
+  ELIF choose(true, false) THEN
+    AWAIT (mouse_x > 100) PASS
+  
+  ELSE
+    DELAY 100 MILLIS
+  
+  END
+  GOTO "loop"
+
+
+FINISH DISPATCH
+
+
+
+coroutine = coroutine_create(function() 
+{ 
+  return { 
+  // DEFINE OPTIONS & TRIGGERS.
+  define: ({ 
+    option: ({ 
+    })
+  }), 
+  
+  // EXECUTABLE DATA.
+  graph: {}, 
+  tables: [], 
+  labels: {}, 
+    
+  // GENERATE AST.
+  nodes: CO_BLOCK([
+    CO_STMT(function() { }), 
+        
+    // LABEL
+    CO_LABEL({ label: "loop" }), 
+    CO_STMT(function() { }), 
+        
+    // IF-STATEMENT
+    CO_IF_CHAIN(
+      
+      // THEN
+      (function() { return choose(true, false) }), 
+      CO_BLOCK([
+        CO_STMT(function() { }), 
+        CO_YIELD(function() { return "let other coroutines do their thing" }), 
+        CO_STMT(function() { })
+      ]), 
+        
+      // ELIF
+      (function() { return choose(true, false) }), 
+      CO_BLOCK([
+        CO_STMT(function() { }), 
+        CO_AWAIT("COND", function() { return (mouse_x > 100) }), 
+        CO_STMT(function() { })
+      ]), 
+    
+      // ELSE
+      (CO_NOP), 
+      CO_BLOCK([
+        CO_STMT(function() { }), 
+        CO_DELAY(function() { return 100 }, "MILLIS"), 
+        CO_STMT(function() { })
+      ])
+      
+    ),
+      
+    // GOTO STATEMENT.
+    CO_STMT(function() {
+        
+      for(var ____;; { 
+        return CO_RUNTIME_GOTO(____); 
+      }) ____ = "loop"
+        
+    }), 
+      
+    // FINISH
+    CO_FINISH()
+  ])}; 
+
+// DISPATCH
+}) .Dispatch(self)
+
 
 
 coroutine = COROUTINE
@@ -64,6 +155,8 @@ coroutine = COROUTINE
 
   ON_YIELD
     surface_reset_target();
+    camera_apply(camera_get_active());
+    draw_surface(this.surface, 0, 0);
 
   BEGIN
     LOOP
@@ -194,6 +287,35 @@ COROUTINE BEGIN
     if (keyboard_check(ord("2"))) BREAK
     if (keyboard_check(ord("3"))) EXIT
     if (keyboard_check(ord("5"))) RETURN 100;
+    
+    // Using macro syntax is okay.
+    IF choose(true, false) THEN
+    
+      IF choose(true, false) THEN
+        show_debug_message("Awaiting!")
+        AWAIT choose(true, false) PASS
+        show_debug_message("Awaited!")
+      
+      ELIF choose(true, false) THEN
+        show_debug_message("Yielding!")
+        YIELD "yielded!" PASS
+        show_debug_message("Hoy!")
+      
+      ELIF choose(true, false) THEN
+        show_debug_message("Pausing!")
+        PAUSE
+        show_debug_message("Pause resumed!")
+      
+      ELSE 
+        show_debug_message("Starting delay!")
+        DELAY 100 FRAMES
+        show_debug_message("Delay passes!")
+      
+      END
+    END
+    
+    
+    
     DELAY 0.1 SECONDS
   END END END END
     

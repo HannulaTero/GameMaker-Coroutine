@@ -10,12 +10,11 @@ function CoroutineRange() constructor
   self.step = 1;
   
   
-  // Single argument.
   switch(argument_count)
   {
+    // Either only length is set, or parameters are given as struct.
     case 1:
     {
-      // Either only length is set, or parameters are given as struct.
       var _item = argument[0];
       if (is_struct(_item))
       {

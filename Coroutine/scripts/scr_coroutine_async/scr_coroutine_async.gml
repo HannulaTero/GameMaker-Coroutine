@@ -35,12 +35,7 @@ function CoroutineAsync(_params) constructor
   /// @returns {Bool} 
   static isFinished = function()
   {
-    var _finished = true;
-    if (onListen != undefined)
-      _finished = _finished && (ds_map_exists(COROUTINE_ASYNC_LISTENERS, type) == false);
-    if (onRequest != undefined)
-     _finished = _finished && (ds_map_exists(COROUTINE_ASYNC_REQUESTS, type) == false);
-    return _finished;
+    return (ds_map_exists(COROUTINE_ASYNC_REQUESTS, type) == false);
   };
   
   
@@ -105,7 +100,7 @@ function CoroutineAsync(_params) constructor
   static DoRequest = function()
   {
     if (onRequest == undefined)
-      return;
+      return self;
     
     self.request = onRequest();
     if (request == -1)

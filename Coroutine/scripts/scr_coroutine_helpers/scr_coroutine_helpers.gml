@@ -1,14 +1,13 @@
 
 
 /// @func coroutine_create(_funcAST);
-/// @desc Creates coroutine prototype, which has linear instructions.
+/// @desc Creates coroutine prototype, or uses cached version of it.
 /// @param {Function} _funcAST
 /// @returns {Struct.CoroutinePrototype}
 function coroutine_create(_funcAST)
 {
-  // Parameter is function, which generates nodes (abstract syntax tree).
-  // Nodes are parsed into linearized instructions, 
-  // and finally coroutine is created to handle execution state.
+  // _funcAST is function, which generates nodes (abstract syntax tree).
+  // Nodes are transformed into executable directed graph.
   static transform = new CoroutineTransform();
   
   // Pick coroutine prototype from cache.
@@ -19,7 +18,6 @@ function coroutine_create(_funcAST)
   }
   
   // Otherwise create a new protoptype, and add it to the cache.
-  // This parses the nodes into linear instructions.
   var _root = _funcAST();
   transform.Dispatch(_root);
   var _prototype = new CoroutinePrototype(_root);

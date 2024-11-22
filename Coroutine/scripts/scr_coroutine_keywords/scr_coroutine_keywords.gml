@@ -1,6 +1,7 @@
 
 
-#macro COROUTINE        coroutine_create(function() { return { define: ({ option: ({
+#macro COROUTINE        coroutine_create(function() { return { graph: {}, tables: [], labels: {}, define: ({ option: ({
+
 
 // Coroutine triggers.
 #macro ON_INIT          }), onInit: method(undefined, function() {
@@ -14,7 +15,7 @@
 
 
 // Coroutine statements.
-#macro BEGIN            })}), graph: {}, tables: [], labels: {}, nodes: CO_BLOCK([CO_STMT(function() {
+#macro BEGIN            })}), nodes: CO_BLOCK([CO_STMT(function() {
 #macro FINISH           }), CO_FINISH()] )}; })
 #macro THEN             }), CO_BLOCK([CO_STMT(function() {
 #macro PASS             }), CO_STMT(function() {
@@ -36,7 +37,7 @@
 #macro AWAIT_ASYNC      }), CO_AWAIT("ASYNC", function() { return 
 #macro AWAIT_BROADCAST  }), CO_AWAIT("BROADCAST", function() { return 
 #macro AWAIT_COROUTINE  }), CO_AWAIT("COROUTINE", function() { return 
-#macro AWAIT_CHILDRENS  }), CO_AWAIT_CHILDRENS(), CO_STMT(function() { return 
+#macro AWAIT_CHILDRENS  }), CO_AWAIT_CHILDRENS(), CO_STMT(function() {  
 #macro ASYNC            }), CO_ASYNC((function() { return
 
 #macro IF               }), CO_IF_CHAIN((function() { return

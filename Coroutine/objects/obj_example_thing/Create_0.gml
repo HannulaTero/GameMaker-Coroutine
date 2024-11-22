@@ -1,4 +1,6 @@
 
+image_blend = c_dkgray;
+
 //Start 
 COROUTINE 
   scoped: false
@@ -16,3 +18,5 @@ BEGIN
 
   END
 FINISH DISPATCH
+
+

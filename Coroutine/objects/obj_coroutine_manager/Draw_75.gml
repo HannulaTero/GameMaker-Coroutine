@@ -77,16 +77,13 @@ try
 } 
 
 // Something wrong happened while executing coroutine.
-// Store error in coroutine result, and jump over action which caused error.
+// Coroutine tries to jump over action which caused error.
 catch(_error)
 {
-  COROUTINE_CURRENT.result = _error;
   COROUTINE_CURRENT.execute = method_get_self(COROUTINE_EXECUTE).next;
-  var _line = string_repeat("=", 64);
-  show_debug_message(_line);
-  show_debug_message(_error);
-  show_debug_message(_line);
-  coroutine_execute(_coroutine.trigger.onError);
+  show_debug_message("\n{1}\n\n{0}\n\n{1}\n\n", _error, string_repeat("=", 64));
+  var _callback = _coroutine.trigger.onError;
+  with(COROUTINE_SCOPE) return _callback(_error);
 }
   
   
@@ -101,7 +98,7 @@ if (COROUTINE_YIELD == false)
 }
 
 
-// Clear up the things.
+// Clean up the things.
 COROUTINE_CURRENT = undefined;
 COROUTINE_EXECUTE = undefined;
 COROUTINE_LOCAL = undefined;
