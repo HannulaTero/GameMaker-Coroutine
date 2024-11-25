@@ -1,4 +1,7 @@
 /// @desc COROUTINE EXECUTION.
+//
+// In Draw GUI event, so it would be last thing to do.
+// But also as draw event, so coroutines can draw.
 
 
 // No active coroutines, quit early.
@@ -12,18 +15,19 @@ if (_count <= 0)
 // Fetch the coroutine.
 var _index = 0;
 var _coroutines = ds_map_keys_to_array(COROUTINE_POOL_ACTIVE);
-var _coroutine = _coroutines[_index];
-with(_coroutine)
+array_shuffle_ext(_coroutines); // To give coroutines equal change.
+
+with(_coroutines[_index])
 {
   // Preparations.
-  COROUTINE_CURRENT = self;
-  COROUTINE_EXECUTE = execute;
-  COROUTINE_LOCAL = local;
-  COROUTINE_SCOPE = scope;
-  COROUTINE_YIELD = false;
+  COROUTINE_CURRENT_TASK    = self;
+  COROUTINE_CURRENT_EXECUTE = execute;
+  COROUTINE_CURRENT_LOCAL   = local;
+  COROUTINE_CURRENT_SCOPE   = scope;
+  COROUTINE_CURRENT_YIELDED = false;
   
   // Launch the coroutine.
-  coroutine_execute(trigger.onLaunch);
+  onLaunch();
 }
 
 
@@ -39,34 +43,30 @@ try
   do 
   {  
     // Execute current coroutine.
-    COROUTINE_EXECUTE();
+    COROUTINE_CURRENT_EXECUTE();
   
     // Check whether coroutine yielded.
-    if (COROUTINE_YIELD)
+    if (COROUTINE_CURRENT_YIELDED)
     {
       // Yield current coroutine.
-      with(_coroutine)
-      {
-        coroutine_execute(trigger.onYield);
-        execute = COROUTINE_EXECUTE;
-      }
+      COROUTINE_CURRENT_TASK.execute = COROUTINE_CURRENT_EXECUTE;
+      COROUTINE_CURRENT_TASK.onYield();
         
       // Check whether there are more coroutines available.
       if (++_index >= _count) break;
     
       // Fetch next coroutine.
-      _coroutine = _coroutines[_index];
-      with(_coroutine)
+      with(_coroutines[_index])
       {
         // Preparations.
-        COROUTINE_CURRENT = self;
-        COROUTINE_EXECUTE = execute;
-        COROUTINE_LOCAL = local;
-        COROUTINE_SCOPE = scope;
-        COROUTINE_YIELD = false;
+        COROUTINE_CURRENT_TASK    = self;
+        COROUTINE_CURRENT_EXECUTE = execute;
+        COROUTINE_CURRENT_LOCAL   = local;
+        COROUTINE_CURRENT_SCOPE   = scope;
+        COROUTINE_CURRENT_YIELDED = false;
       
         // Launch the coroutine.
-        coroutine_execute(trigger.onLaunch);
+        onLaunch();
       }
     }
   }
@@ -80,30 +80,26 @@ try
 // Coroutine tries to jump over action which caused error.
 catch(_error)
 {
-  COROUTINE_CURRENT.execute = method_get_self(COROUTINE_EXECUTE).next;
   show_debug_message("\n{1}\n\n{0}\n\n{1}\n\n", _error, string_repeat("=", 64));
-  var _callback = _coroutine.trigger.onError;
-  with(COROUTINE_SCOPE) return _callback(_error);
+  COROUTINE_CURRENT_TASK.execute = method_get_self(COROUTINE_CURRENT_EXECUTE).next;
+  COROUTINE_CURRENT_TASK.onError();
 }
   
   
 // Check if time ran out and Coroutine was forced to yield.
-if (COROUTINE_YIELD == false)
+if (COROUTINE_CURRENT_YIELDED == false)
 {
-  with(_coroutine)
-  {
-    coroutine_execute(trigger.onYield);
-    execute = COROUTINE_EXECUTE;
-  }
+  COROUTINE_CURRENT_TASK.execute = COROUTINE_CURRENT_EXECUTE;
+  COROUTINE_CURRENT_TASK.onYield();
 }
 
 
 // Clean up the things.
-COROUTINE_CURRENT = undefined;
-COROUTINE_EXECUTE = undefined;
-COROUTINE_LOCAL = undefined;
-COROUTINE_SCOPE = undefined;
-COROUTINE_YIELD = undefined;
+COROUTINE_CURRENT_TASK    = undefined;
+COROUTINE_CURRENT_EXECUTE = undefined;
+COROUTINE_CURRENT_LOCAL   = undefined;
+COROUTINE_CURRENT_SCOPE   = undefined;
+COROUTINE_CURRENT_YIELDED = undefined;
 array_resize(_coroutines, 0);
 
 

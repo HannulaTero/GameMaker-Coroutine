@@ -1,9 +1,10 @@
+// feather ignore all
 
 
 /// @func coroutine_create(_funcAST);
 /// @desc Creates coroutine prototype, or uses cached version of it.
 /// @param {Function} _funcAST
-/// @returns {Struct.CoroutinePrototype}
+/// @returns {Function}
 function coroutine_create(_funcAST)
 {
   // _funcAST is function, which generates nodes (abstract syntax tree).
@@ -17,7 +18,8 @@ function coroutine_create(_funcAST)
     return COROUTINE_CACHE_PROTOTYPES[? _key];
   }
   
-  // Otherwise create a new protoptype, and add it to the cache.
+  // Otherwise create a new protoptype, and generate function for it. 
+  // 
   var _root = _funcAST();
   transform.Dispatch(_root);
   var _prototype = new CoroutinePrototype(_root);
@@ -26,27 +28,18 @@ function coroutine_create(_funcAST)
 }
 
 
-/// @func coroutine_execute(_callback);
-/// @desc Executes given callback in current coroutines scope.
-/// @param {Function} _callback
-function coroutine_execute(_callback)
-{
-  gml_pragma("forceinline");
-  with(COROUTINE_SCOPE) return _callback();
-}
-
-
 /// @func coroutine_async_listen();
-/// @desc When async event is fired, this will trigger listeners.
+/// @desc Whenever async event is fired, this will trigger listeners.
 function coroutine_async_listen()
 {
   gml_pragma("forceinline");
-  // Keys are same as values, so no need to read the map itself.
+  // Map acts as set, and keys hold listeners. So no need to read the map itself.
   var _listeners = ds_map_keys_to_array(COROUTINE_ASYNC_LISTENERS[? event_number]);
   var _count = array_length(_listeners);
   for(var i = 0; i < _count; i++)
   {
-    _listeners[i].onListen();
+    var _listener = _listeners[i];
+    _listener.onListen(_listener);
   }
   array_resize(_listeners, 0);
 }
@@ -97,11 +90,14 @@ function coroutine_frame_time_usage()
 }
 
 
-
-
-
-
-
+/// @func coroutine_execute(_callback);
+/// @desc Executes given callback in current coroutines scope.
+/// @param {Function} _callback
+function coroutine_execute(_callback)
+{
+  gml_pragma("forceinline");
+  with(COROUTINE_CURRENT_SCOPE) return _callback();
+}
 
 
 

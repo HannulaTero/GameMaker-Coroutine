@@ -3,16 +3,11 @@
 
 
 /// @func CO_RUNTIME_RESTART();
-/// @desc 
+/// @desc Jumps directly at the beginning, doesn't do anything to ensure correctness.
 /// @returns {Function}
 function CO_RUNTIME_RESTART()
 {
-  // feather ignore GM1049
-  with(COROUTINE_CURRENT)
-  {
-    Restart();
-    return execute;
-  }
+  return COROUTINE_CURRENT_TASK.graph.execute;
 }
 
 
@@ -21,7 +16,7 @@ function CO_RUNTIME_RESTART()
 /// @returns {Function}
 function CO_RUNTIME_CONTINUE()
 {
-  return method_get_self(COROUTINE_EXECUTE).onContinue;
+  return method_get_self(COROUTINE_CURRENT_EXECUTE).onContinue;
 }
 
 
@@ -30,7 +25,7 @@ function CO_RUNTIME_CONTINUE()
 /// @returns {Function}
 function CO_RUNTIME_BREAK()
 {
-  return method_get_self(COROUTINE_EXECUTE).onBreak;
+  return method_get_self(COROUTINE_CURRENT_EXECUTE).onBreak;
 }
 
 
@@ -38,10 +33,17 @@ function CO_RUNTIME_BREAK()
 /// @desc 
 /// @param {Any} _return
 /// @returns {Undefined}
+// feather ignore GM1041
+// feather ignore GM1049
 function CO_RUNTIME_RETURN(_return)
 {
-  COROUTINE_CURRENT.Finish(_return);
-  COROUTINE_YIELD = true;
+  COROUTINE_CURRENT_YIELDED = true;
+  with(COROUTINE_CURRENT_TASK)
+  {
+    result = _return;
+    onComplete();
+    Destroy(self);
+  }
   return undefined;
 }
 
@@ -51,8 +53,8 @@ function CO_RUNTIME_RETURN(_return)
 /// @returns {Undefined}
 function CO_RUNTIME_CANCEL()
 {
-  COROUTINE_CURRENT.Cancel();
-  COROUTINE_YIELD = true;
+  COROUTINE_CURRENT_TASK.Cancel();
+  COROUTINE_CURRENT_YIELDED = true;
   return undefined;
 }
 
@@ -64,11 +66,11 @@ function CO_RUNTIME_CANCEL()
 function CO_RUNTIME_GOTO(_label)
 {
   // feather ignore GM1049
-  with(COROUTINE_CURRENT)
+  with(COROUTINE_CURRENT_TASK)
   {
     if (struct_exists(labels, _label) == false)
     {
-      throw($"{name}, Unknown GOTO -target: '{_label}'.");
+      throw($"{option.name}, Unknown GOTO -target: '{_label}'.");
     }
     return labels[$ _label];
   }

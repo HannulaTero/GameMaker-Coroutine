@@ -3,6 +3,36 @@ show_debug_overlay(true, true);
 surface = -1;
 
 
+
+coroutine = COROUTINE BEGIN
+
+  // Dispatch subcoroutine.
+  COROUTINE BEGIN
+    DELAY random_range(2.0, 5.0) SECONDS
+    show_debug_message("First child-coroutine");
+  FINISH DISPATCH 
+
+  // Dispatch subcoroutine.
+  COROUTINE BEGIN
+    DELAY random_range(2.0, 5.0) SECONDS
+    show_debug_message("Second child-coroutine");
+  FINISH DISPATCH 
+
+  // Dispatch subcoroutine.
+  COROUTINE BEGIN
+    DELAY random_range(2.0, 5.0) SECONDS
+    show_debug_message("Third child-coroutine");
+  FINISH DISPATCH 
+
+  // Await all subcoroutines to be finished.
+  AWAIT_SUBTASKS
+  show_debug_message("Parent coroutine");  
+  
+
+FINISH DISPATCH 
+
+
+
 array = array_create_ext(30, function()
 {
   return random(1);
@@ -21,8 +51,8 @@ coroutine = COROUTINE BEGIN
   REPEAT 10 THEN
     result = 0;
     SWITCH irandom(11) 
-      CASE 0 THEN result += random_range(0, 10); YIELD "case 0 yielded" PASS
-      CASE 1 THEN result += random_range(1, 10); PAUSE "case 1 paused" PASS
+      CASE 0 THEN result += random_range(0, 10); YIELD_WITH "case 0 yielded" PASS
+      CASE 1 THEN result += random_range(1, 10); PAUSE_WITH "case 1 paused" PASS
       CASE 2 THEN result += random_range(2, 10); DELAY 100 MILLIS
       CASE 3 THEN result += random_range(3, 10); GOTO "label case 7";
       CASE 4 THEN result += random_range(4, 10); CONTINUE
@@ -30,7 +60,7 @@ coroutine = COROUTINE BEGIN
       CASE 6 THEN result += random_range(6, 10); 
       CASE 7 THEN result += random_range(7, 10); LABEL "label case 7" 
       CASE 8 THEN result += random_range(8, 10); BREAK
-      CASE 9 THEN result += random_range(9, 10); YIELD "case 9 yielded" PASS
+      CASE 9 THEN result += random_range(9, 10); YIELD_WITH "case 9 yielded" PASS
     END
     DELAY 100 MILLIS
     show_debug_message(result);
@@ -52,7 +82,7 @@ coroutine = COROUTINE BEGIN
 
   LABEL "loop" PASS
   IF choose(true, false) THEN
-    YIELD "let other coroutines do their thing" PASS
+    YIELD_WITH "let other coroutines do their thing" PASS
     
   ELIF choose(true, false) THEN
     AWAIT (mouse_x > 100) PASS
@@ -97,7 +127,7 @@ coroutine = coroutine_create(function()
       (function() { return choose(true, false) }), 
       CO_BLOCK([
         CO_STMT(function() { }), 
-        CO_YIELD(function() { return "let other coroutines do their thing" }), 
+        CO_YIELD(),  
         CO_STMT(function() { })
       ]), 
         
@@ -133,7 +163,7 @@ coroutine = coroutine_create(function()
   ])}; 
 
 // DISPATCH
-}) .Dispatch(self)
+}).Dispatch(self)
 
 
 
@@ -167,7 +197,7 @@ coroutine = COROUTINE
       x = mouse_x;
       y = mouse_y;
       
-      YIELD "Drawing" PASS
+      YIELD_WITH "Drawing" PASS
     END
   FINISH 
   
@@ -178,7 +208,7 @@ COROUTINE BEGIN
 
   i = 1;
   REPEAT 10 THEN
-    YIELD i PASS
+    YIELD_WITH i PASS
     i *= 2
     show_debug_message(i);
   END
@@ -194,35 +224,40 @@ COROUTINE BEGIN
   data = undefined;
   
   // Make HTTP request.
-  request = ASYNC_BEGIN 
+  request = ASYNC_REQUEST
       type: ev_async_web,
       desc: $"Request for http_get({url})",
       timeout: 5.0,
-      retries: 3,
+      retries: 3
   
     GET_REQUEST
       return http_get(url);
-      
-    ON_LISTEN 
-      show_debug_message($"HTTP Async ID: {async_load[? "id"]}");
     
     ON_SUCCESS
       data = async_load[? "result"];  
-      show_debug_message($"HTTP GET for \"{url}\" successful");
+      show_debug_message($"HTTP GET for \"{url}\" successful!");
       
     ON_FAILURE
-      show_debug_message($"HTTP GET for \"{url}\" unsuccessful");
+      show_debug_message($"HTTP GET for \"{url}\" unsuccessful!");
     
     ON_TIMEOUT
-      show_debug_message($"HTTP GET for \"{url}\" timed out");
+      show_debug_message($"HTTP GET for \"{url}\" timed out!");
   
+  ASYNC_END
+  
+  
+  ASYNC_LISTENER 
+    type: ev_async_web
+  
+    ON_LISTEN 
+    
   ASYNC_END
   
   // Await until request is done.
   AWAIT request.isFinished() PASS
   
   show_debug_message($"data = \"{data}\"");
-  show_debug_message($"HTTP GET for \"{url}\" complete");
+  show_debug_message($"HTTP GET for \"{url}\" complete!");
         
 
   // Do a for-loop just because.
@@ -235,7 +270,7 @@ COROUTINE BEGIN
     show_debug_message(i);
     if (keyboard_check_pressed(vk_enter)) EXIT;
     if (keyboard_check_pressed(vk_space)) GOTO "restart";
-    YIELD "Looping" PASS
+    YIELD_WITH "Looping" PASS
   END
 
 // End coroutine, then dispatch it.
@@ -245,38 +280,11 @@ FINISH DISPATCH
 
 
 
-
-COROUTINE BEGIN
-
-  // Dispatch subcoroutine.
-  COROUTINE BEGIN
-    DELAY random_range(2.0, 5.0) SECONDS
-    show_debug_message("First child-coroutine");
-  FINISH DISPATCH 
-
-  // Dispatch subcoroutine.
-  COROUTINE BEGIN
-    DELAY random_range(2.0, 5.0) SECONDS
-    show_debug_message("Second child-coroutine");
-  FINISH DISPATCH 
-
-  // Dispatch subcoroutine.
-  COROUTINE BEGIN
-    DELAY random_range(2.0, 5.0) SECONDS
-    show_debug_message("Third child-coroutine");
-  FINISH DISPATCH 
-
-  // Await all subcoroutines to be finished.
-  AWAIT_CHILDRENS
-  show_debug_message("Parent coroutine");  
-  
-
-FINISH DISPATCH 
   
   
   
   
-COROUTINE BEGIN
+coroutine_foreach = COROUTINE BEGIN
   
   FOREACH i: key, ival: value IN RANGE(0, 1024, +16) THEN
   FOREACH j: key, jval: value IN RANGE(0, 1024, +32) THEN
@@ -298,12 +306,12 @@ COROUTINE BEGIN
       
       ELIF choose(true, false) THEN
         show_debug_message("Yielding!")
-        YIELD "yielded!" PASS
+        YIELD_WITH "yielded!" PASS
         show_debug_message("Hoy!")
       
       ELIF choose(true, false) THEN
         show_debug_message("Pausing!")
-        PAUSE
+        PAUSE_WITH "paused!" PASS
         show_debug_message("Pause resumed!")
       
       ELSE 

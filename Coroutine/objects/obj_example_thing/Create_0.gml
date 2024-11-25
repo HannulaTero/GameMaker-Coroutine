@@ -1,9 +1,11 @@
 
 image_blend = c_dkgray;
 
+
 //Start 
-COROUTINE 
+coroutine = COROUTINE 
   scoped: false
+  
 BEGIN 
 
   DELAY random(120) MILLIS 
@@ -20,3 +22,4 @@ BEGIN
 FINISH DISPATCH
 
 
+ 

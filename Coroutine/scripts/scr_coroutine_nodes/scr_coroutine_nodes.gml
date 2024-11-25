@@ -10,15 +10,14 @@ function CO_NOP()
 }
 
 
-/// @func CO_BEGIN();
+/// @func CO_NODE(_name);
 /// @desc
+/// @param {String} _name
 /// @returns {Struct}
-function CO_BEGIN()
+function CO_NODE(_name)
 { 
   gml_pragma("forceinline"); 
-  return {
-    name: "BEGIN" 
-  }; 
+  return { name: _name }; 
 }
 
 
@@ -28,9 +27,7 @@ function CO_BEGIN()
 function CO_FINISH()
 { 
   gml_pragma("forceinline"); 
-  return {
-    name: "FINISH" 
-  }; 
+  return { name: "FINISH" }; 
 }
 
 
@@ -76,29 +73,49 @@ function CO_LABEL(_label)
 }
 
 
-/// @func CO_YIELD(_call);
+/// @func CO_YIELD();
+/// @desc
+/// @returns {Struct}
+function CO_YIELD()
+{ 
+  gml_pragma("forceinline"); 
+  return { name: "YIELD" };
+}
+
+
+/// @func CO_PAUSE();
+/// @desc
+/// @returns {Struct}
+function CO_PAUSE()
+{ 
+  gml_pragma("forceinline"); 
+  return { name: "PAUSE" };
+}
+
+
+/// @func CO_YIELD_WITH(_call);
 /// @desc
 /// @param {Function} _call
 /// @returns {Struct}
-function CO_YIELD(_call)
+function CO_YIELD_WITH(_call)
 { 
   gml_pragma("forceinline"); 
   return {
-    name: "YIELD", 
+    name: "YIELD_WITH", 
     call: method(undefined, _call) 
   };
 }
 
 
-/// @func CO_PAUSE(_call);
+/// @func CO_PAUSE_WITH(_call);
 /// @desc
 /// @param {Function} _call
 /// @returns {Struct}
-function CO_PAUSE(_call)
+function CO_PAUSE_WITH(_call)
 { 
   gml_pragma("forceinline"); 
   return {
-    name: "PAUSE", 
+    name: "PAUSE_WITH", 
     call: method(undefined, _call)
   };
 }
@@ -135,15 +152,33 @@ function CO_AWAIT(_type, _call)
 }
 
 
-/// @func CO_AWAIT_CHILDRENS();
+/// @func CO_AWAIT_SUBTASKS();
 /// @desc
 /// @returns {Struct}
-function CO_AWAIT_CHILDRENS()
+function CO_AWAIT_SUBTASKS()
 { 
   gml_pragma("forceinline"); 
-  return {
-    name: "AWAIT_CHILDRENS", 
-  }; 
+  return { name: "AWAIT_SUBTASKS" }; 
+}
+
+
+/// @func CO_AWAIT_REQUESTS();
+/// @desc
+/// @returns {Struct}
+function CO_AWAIT_REQUESTS()
+{ 
+  gml_pragma("forceinline"); 
+  return { name: "AWAIT_REQUESTS" }; 
+}
+
+
+/// @func CO_AWAIT_LISTENERS();
+/// @desc
+/// @returns {Struct}
+function CO_AWAIT_LISTENERS()
+{ 
+  gml_pragma("forceinline"); 
+  return { name: "AWAIT_LISTENERS" }; 
 }
 
 

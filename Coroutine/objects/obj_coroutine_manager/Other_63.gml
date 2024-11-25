@@ -2,3 +2,24 @@
 
 // Handle listeners.
 coroutine_async_listen();
+
+
+// Check whether request exists.
+with(COROUTINE_ASYNC_REQUESTS[? async_load[? "id"]])
+{
+  // Trigger request based on status.
+  var _status = async_load[? "status"];
+  if (_status == true)
+  {
+    onSuccess(self);
+    Destroy();
+    exit;
+  }
+
+  if (_status == false)
+  {
+    onFailure(self);
+    Destroy();
+    exit;
+  }
+}

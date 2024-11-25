@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_coroutine_view",
   "parent":{
-    "name":"Iterator",
-    "path":"folders/Coroutine/Runtime/Iterator.yy",
+    "name":"Foreach Iterator",
+    "path":"folders/Coroutine/Runtime/Foreach Iterator.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

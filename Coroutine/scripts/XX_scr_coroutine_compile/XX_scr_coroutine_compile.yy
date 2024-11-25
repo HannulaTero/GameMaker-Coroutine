@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_coroutine_instance",
+  "%Name":"XX_scr_coroutine_compile",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_coroutine_instance",
+  "name":"XX_scr_coroutine_compile",
   "parent":{
-    "name":"Runtime",
-    "path":"folders/Coroutine/Runtime.yy",
+    "name":"Parsing",
+    "path":"folders/Coroutine/Parsing.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

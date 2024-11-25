@@ -4,33 +4,33 @@
 /// @desc For transforming AST nodes into directed graph.
 function CoroutineTransform() constructor
 {
-  self.labels = {};
-  self.tables = [];
-  self.register = 0;
+  labels = {};
+  tables = [];
+  final = undefined;
+  register = 0;
   
   
   // Dummy final node.
-  static final = { 
-    execute: function() {
-      return execute; // Dummy.
-    }
+  static finalNode = { 
+    next: function() { },
+    execute: function() { /* Dummy. */ }
   };
     
   // Don't allow breaking outside the loop.
   static errorBreak = { 
+    next: function() { },
     execute: function() 
     { 
-      throw("BREAK used outside a loop."); 
-      return execute; 
+      throw("BREAK used outside a loop.");
     }
   };
     
   // Don't allow breaking
   static errorContinue = { 
+    next: function() { },
     execute: function() 
     { 
-      throw("CONTINUE used outside a loop."); 
-      return execute; 
+      throw("CONTINUE used outside a loop.");
     }
   };
   
@@ -40,12 +40,14 @@ function CoroutineTransform() constructor
   /// @param {Struct} _root
   static Dispatch = function(_root)
   {
-    self.tables = _root.tables;
-    self.labels = _root.labels;
-    self.register = 0;
+    tables = _root.tables;
+    labels = _root.labels;
+    final = undefined;
+    register = 0;
     
-    _root.graph = Generate(_root.nodes, final, errorBreak, errorContinue);
+    _root.graph = Generate(_root.nodes, finalNode, errorBreak, errorContinue);
     _root.execute = _root.graph.execute;
+    _root.final = final;
     return _root;
   };
   
@@ -58,30 +60,26 @@ function CoroutineTransform() constructor
   /// @param {Struct} _continue
   static Generate = function(_node, _next, _break, _continue)
   {
+    // Assumes nodes are valid, and there is always functor for given node-name.
     return functors[$ _node.name](_node, _next, _break, _continue);
   };
   
   
   // LOOK-UP TABLE for GENERATORS.
-  // Could use large switch-statement instead, but in GML it is just fance if-else -chain.
-  // So with enough cases, having explicit lookup-table is faster in general case.
+  /*
+    Could use large switch-statement instead, but in GML it is just fancy if-else -chain.
+    So with enough cases, having explicit lookup-table is faster in general case.
+  
+    These generator functions should be struct.
+      Struct should have atleast "execute" and "next" -members.
+      "execute" and "next should both be functions, which are called during execution.
+      Returning struct also works as context, which handle/direct the functions execution.
+    
+    Executive functions assume, that manager calls, and global state is proper.
+      Functions change global state to lead execution to next state.
+    
+  */
   static functors = coroutine_mapping([
-    
-    
-    // Marks beginning of the coroutine execution.
-    // Calls trigger for initializing.
-    ["BEGIN"],
-    function(_node, _next, _break, _continue)
-    {
-      return { 
-        next: _next.execute,
-        execute: function()
-        {
-          COROUTINE_CURRENT.onInit();
-          COROUTINE_EXECUTE = next;
-        }
-      };
-    },
     
     
     // Marks end of the coroutine execution.
@@ -89,14 +87,18 @@ function CoroutineTransform() constructor
     ["FINISH"],
     function(_node, _next, _break, _continue)
     {
-      return { 
+      static nop = function() {};
+      final = { 
+        next: nop,
         execute: function()
         {
-          COROUTINE_CURRENT.Finish(undefined);
-          COROUTINE_EXECUTE = execute;
-          COROUTINE_YIELD = true;
+          COROUTINE_CURRENT_TASK.onComplete();
+          COROUTINE_CURRENT_TASK.Destroy();
+          COROUTINE_CURRENT_EXECUTE = next;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
+      return final;
     },
     
     
@@ -127,8 +129,9 @@ function CoroutineTransform() constructor
         onContinue: _continue.execute,
         execute: function()
         {
-          // Return value sohuld be from calling coroutine control flow statements.
-          COROUTINE_EXECUTE = coroutine_execute(call) ?? next;
+          // Return value should be from calling coroutine control flow statements.
+          // Or undefined, so it just proceeds to the next.
+          COROUTINE_CURRENT_EXECUTE = coroutine_execute(call) ?? next;
         }
       };
     },
@@ -145,8 +148,41 @@ function CoroutineTransform() constructor
     
     
     // Yields execution, and allows others also to do execution.
-    // This can also return value.
+    // This doesn't change coroutine value.
     ["YIELD"],
+    function(_node, _next, _break, _continue)
+    {
+      return { 
+        next: _next.execute,
+        execute: function()
+        {
+          COROUTINE_CURRENT_EXECUTE = next;
+          COROUTINE_CURRENT_YIELDED = true;
+        }
+      };
+    },
+    
+    
+    // Pauses and yields coroutine execution.
+    // This doesn't change coroutine value.
+    ["PAUSE"],
+    function(_node, _next, _break, _continue)
+    {
+      return { 
+        next: _next.execute,
+        execute: function()
+        {
+          COROUTINE_CURRENT_TASK.Pause();
+          COROUTINE_CURRENT_EXECUTE = next;
+          COROUTINE_CURRENT_YIELDED = true;
+        }
+      };
+    },
+    
+    
+    // Yields execution, and allows others also to do execution.
+    // This will also set current value for coroutine.
+    ["YIELD_WITH"],
     function(_node, _next, _break, _continue)
     {
       return { 
@@ -154,17 +190,17 @@ function CoroutineTransform() constructor
         call: _node.call, 
         execute: function()
         {
-          COROUTINE_CURRENT.result = coroutine_execute(call);
-          COROUTINE_EXECUTE = next;
-          COROUTINE_YIELD = true;
+          COROUTINE_CURRENT_TASK.result = coroutine_execute(call);
+          COROUTINE_CURRENT_EXECUTE = next;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
     },
     
     
     // Pauses and yields coroutine execution.
-    // This can also return value.
-    ["PAUSE"],
+    // This will also set current value for coroutine.
+    ["PAUSE_WITH"],
     function(_node, _next, _break, _continue)
     {
       return { 
@@ -172,12 +208,10 @@ function CoroutineTransform() constructor
         call: _node.call,
         execute: function()
         {
-          COROUTINE_CURRENT.result = coroutine_execute(call);
-          coroutine_execute(COROUTINE_CURRENT.trigger.onPause);
-          ds_map_delete(COROUTINE_POOL_ACTIVE, COROUTINE_CURRENT);
-          COROUTINE_POOL_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
-          COROUTINE_EXECUTE = next;
-          COROUTINE_YIELD = true;
+          COROUTINE_CURRENT_TASK.result = coroutine_execute(call);
+          COROUTINE_CURRENT_TASK.Pause();
+          COROUTINE_CURRENT_EXECUTE = next;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
     },
@@ -210,20 +244,24 @@ function CoroutineTransform() constructor
         unit: units[$ _node.type](),
         execute: function()
         {
-          // Delete from active and yield. 
-          ds_map_delete(COROUTINE_POOL_ACTIVE, COROUTINE_CURRENT);
-          COROUTINE_POOL_PAUSED[? COROUTINE_CURRENT] = COROUTINE_CURRENT;
-          COROUTINE_EXECUTE = next;
-          COROUTINE_YIELD = true;
-          
-          // Return back to active after delay.
+          // feather ignore GM1041
+          // feather ignore GM1049
+          var _unit = unit;
           var _delay = coroutine_execute(call) / rate;
-          COROUTINE_CURRENT.delayTimer = call_later(_delay, unit, method(COROUTINE_CURRENT, function()
+          with(COROUTINE_CURRENT_TASK)
           {
-            ds_map_delete(COROUTINE_POOL_PAUSED, self);
-            COROUTINE_POOL_ACTIVE[? self] = self;
-            delayTimer = undefined;
-          }));
+            // Delete from active and yield. 
+            ds_map_delete(COROUTINE_POOL_ACTIVE, self);
+            COROUTINE_POOL_PAUSED[? self] = self;
+            paused = true;
+          
+            // Return back to active after delay.
+            time_source_reconfigure(delaySource, _delay, _unit, delayResume);
+            time_source_start(delaySource);
+          }
+          
+          COROUTINE_CURRENT_EXECUTE = next;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
     },
@@ -241,11 +279,11 @@ function CoroutineTransform() constructor
         {
           if (coroutine_execute(call))
           {
-            COROUTINE_EXECUTE = next;
+            COROUTINE_CURRENT_EXECUTE = next;
             return;
           }
-          COROUTINE_EXECUTE = execute;
-          COROUTINE_YIELD = true;
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
     },
@@ -254,34 +292,32 @@ function CoroutineTransform() constructor
     ["AWAIT_ASYNC", "AWAIT_COROUTINE"],
     function(_node, _next, _break, _continue)
     {
-      var _init = {
-        next: undefined,
-        call: _node.call,
-        register,
-        execute: function()
-        {
-          COROUTINE_LOCAL[register] = coroutine_execute(call);
-          COROUTINE_EXECUTE = next;
-        }
-      };
       
       var _wait = {
         next: _next.execute,
         register,
         execute: function()
         {
-          if (COROUTINE_LOCAL[register].isFinished())
+          if (COROUTINE_CURRENT_LOCAL[register].isFinished())
           {
-            COROUTINE_EXECUTE = next;
+            COROUTINE_CURRENT_EXECUTE = next;
             return;
           }
-          COROUTINE_EXECUTE = execute;
-          COROUTINE_YIELD = true;
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
       
-      _init.next = _wait;
-      return _init;
+      return {
+        next: _wait.execute,
+        call: _node.call,
+        register,
+        execute: function()
+        {
+          COROUTINE_CURRENT_LOCAL[register] = coroutine_execute(call);
+          COROUTINE_CURRENT_EXECUTE = next;
+        }
+      };
     },
     
     
@@ -295,11 +331,11 @@ function CoroutineTransform() constructor
         {
           if (coroutine_execute(call))
           {
-            COROUTINE_EXECUTE = next;
+            COROUTINE_CURRENT_EXECUTE = next;
             return;
           }
-          COROUTINE_EXECUTE = execute;
-          COROUTINE_YIELD = true;
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
     },
@@ -307,20 +343,104 @@ function CoroutineTransform() constructor
     
     // Pauses execution until all child coroutines have finished.
     // 
-    ["AWAIT_CHILDRENS"],
+    ["AWAIT_SUBTASKS"],
     function(_node, _next, _break, _continue)
     {
       return {
         next: _next.execute,
         execute: function()
         {
-          if (COROUTINE_CURRENT.hasChilds() == false)
+          if (ds_map_size(COROUTINE_CURRENT_TASK.childTasks) <= 0)
           {
-            COROUTINE_EXECUTE = next;
+            COROUTINE_CURRENT_EXECUTE = next;
             return;
           }
-          COROUTINE_EXECUTE = execute;
-          COROUTINE_YIELD = true;
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
+        }
+      };
+    },
+    
+    
+    // Pauses execution until all child coroutines have finished.
+    // 
+    ["AWAIT_SUBTASKS"],
+    function(_node, _next, _break, _continue)
+    {
+      return {
+        next: _next.execute,
+        execute: function()
+        {
+          if (ds_map_size(COROUTINE_CURRENT_TASK.childTasks) <= 0)
+          {
+            COROUTINE_CURRENT_EXECUTE = next;
+            return;
+          }
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
+        }
+      };
+    },
+    
+    
+    // Pauses execution until all async requests have finished.
+    // 
+    ["AWAIT_REQUESTS"],
+    function(_node, _next, _break, _continue)
+    {
+      return {
+        next: _next.execute,
+        execute: function()
+        {
+          if (ds_map_size(COROUTINE_CURRENT_TASK.asyncRequests) <= 0)
+          {
+            COROUTINE_CURRENT_EXECUTE = next;
+            return;
+          }
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
+        }
+      };
+    },
+    
+    
+    // Pauses execution until all async listeners have finished.
+    // 
+    ["AWAIT_LISTENERS"],
+    function(_node, _next, _break, _continue)
+    {
+      return {
+        next: _next.execute,
+        execute: function()
+        {
+          if (ds_map_size(COROUTINE_CURRENT_TASK.asyncListeners) <= 0)
+          {
+            COROUTINE_CURRENT_EXECUTE = next;
+            return;
+          }
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
+        }
+      };
+    },
+    
+    
+    // Pauses execution until all child coroutines have finished.
+    // 
+    ["AWAIT_SUBTASKS"],
+    function(_node, _next, _break, _continue)
+    {
+      return {
+        next: _next.execute,
+        execute: function()
+        {
+          if (ds_map_size(COROUTINE_CURRENT_TASK.childTasks) <= 0)
+          {
+            COROUTINE_CURRENT_EXECUTE = next;
+            return;
+          }
+          COROUTINE_CURRENT_EXECUTE = execute;
+          COROUTINE_CURRENT_YIELDED = true;
         }
       };
     },
@@ -338,7 +458,7 @@ function CoroutineTransform() constructor
         execute: function()
         {
           // TODO
-          COROUTINE_EXECUTE = next;
+          COROUTINE_CURRENT_EXECUTE = next;
         }
       };
     },
@@ -361,7 +481,7 @@ function CoroutineTransform() constructor
         cond: _node.cond,
         execute: function()
         {
-          COROUTINE_EXECUTE = coroutine_execute(cond) ? next : jump;
+          COROUTINE_CURRENT_EXECUTE = coroutine_execute(cond) ? next : jump;
         }
       };
     },
@@ -426,7 +546,7 @@ function CoroutineTransform() constructor
         def: (_def != undefined) ? _def.execute : _next.execute,
         execute: function() 
         { 
-          COROUTINE_EXECUTE = table[? coroutine_execute(item)] ?? def; 
+          COROUTINE_CURRENT_EXECUTE = table[? coroutine_execute(item)] ?? def; 
         }
       };
     },
@@ -441,7 +561,7 @@ function CoroutineTransform() constructor
         next: undefined,
         execute: function() 
         { 
-          COROUTINE_EXECUTE = next;
+          COROUTINE_CURRENT_EXECUTE = next;
         }
       };
       
@@ -463,7 +583,7 @@ function CoroutineTransform() constructor
         cond: _node.cond,
         execute: function()
         {
-          COROUTINE_EXECUTE = coroutine_execute(cond) ? next : jump;
+          COROUTINE_CURRENT_EXECUTE = coroutine_execute(cond) ? next : jump;
         }
       };
       
@@ -489,8 +609,8 @@ function CoroutineTransform() constructor
         register: _register,
         execute: function()
         {
-          COROUTINE_LOCAL[register] = coroutine_execute(call);
-          COROUTINE_EXECUTE = next;
+          COROUTINE_CURRENT_LOCAL[register] = coroutine_execute(call);
+          COROUTINE_CURRENT_EXECUTE = next;
         }
       };
       
@@ -501,7 +621,7 @@ function CoroutineTransform() constructor
         register: _register,
         execute: function()
         {
-          COROUTINE_EXECUTE = (--COROUTINE_LOCAL[register] >= 0) ? next : jump;
+          COROUTINE_CURRENT_EXECUTE = (--COROUTINE_CURRENT_LOCAL[register] >= 0) ? next : jump;
         }
       };
       
@@ -527,7 +647,7 @@ function CoroutineTransform() constructor
         cond: _node.cond,
         execute: function()
         {
-          COROUTINE_EXECUTE = coroutine_execute(cond) ? jump : next;
+          COROUTINE_CURRENT_EXECUTE = coroutine_execute(cond) ? jump : next;
         }
       };
       
@@ -550,7 +670,7 @@ function CoroutineTransform() constructor
         execute: function()
         {
           coroutine_execute(call);
-          COROUTINE_EXECUTE = next;
+          COROUTINE_CURRENT_EXECUTE = next;
         }
       }
       
@@ -561,7 +681,7 @@ function CoroutineTransform() constructor
         cond: _node.cond,
         execute: function()
         {
-          COROUTINE_EXECUTE = coroutine_execute(cond) ? next : jump;
+          COROUTINE_CURRENT_EXECUTE = coroutine_execute(cond) ? next : jump;
         }
       };
       
@@ -572,7 +692,7 @@ function CoroutineTransform() constructor
         execute: function()
         {
           coroutine_execute(call);
-          COROUTINE_EXECUTE = next;
+          COROUTINE_CURRENT_EXECUTE = next;
         }
       };
       
@@ -606,8 +726,8 @@ function CoroutineTransform() constructor
         {
           var _item = coroutine_execute(call);
           var _iterator = new CoroutineIterator(_item, key, val);
-          COROUTINE_LOCAL[register] = _iterator;
-          COROUTINE_EXECUTE = next;
+          COROUTINE_CURRENT_LOCAL[register] = _iterator;
+          COROUTINE_CURRENT_EXECUTE = next;
         }
       }
       
@@ -618,16 +738,16 @@ function CoroutineTransform() constructor
         register: _register,
         execute: function()
         {
-          var _iterator = COROUTINE_LOCAL[register];
+          var _iterator = COROUTINE_CURRENT_LOCAL[register];
           if (_iterator.index < _iterator.count)
           {
             _iterator.Next();
-            COROUTINE_EXECUTE = next;
+            COROUTINE_CURRENT_EXECUTE = next;
           }
           else
           {
-            COROUTINE_LOCAL[register] = undefined;
-            COROUTINE_EXECUTE = jump;
+            COROUTINE_CURRENT_LOCAL[register] = undefined;
+            COROUTINE_CURRENT_EXECUTE = jump;
           }
         }
       };

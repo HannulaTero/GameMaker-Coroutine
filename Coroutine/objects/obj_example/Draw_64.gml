@@ -1,7 +1,7 @@
 
 var _x = room_width - 64;
 var _y = room_height - 64;
-var _c = c_red;
+var _c = make_color_hsv(0, 0, 240);
 draw_sprite_ext(spr_example_thing, 0, _x, _y, 1, 1, current_time, _c, 1);
 
 var _active = ds_map_size(COROUTINE_POOL_ACTIVE);
@@ -14,4 +14,5 @@ draw_text(32, 400, $"coroutine : {coroutine.Get()}");
 if (keyboard_check_pressed(vk_enter))
 {
   coroutine.Resume();
+  coroutine_foreach.Resume();
 }

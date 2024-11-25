@@ -65,14 +65,18 @@ function test_suite_syntax()
 
     AWAIT PASS
     DELAY SECONDS 
-    YIELD PASS
-    PAUSE PASS
+    YIELD
+    PAUSE
+    YIELD_WITH "yield" PASS
+    PAUSE_WITH "pause" PASS
   
     FOR COND ITER THEN
       AWAIT PASS
       DELAY MILLIS 
-      YIELD PASS
-      PAUSE PASS
+      YIELD
+      PAUSE
+      YIELD_WITH "yield" PASS
+      PAUSE_WITH "pause" PASS
   
     END
     
@@ -88,10 +92,10 @@ function test_suite_syntax()
     
     AWAIT true PASS
     
-    AWAIT_ASYNC
+    AWAIT_REQUESTS
     AWAIT_COROUTINE
     AWAIT_BROADCAST
-    AWAIT_CHILDRENS
+    AWAIT_SUBTASKS
     
     GOTO "goto target";
     

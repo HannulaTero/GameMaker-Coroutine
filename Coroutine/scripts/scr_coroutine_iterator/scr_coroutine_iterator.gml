@@ -12,14 +12,14 @@
 /// feather ignore GM2043
 function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefined) constructor
 {
-  self.item = _item;
-  self.keys = undefined;
-  self.index = 0;
-  self.count = 0;
-  self.nameVal = _nameVal;
-  self.nameKey = _nameKey;
-  self.GetVal = function() {};
-  self.GetKey = function() {};
+  item = _item;
+  keys = undefined;
+  index = 0;
+  count = 0;
+  nameVal = _nameVal;
+  nameKey = _nameKey;
+  GetVal = function() {};
+  GetKey = function() {};
 
 
   // Find correct methods for iterating the given item.
@@ -67,9 +67,9 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for array.
   static asArray = function()
   {
-    self.count = array_length(item);
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[index]; };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
+    count = array_length(item);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = item[index]; };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -78,10 +78,10 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for struct.
   static asStruct = function()
   {
-    self.keys = struct_get_names(item);
-    self.count = struct_names_count(item);
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[$ keys[index]]; };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = keys[index]; };
+    keys = struct_get_names(item);
+    count = struct_names_count(item);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = item[$ keys[index]]; };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = keys[index]; };
     return self;
   };
   
@@ -95,10 +95,10 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
     var _instances = array_create(instance_number(item));
     with(_object) _instances[_index++] = self;
     
-    self.item = _instances;
-    self.count = array_length(item);
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[index]; };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
+    item = _instances;
+    count = array_length(item);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = item[index]; };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -107,10 +107,10 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for range.
   static asRange = function()
   {
-    self.start = item.start;
-    self.count = floor((item.stop - item.start) / item.step);
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = start + item.step * index; };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
+    start = item.start;
+    count = floor((item.stop - item.start) / item.step);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = start + item.step * index; };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -119,12 +119,12 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for buffer in specific view.
   static asView = function()
   {
-    self.data = item.data;
-    self.dtype = item.dtype;
-    self.dsize = item.dsize;
-    self.count = floor((item.stop - item.start) / item.step);
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = buffer_peek(data, (start + item.step * index) * dsize, dtype); };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
+    data = item.data;
+    dtype = item.dtype;
+    dsize = item.dsize;
+    count = floor((item.stop - item.start) / item.step);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = buffer_peek(data, (start + item.step * index) * dsize, dtype); };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -133,10 +133,10 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for string.
   static asString = function()
   {
-    self.index = 1; // In GML, strings are 1-indexed.
-    self.count = string_length(item) + 1;
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = string_char_at(item, index); };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
+    index = 1; // In GML, strings are 1-indexed.
+    count = string_length(item) + 1;
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = string_char_at(item, index); };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -145,9 +145,9 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for ds_list.
   static asList = function()
   {
-    self.count = ds_list_size(item);
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[| index]; };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = index; };
+    count = ds_list_size(item);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = item[| index]; };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };
   
@@ -156,10 +156,10 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for ds_map.
   static asMap = function()
   {
-    self.keys = ds_map_keys_to_array(item);
-    self.count = ds_map_size(item);
-    self.GetVal = function() { COROUTINE_SCOPE[$ nameVal] = item[? keys[index]]; };
-    self.GetKey = function() { COROUTINE_SCOPE[$ nameKey] = keys[index]; };
+    keys = ds_map_keys_to_array(item);
+    count = ds_map_size(item);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = item[? keys[index]]; };
+    GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = keys[index]; };
     return self;
   };
 }

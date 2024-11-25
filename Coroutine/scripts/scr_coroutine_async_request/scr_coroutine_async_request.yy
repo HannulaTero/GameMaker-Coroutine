@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_coroutine_async_request",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_coroutine_async_request",
+  "parent":{
+    "name":"Asynchronous",
+    "path":"folders/Coroutine/Runtime/Asynchronous.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

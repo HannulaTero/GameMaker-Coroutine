@@ -1,17 +1,18 @@
+// feather ignore GM1051
 
 
 #macro COROUTINE        coroutine_create(function() { return { graph: {}, tables: [], labels: {}, define: ({ option: ({
 
 
 // Coroutine triggers.
-#macro ON_INIT          }), onInit: method(undefined, function() {
+#macro ON_INIT          }), onInit: method(undefined, function(_params={}) {
 #macro ON_YIELD         }), onYield: method(undefined, function() {
 #macro ON_PAUSE         }), onPause: method(undefined, function() {
 #macro ON_CANCEL        }), onCancel: method(undefined, function() {
 #macro ON_RESUME        }), onResume: method(undefined, function() {
 #macro ON_LAUNCH        }), onLaunch: method(undefined, function() {
 #macro ON_COMPLETE      }), onComplete: method(undefined, function() {
-#macro ON_ERROR         }), onError: method(undefined, function(error) {
+#macro ON_ERROR         }), onError: method(undefined, function(_error) {
 
 
 // Coroutine statements.
@@ -20,14 +21,15 @@
 #macro THEN             }), CO_BLOCK([CO_STMT(function() {
 #macro PASS             }), CO_STMT(function() {
 #macro END              })])), CO_STMT(function() {
-#macro DISPATCH         .Dispatch(self)
+#macro DISPATCH         .Dispatch(self);
 
 #macro LABEL            }), CO_LABEL({ label: 
-#macro YIELD            }), CO_YIELD(function() { return 
-#macro PAUSE            }), CO_PAUSE(function() { return 
-#macro DELAY            }), CO_DELAY(function() { return 
+#macro YIELD            }), CO_YIELD(), CO_STMT(function() {
+#macro PAUSE            }), CO_PAUSE(), CO_STMT(function() {
+#macro YIELD_WITH       }), CO_YIELD_WITH(function() { return
+#macro PAUSE_WITH       }), CO_PAUSE_WITH(function() { return
   
-#macro TIMEOUT          }), CO_TIMEOUT(function() { return 
+#macro DELAY            }), CO_DELAY(function() { return
 #macro MICROS           }, "MICROS"), CO_STMT(function() {
 #macro MILLIS           }, "MILLIS"), CO_STMT(function() {
 #macro FRAMES           }, "FRAMES"), CO_STMT(function() {
@@ -35,9 +37,12 @@
 
 #macro AWAIT            }), CO_AWAIT("COND", function() { return 
 #macro AWAIT_ASYNC      }), CO_AWAIT("ASYNC", function() { return 
-#macro AWAIT_BROADCAST  }), CO_AWAIT("BROADCAST", function() { return 
-#macro AWAIT_COROUTINE  }), CO_AWAIT("COROUTINE", function() { return 
-#macro AWAIT_CHILDRENS  }), CO_AWAIT_CHILDRENS(), CO_STMT(function() {  
+#macro AWAIT_COROUTINE  }), CO_AWAIT("COROUTINE", function() { return
+#macro AWAIT_BROADCAST  }), CO_AWAIT("BROADCAST", function() { return  
+  
+#macro AWAIT_SUBTASKS   }), CO_AWAIT_SUBTASKS(), CO_STMT(function() {
+#macro AWAIT_REQUESTS   }), CO_AWAIT_REQUESTS(), CO_STMT(function() {
+#macro AWAIT_LISTENERS  }), CO_AWAIT_LISTENERS(), CO_STMT(function() {
 #macro ASYNC            }), CO_ASYNC((function() { return
 
 #macro IF               }), CO_IF_CHAIN((function() { return
@@ -64,7 +69,7 @@
 #macro VIEW             new CoroutineView
 
 
-// Runtime control flow statements.
+// Runtime evaluated statements.
 #macro RESTART          return CO_RUNTIME_RESTART()
 #macro CONTINUE         return CO_RUNTIME_CONTINUE()
 #macro BREAK            return CO_RUNTIME_BREAK()
@@ -72,23 +77,21 @@
 #macro CANCEL           return CO_RUNTIME_CANCEL() 
 #macro RETURN           for(var ____;; { return CO_RUNTIME_RETURN(____); }) ____ =
 #macro GOTO             for(var ____;; { return CO_RUNTIME_GOTO(____); }) ____ =
+#macro PRINT            for(var ____;; { show_debug_message(____); break; }) ____ =
 
 
 // Runtime async request, and its triggers.
-#macro ASYNC_BEGIN      ((new CoroutineAsync({
-#macro GET_REQUEST      })).SetRequest((function() {
-#macro ON_WAITING       })).SetWaiting((function() {
-#macro ON_SUCCESS       })).SetSuccess((function() {
-#macro ON_FAILURE       })).SetFailure((function() {
-#macro ON_TIMEOUT       })).SetTimeout((function() {
-#macro ON_LISTEN        })).SetListen((function() {
-#macro ASYNC_END        })).AsyncDispatch())
-
-
-
-
-
-
+#macro ASYNC_REQUEST    (new CoroutineAsyncRequest({ option: ({
+#macro GET_REQUEST      }), onRequest: (function(_async) {
+#macro ON_WAITING       }), onWaiting: (function(_async) {
+#macro ON_SUCCESS       }), onSuccess: (function(_async) {
+#macro ON_FAILURE       }), onFailure: (function(_async) {
+#macro ON_TIMEOUT       }), onTimeout: (function(_async) {
+  
+#macro ASYNC_LISTENER   (new CoroutineAsyncListener({ option: ({
+#macro ON_LISTEN        }), onListen: (function(_async) {
+  
+#macro ASYNC_END        })})); 
 
 
 

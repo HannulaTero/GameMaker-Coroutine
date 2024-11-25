@@ -3,13 +3,14 @@
   "%Name":"obj_example_thung",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
   "name":"obj_example_thung",
   "overriddenProperties":[],
   "parent":{
-    "name":"Coroutine Example",
-    "path":"folders/Coroutine Example.yy",
+    "name":"Testing",
+    "path":"folders/Coroutine Examples/Testing.yy",
   },
   "parentObjectId":null,
   "persistent":false,

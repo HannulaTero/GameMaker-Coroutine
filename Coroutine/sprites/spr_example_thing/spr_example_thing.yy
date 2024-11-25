@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":4,
   "parent":{
-    "name":"Coroutine Example",
-    "path":"folders/Coroutine Example.yy",
+    "name":"Testing",
+    "path":"folders/Coroutine Examples/Testing.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

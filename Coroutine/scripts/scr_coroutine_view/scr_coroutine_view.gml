@@ -5,12 +5,12 @@
 function CoroutineView() constructor
 {
   // Declare variables.
-  self.data = undefined;
-  self.dtype = undefined;
-  self.dsize = undefined;
-  self.start = 0;
-  self.stop = 0;
-  self.step = 1;
+  data = undefined;
+  dtype = undefined;
+  dsize = undefined;
+  start = 0;
+  stop = 0;
+  step = 1;
   
   
   switch(argument_count)
@@ -21,21 +21,21 @@ function CoroutineView() constructor
       var _item = argument[0];
       if (is_struct(_item))
       {
-        self.data = _item[$ "data"];
-        self.dtype = _item[$ "dtype"] ?? buffer_u8;
-        self.dsize = buffer_sizeof(dtype);
-        self.start = _item[$ "start"] ?? start;
-        self.stop = _item[$ "stop"] ?? stop;
-        self.step = _item[$ "step"] ?? step;
+        data = _item[$ "data"];
+        dtype = _item[$ "dtype"] ?? buffer_u8;
+        dsize = buffer_sizeof(dtype);
+        start = _item[$ "start"] ?? start;
+        stop = _item[$ "stop"] ?? stop;
+        step = _item[$ "step"] ?? step;
       }
       else
       {
-        self.data = _item;
-        self.dtype = buffer_u8;
-        self.dsize = buffer_sizeof(dtype);
-        self.start = 0;
-        self.stop = buffer_get_size(data) / dsize;
-        self.step = 1;
+        data = _item;
+        dtype = buffer_u8;
+        dsize = buffer_sizeof(dtype);
+        start = 0;
+        stop = buffer_get_size(data) / dsize;
+        step = 1;
       }
       break;
     }
@@ -43,48 +43,48 @@ function CoroutineView() constructor
     // Data and dtype are set.
     case 2:
     {
-      self.data = argument[0];
-      self.dtype = argument[1];
-      self.dsize = buffer_sizeof(dtype);
-      self.start = 0;
-      self.stop = buffer_get_size(data) / dsize;
-      self.step = 1;
+      data = argument[0];
+      dtype = argument[1];
+      dsize = buffer_sizeof(dtype);
+      start = 0;
+      stop = buffer_get_size(data) / dsize;
+      step = 1;
       break;
     }
   
     // Data, dtype and length are set.
     case 3:
     {
-      self.data = argument[0];
-      self.dtype = argument[1];
-      self.dsize = buffer_sizeof(dtype);
-      self.start = 0;
-      self.stop = argument[2];
-      self.step = 1;
+      data = argument[0];
+      dtype = argument[1];
+      dsize = buffer_sizeof(dtype);
+      start = 0;
+      stop = argument[2];
+      step = 1;
       break;
     }
   
     // Data, dtype, offset and length are set.
     case 4:
     {
-      self.data = argument[0];
-      self.dtype = argument[1];
-      self.dsize = buffer_sizeof(dtype);
-      self.start = argument[2];
-      self.stop = argument[3];
-      self.step = 1;
+      data = argument[0];
+      dtype = argument[1];
+      dsize = buffer_sizeof(dtype);
+      start = argument[2];
+      stop = argument[3];
+      step = 1;
       break;
     }
   
     // All are set (data, dtype, start, stop, step)
     case 5:
     {
-      self.data = argument[0];
-      self.dtype = argument[1];
-      self.dsize = buffer_sizeof(dtype);
-      self.start = argument[2];
-      self.stop = argument[3];
-      self.step = argument[4];
+      data = argument[0];
+      dtype = argument[1];
+      dsize = buffer_sizeof(dtype);
+      start = argument[2];
+      stop = argument[3];
+      step = argument[4];
       break;
     }
   

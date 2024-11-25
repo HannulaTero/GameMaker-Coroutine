@@ -1,8 +1,6 @@
 
-
-
 /// @func CoroutinePrototype(_root);
-/// @desc Structure for holding blueprints for creating coroutine-instances.
+/// @desc Structure for holding blueprints for creating coroutine -tasks.
 /// @param {Struct} _root
 function CoroutinePrototype(_root) constructor
 {
@@ -11,54 +9,44 @@ function CoroutinePrototype(_root) constructor
   
   
   // Get the instructions.
-  self.root = _root;
-  self.nodes = _root.nodes;
-  self.graph = _root.graph;
-  self.labels = _root.labels;
+  root = _root;
+  nodes = _root.nodes;
+  graph = _root.graph;
+  final = _root.final;
+  labels = _root.labels;
   
   
   // Get the options.
   var _option = _root.define.option;
-  self.option = {};
-  with(option)
-  {
-    name = _option[$ "name"] ?? $"CoroutinePrototype_{counter++}";
-    desc = _option[$ "desc"] ?? "";
-    slot = _option[$ "slot"] ?? 1.0;
-    scoped = _option[$ "scoped"] ?? true;
-  }
+  name    = _option[$ "name"]   ?? $"CoroutinePrototype_{counter++}";
+  desc    = _option[$ "desc"]   ?? "";
+  slot    = _option[$ "slot"]   ?? 1.0;
+  scoped  = _option[$ "scoped"] ?? true;
   
   
   // Get the triggers.
   var _nop = function() {};
   var _define = _root.define;
-  self.trigger = {};
-  with(trigger)
-  {
-    onInit = _define[$ "onInit"] ?? _nop;
-    onYield = _define[$ "onYield"] ?? _nop;
-    onPause = _define[$ "onPause"] ?? _nop;
-    onCancel = _define[$ "onCancel"] ?? _nop;
-    onResume = _define[$ "onResume"] ?? _nop;
-    onLaunch = _define[$ "onLaunch"] ?? _nop;
-    onComplete = _define[$ "onComplete"] ?? _nop;
-    onError = _define[$ "onError"] ?? _nop;
-  }
+  onInit      = _define[$ "onInit"]     ?? _nop;
+  onYield     = _define[$ "onYield"]    ?? _nop;
+  onPause     = _define[$ "onPause"]    ?? _nop;
+  onCancel    = _define[$ "onCancel"]   ?? _nop;
+  onResume    = _define[$ "onResume"]   ?? _nop;
+  onLaunch    = _define[$ "onLaunch"]   ?? _nop;
+  onComplete  = _define[$ "onComplete"] ?? _nop;
+  onError     = _define[$ "onError"]    ?? _nop;
   
   
-  /// @func Dispatch(_this);
-  /// @desc
+  /// @func Dispatch(_this, _scope);
+  /// @desc Creates new active task of prototype.
   /// @param {Id.Instance|Struct} _this
-  /// @returns {Struct.CoroutineInstance}
-  static Dispatch = function(_this=other)
-  {
-    return new CoroutineInstance(self, _this);
+  /// @param {Struct} _vars
+  /// @returns {Struct.CoroutineTask}
+  static Dispatch = function(_this=other, _vars=undefined) 
+  { 
+    return new CoroutineTask(self, _this, _vars); 
   };
 }
-
-
-
-
 
 
 

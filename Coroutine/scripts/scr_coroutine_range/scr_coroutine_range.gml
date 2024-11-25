@@ -5,9 +5,9 @@
 function CoroutineRange() constructor
 {
   // Declare variables.
-  self.start = 0;
-  self.stop = 0;
-  self.step = 1;
+  start = 0;
+  stop = 0;
+  step = 1;
   
   
   switch(argument_count)
@@ -18,13 +18,13 @@ function CoroutineRange() constructor
       var _item = argument[0];
       if (is_struct(_item))
       {
-        self.start = _item[$ "start"] ?? start;
-        self.stop = _item[$ "stop"] ?? stop;
-        self.step = _item[$ "step"] ?? step;
+        start = _item[$ "start"] ?? start;
+        stop = _item[$ "stop"] ?? stop;
+        step = _item[$ "step"] ?? step;
       }
       else
       {
-        self.stop = _item;
+        stop = _item;
       }
       break;
     }
@@ -32,17 +32,17 @@ function CoroutineRange() constructor
     // Start and stop are set.
     case 2:
     {
-      self.start = argument[0];
-      self.stop = argument[1];
+      start = argument[0];
+      stop = argument[1];
       break;
     }
   
     // All are set: start, stop and step 
     case 3: 
     {
-      self.start = argument[0];
-      self.stop = argument[1];
-      self.step = argument[2];
+      start = argument[0];
+      stop = argument[1];
+      step = argument[2];
       break;
     }
   
