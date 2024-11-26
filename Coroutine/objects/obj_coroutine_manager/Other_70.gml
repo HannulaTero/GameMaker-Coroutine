@@ -11,7 +11,7 @@ with(COROUTINE_ASYNC_REQUESTS[? async_load[? "id"]])
   switch(async_load[? "status"])
   {
     case "1": 
-      onWaiting(self);
+      onPending(self);
       break;
     case "2": 
       onSuccess(self);
@@ -19,8 +19,7 @@ with(COROUTINE_ASYNC_REQUESTS[? async_load[? "id"]])
       break;
     case "0": 
     case "3": 
-      onFailure(self);
-      Destroy();
+      Failure();
       break;
     default:
       throw($"Async Social: Unknown status '{async_load[? "status"]}'.");

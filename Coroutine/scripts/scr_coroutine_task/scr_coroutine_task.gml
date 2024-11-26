@@ -43,6 +43,7 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   onResume    = method(scope, prototype.onResume);
   onLaunch    = method(scope, prototype.onLaunch);
   onComplete  = method(scope, prototype.onComplete);
+  onCleanup   = method(scope, prototype.onCleanup);
   onError     = method(scope, prototype.onError);
 
   
@@ -207,6 +208,9 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     // Can't destroy what has already been destroyed.
     if (finished == true) 
       return self;
+    
+    // Trigger Cleanup.
+    onCleanup();
     
     // Put itself into right state, and remove data.
     paused = false;

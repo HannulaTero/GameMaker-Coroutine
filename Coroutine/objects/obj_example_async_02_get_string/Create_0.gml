@@ -12,7 +12,7 @@ COROUTINE BEGIN
   
   // Make the request.
   ASYNC_REQUEST
-    GET_REQUEST return get_string_async("Give me string", "Hello world!");
+    DO_REQUEST return get_string_async("Give me string", "Hello world!");
     ON_SUCCESS text = async_load[? "result"];
     ON_FAILURE text = "<cancelled>";
   ASYNC_END

@@ -1,11 +1,11 @@
 {
   "$GMObject":"",
-  "%Name":"obj_example_async_request_01_http",
+  "%Name":"obj_example_async_01_sound_end",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_example_async_request_01_http",
+  "name":"obj_example_async_01_sound_end",
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Asyncs",

@@ -12,6 +12,7 @@
 #macro ON_RESUME        }), onResume: method(undefined, function() {
 #macro ON_LAUNCH        }), onLaunch: method(undefined, function() {
 #macro ON_COMPLETE      }), onComplete: method(undefined, function() {
+#macro ON_CLEANUP       }), onCleanup: method(undefined, function() {
 #macro ON_ERROR         }), onError: method(undefined, function(_error) {
 
 
@@ -73,8 +74,7 @@
 #macro RESTART          return CO_RUNTIME_RESTART()
 #macro CONTINUE         return CO_RUNTIME_CONTINUE()
 #macro BREAK            return CO_RUNTIME_BREAK()
-#macro EXIT             return CO_RUNTIME_RETURN(undefined) 
-#macro CANCEL           return CO_RUNTIME_CANCEL() 
+#macro EXIT             return CO_RUNTIME_RETURN(undefined)
 #macro RETURN           for(var ____;; { return CO_RUNTIME_RETURN(____); }) ____ =
 #macro GOTO             for(var ____;; { return CO_RUNTIME_GOTO(____); }) ____ =
 #macro PRINT            for(var ____;; { show_debug_message(____); break; }) ____ =
@@ -82,15 +82,13 @@
 
 // Runtime async request, and its triggers.
 #macro ASYNC_REQUEST    (new CoroutineAsyncRequest({ option: ({
-#macro GET_REQUEST      }), onRequest: (function(_async) {
-#macro ON_WAITING       }), onWaiting: (function(_async) {
+#macro ASYNC_LISTENER   (new CoroutineAsyncListener({ option: ({
+#macro DO_REQUEST      }), onRequest: (function(_async) {
+#macro ON_PENDING       }), onPending: (function(_async) {
 #macro ON_SUCCESS       }), onSuccess: (function(_async) {
 #macro ON_FAILURE       }), onFailure: (function(_async) {
 #macro ON_TIMEOUT       }), onTimeout: (function(_async) {
-  
-#macro ASYNC_LISTENER   (new CoroutineAsyncListener({ option: ({
 #macro ON_LISTEN        }), onListen: (function(_async) {
-  
 #macro ASYNC_END        })})); 
 
 

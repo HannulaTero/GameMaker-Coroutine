@@ -10,6 +10,7 @@ function CoroutineAsyncListener(_params) constructor
   type = _params.option[$ "type"];
   name = _params.option[$ "name"] ?? $"ASYNC Listener[{ptr(self)}]";
   desc = _params.option[$ "desc"] ?? "";
+  scope = _params.option[$ "scope"] ?? other; 
   timeout = _params.option[$ "timeout"]; // seconds.
   result = undefined;
   paused = false;
@@ -27,6 +28,7 @@ function CoroutineAsyncListener(_params) constructor
   // Sanity check:
   if (onListen == undefined)
     throw($"ASYNC Listener: onListen must be defined.");
+  onListen = method(scope, onListen);
   
   if (type == undefined)
     throw($"ASYNC Listener: expected a async event -type.");

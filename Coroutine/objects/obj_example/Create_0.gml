@@ -225,12 +225,12 @@ COROUTINE BEGIN
   
   // Make HTTP request.
   request = ASYNC_REQUEST
-      type: ev_async_web,
+      name: "HTTP Get",
       desc: $"Request for http_get({url})",
       timeout: 5.0,
       retries: 3
   
-    GET_REQUEST
+    DO_REQUEST
       return http_get(url);
     
     ON_SUCCESS

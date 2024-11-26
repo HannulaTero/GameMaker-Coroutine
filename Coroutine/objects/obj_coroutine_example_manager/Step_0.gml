@@ -1,4 +1,4 @@
-
+/*
 
 if (keyboard_check_pressed(vk_anykey))
 {
@@ -13,6 +13,7 @@ if (keyboard_check_pressed(vk_anykey))
     case "6": _example = obj_example_basics_05_variables; break;
     case "7": _example = obj_example_async_request_00_get_string; break;
     case "8": _example = obj_example_async_request_01_get_integers; break;
+    case "9": _example = obj_example_async_request_02_http_get; break;
   }
   
   keyboard_string = "";

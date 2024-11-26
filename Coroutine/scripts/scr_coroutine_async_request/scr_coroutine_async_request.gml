@@ -17,6 +17,7 @@ function CoroutineAsyncRequest(_params) constructor
   request = _params.option[$ "request"];
   result = undefined;
   paused = false;
+  failed = false;
   finished = false;
   parent = undefined;
   timer = undefined;
@@ -31,7 +32,7 @@ function CoroutineAsyncRequest(_params) constructor
   // Callbacks.
   var _nop = function() {};
   onRequest = _params[$ "onRequest"];
-  onWaiting = method(scope, _params[$ "onWaiting"] ?? _nop);
+  onPending = method(scope, _params[$ "onPending"] ?? _nop);
   onSuccess = method(scope, _params[$ "onSuccess"] ?? _nop);
   onFailure = method(scope, _params[$ "onFailure"] ?? _nop);
   onTimeout = method(scope, _params[$ "onTimeout"] ?? _nop);
@@ -87,12 +88,44 @@ function CoroutineAsyncRequest(_params) constructor
   
   
   /// @func Get();
-  /// @desc Async listen current result.
+  /// @desc Async request current result.
   /// @returns {Any}
   static Get = function()
   {
     return result;
   };
+  
+  
+  /// @func Success();
+  /// @desc Make Async request succeed.
+  /// @returns {Any}
+  static Success = function()
+  {
+    onSuccess(self);
+    Destroy();
+    return self;
+  };
+  
+  
+  /// @func Failure();
+  /// @desc Make Async request fail.
+  /// @returns {Any}
+  static Failure = function()
+  {
+    failed = true;
+    onFailure(self);
+    Destroy();
+    return self;
+  };
+    
+  
+  /// @func hasFailed();
+  /// @desc Check whether request has failed.
+  /// @returns {Bool} 
+  static hasFailed = function()
+  {
+    return failed;
+  }; 
     
   
   /// @func isFinished();
@@ -105,7 +138,7 @@ function CoroutineAsyncRequest(_params) constructor
   
   
   /// @func Destroy();
-  /// @desc Async listen is removed.
+  /// @desc Async request is removed.
   /// @returns {Struct.CoroutineAsyncRequest}
   static Destroy = function()
   {

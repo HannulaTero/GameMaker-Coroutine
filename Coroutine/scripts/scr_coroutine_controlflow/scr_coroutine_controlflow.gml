@@ -48,17 +48,6 @@ function CO_RUNTIME_RETURN(_return)
 }
 
 
-/// @func CO_RUNTIME_CANCEL();
-/// @desc 
-/// @returns {Undefined}
-function CO_RUNTIME_CANCEL()
-{
-  COROUTINE_CURRENT_TASK.Cancel();
-  COROUTINE_CURRENT_YIELDED = true;
-  return undefined;
-}
-
-
 /// @func CO_RUNTIME_GOTO(_label);
 /// @desc 
 /// @param {String} _label

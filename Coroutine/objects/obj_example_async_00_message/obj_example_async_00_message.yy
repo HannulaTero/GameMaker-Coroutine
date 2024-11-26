@@ -1,11 +1,11 @@
 {
   "$GMObject":"",
-  "%Name":"obj_example_async_request_00_get_string",
+  "%Name":"obj_example_async_00_message",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_example_async_request_00_get_string",
+  "name":"obj_example_async_00_message",
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Asyncs",

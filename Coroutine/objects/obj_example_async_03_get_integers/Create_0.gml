@@ -1,11 +1,11 @@
-/// @desc CREATE COROUTINE PROTOTYPE.
+/// @desc GET INTEGERS.
 
 
 width = 64;
 height = 64;
 
 
-requestSize = COROUTINE BEGIN
+COROUTINE BEGIN
 
   width = this.width;
   height = this.height;
@@ -43,6 +43,5 @@ requestSize = COROUTINE BEGIN
   this.height = height;
   show_debug_message($"Fetched size: [{width}, {height}].");
   
-FINISH 
-
+FINISH DISPATCH
 

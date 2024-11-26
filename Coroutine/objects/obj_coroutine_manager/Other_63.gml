@@ -18,8 +18,7 @@ with(COROUTINE_ASYNC_REQUESTS[? async_load[? "id"]])
 
   if (_status == false)
   {
-    onFailure(self);
-    Destroy();
+    Failure();
     exit;
   }
 }
