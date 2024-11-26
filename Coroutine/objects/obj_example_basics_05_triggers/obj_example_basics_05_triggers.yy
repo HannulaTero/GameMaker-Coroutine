@@ -1,11 +1,11 @@
 {
   "$GMObject":"",
-  "%Name":"obj_example_basics_05_variables",
+  "%Name":"obj_example_basics_05_triggers",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_example_basics_05_variables",
+  "name":"obj_example_basics_05_triggers",
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Basics",

@@ -21,14 +21,15 @@
 #macro FINISH           }), CO_FINISH()] )}; })
 #macro THEN             }), CO_BLOCK([CO_STMT(function() {
 #macro PASS             }), CO_STMT(function() {
+#macro SET              }), CO_SET(function() { return
 #macro END              })])), CO_STMT(function() {
 #macro DISPATCH         .Dispatch(self);
 
 #macro LABEL            }), CO_LABEL({ label: 
 #macro YIELD            }), CO_YIELD(), CO_STMT(function() {
 #macro PAUSE            }), CO_PAUSE(), CO_STMT(function() {
-#macro YIELD_WITH       }), CO_YIELD_WITH(function() { return
-#macro PAUSE_WITH       }), CO_PAUSE_WITH(function() { return
+#macro YIELD_SET        }), CO_YIELD_WITH(function() { return
+#macro PAUSE_SET        }), CO_PAUSE_WITH(function() { return
   
 #macro DELAY            }), CO_DELAY(function() { return
 #macro MICROS           }, "MICROS"), CO_STMT(function() {

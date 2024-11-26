@@ -3,8 +3,10 @@
 COROUTINE_SINGLETON
 
 show_debug_overlay(true, true);
-x = room_width * 0.50;
-y = room_height * 0.40;
+xstart = room_width * 0.50;
+ystart = room_height * 0.40;
+x = xstart;
+y = ystart;
 
 // Get the examples.
 examples = {
@@ -14,8 +16,7 @@ examples = {
     obj_example_basics_02_settings,
     obj_example_basics_03_prototype,
     obj_example_basics_04_dispatch,
-    obj_example_basics_05_variables,
-    obj_example_basics_06_triggers,
+    obj_example_basics_05_triggers,
   ],
   async : [
     obj_example_async_00_message,
@@ -29,7 +30,11 @@ examples = {
     obj_example_async_XX_listen_http,
   ],
   keywords : [
-  
+    obj_example_keywords_00_pass,
+    obj_example_keywords_01_yield,
+    obj_example_keywords_02_pause,
+    obj_example_keywords_03_delay,
+    obj_example_keywords_04_set,
   ]
 };
 

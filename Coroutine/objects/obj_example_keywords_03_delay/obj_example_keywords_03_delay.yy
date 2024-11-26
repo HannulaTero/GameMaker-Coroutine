@@ -1,15 +1,15 @@
 {
   "$GMObject":"",
-  "%Name":"obj_example_basics_06_triggers",
+  "%Name":"obj_example_keywords_03_delay",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_example_basics_06_triggers",
+  "name":"obj_example_keywords_03_delay",
   "overriddenProperties":[],
   "parent":{
-    "name":"Examples Basics",
-    "path":"folders/Coroutine Examples/Examples Basics.yy",
+    "name":"Keywords",
+    "path":"folders/Coroutine Examples/Keywords.yy",
   },
   "parentObjectId":{
     "name":"obj_example_base",

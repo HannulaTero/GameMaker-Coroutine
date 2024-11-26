@@ -51,8 +51,8 @@ coroutine = COROUTINE BEGIN
   REPEAT 10 THEN
     result = 0;
     SWITCH irandom(11) 
-      CASE 0 THEN result += random_range(0, 10); YIELD_WITH "case 0 yielded" PASS
-      CASE 1 THEN result += random_range(1, 10); PAUSE_WITH "case 1 paused" PASS
+      CASE 0 THEN result += random_range(0, 10); YIELD_SET "case 0 yielded" PASS
+      CASE 1 THEN result += random_range(1, 10); PAUSE_SET "case 1 paused" PASS
       CASE 2 THEN result += random_range(2, 10); DELAY 100 MILLIS
       CASE 3 THEN result += random_range(3, 10); GOTO "label case 7";
       CASE 4 THEN result += random_range(4, 10); CONTINUE
@@ -60,7 +60,7 @@ coroutine = COROUTINE BEGIN
       CASE 6 THEN result += random_range(6, 10); 
       CASE 7 THEN result += random_range(7, 10); LABEL "label case 7" 
       CASE 8 THEN result += random_range(8, 10); BREAK
-      CASE 9 THEN result += random_range(9, 10); YIELD_WITH "case 9 yielded" PASS
+      CASE 9 THEN result += random_range(9, 10); YIELD_SET "case 9 yielded" PASS
     END
     DELAY 100 MILLIS
     show_debug_message(result);
@@ -82,7 +82,7 @@ coroutine = COROUTINE BEGIN
 
   LABEL "loop" PASS
   IF choose(true, false) THEN
-    YIELD_WITH "let other coroutines do their thing" PASS
+    YIELD_SET "let other coroutines do their thing" PASS
     
   ELIF choose(true, false) THEN
     AWAIT (mouse_x > 100) PASS
@@ -197,7 +197,7 @@ coroutine = COROUTINE
       x = mouse_x;
       y = mouse_y;
       
-      YIELD_WITH "Drawing" PASS
+      YIELD_SET "Drawing" PASS
     END
   FINISH 
   
@@ -208,7 +208,7 @@ COROUTINE BEGIN
 
   i = 1;
   REPEAT 10 THEN
-    YIELD_WITH i PASS
+    YIELD_SET i PASS
     i *= 2
     show_debug_message(i);
   END
@@ -270,7 +270,7 @@ COROUTINE BEGIN
     show_debug_message(i);
     if (keyboard_check_pressed(vk_enter)) EXIT;
     if (keyboard_check_pressed(vk_space)) GOTO "restart";
-    YIELD_WITH "Looping" PASS
+    YIELD_SET "Looping" PASS
   END
 
 // End coroutine, then dispatch it.
@@ -306,12 +306,12 @@ coroutine_foreach = COROUTINE BEGIN
       
       ELIF choose(true, false) THEN
         show_debug_message("Yielding!")
-        YIELD_WITH "yielded!" PASS
+        YIELD_SET "yielded!" PASS
         show_debug_message("Hoy!")
       
       ELIF choose(true, false) THEN
         show_debug_message("Pausing!")
-        PAUSE_WITH "paused!" PASS
+        PAUSE_SET "paused!" PASS
         show_debug_message("Pause resumed!")
       
       ELSE 

@@ -24,13 +24,14 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   this = _this;
   local = [];
   scope = prototype.scoped ? { this: _this, coroutine: _self } : _this;
+  execute = graph.execute;
   childTasks = ds_map_create();
   asyncRequests = ds_map_create();
   asyncListeners = ds_map_create();
   parent = undefined;
   result = undefined;
-  execute = graph.execute;
   finished = false;
+  delayed = false;
   paused = false;
   
   
@@ -53,6 +54,7 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   { 
     ds_map_delete(COROUTINE_POOL_DELAYED, self);
     COROUTINE_POOL_ACTIVE[? self] = self; 
+    delayed = false;
   };
   delaySource = time_source_create(time_source_game, 1, time_source_units_seconds, delayResume);
   
@@ -110,14 +112,21 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   static Pause = function() 
   {
     // Can't pause if it's already paused or destroyed.
-    if (finished == true) || (paused == true)
+    if (finished == true) 
+    || (paused == true)
       return self;
       
     // Take a undeterminated break.
     paused = true;
     onPause();
     ds_map_delete(COROUTINE_POOL_ACTIVE, self);
+    ds_map_delete(COROUTINE_POOL_DELAYED, self);
     COROUTINE_POOL_PAUSED[? self] = self;
+    if (time_source_get_state(delaySource) != time_source_state_stopped)
+    {
+      time_source_stop(delaySource);
+    }
+    
     return self;
   };
   
@@ -127,7 +136,9 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   static Resume = function() 
   { 
     // Can't resume if it's not paused or destroyed.
-    if (finished == true) || (paused == false)
+    if (finished == true) 
+    || (delayed == true)
+    || (paused == false)
       return self;
       
     // Return to the usual action.
@@ -135,12 +146,7 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     onResume();
     ds_map_delete(COROUTINE_POOL_PAUSED, self);
     COROUTINE_POOL_ACTIVE[? self] = self;
-    if (time_source_get_state(delaySource) != time_source_state_stopped)
-    {
-      time_source_stop(delaySource);
-    }
-    
-    return self; 
+    return self;
   };
   
   
@@ -195,6 +201,15 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   };
   
   
+  /// @func isDelayed();
+  /// @desc 
+  /// @returns {Bool}
+  static isDelayed = function() 
+  {
+    return delayed; 
+  };
+  
+  
   /// @func isFinished();
   /// @desc 
   /// @returns {Bool}
@@ -218,6 +233,7 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     
     // Put itself into right state, and remove data.
     paused = false;
+    delayed = false;
     finished = true;
     ds_map_delete(COROUTINE_POOL_ACTIVE, self);
     ds_map_delete(COROUTINE_POOL_PAUSED, self);

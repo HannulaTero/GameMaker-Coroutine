@@ -67,16 +67,16 @@ function test_suite_syntax()
     DELAY SECONDS 
     YIELD
     PAUSE
-    YIELD_WITH "yield" PASS
-    PAUSE_WITH "pause" PASS
+    YIELD_SET "yield" PASS
+    PAUSE_SET "pause" PASS
   
     FOR COND ITER THEN
       AWAIT PASS
       DELAY MILLIS 
       YIELD
       PAUSE
-      YIELD_WITH "yield" PASS
-      PAUSE_WITH "pause" PASS
+      YIELD_SET "yield" PASS
+      PAUSE_SET "pause" PASS
   
     END
     

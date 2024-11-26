@@ -9,7 +9,7 @@ coroutine = COROUTINE
 BEGIN 
 
   DELAY random(120) MILLIS 
-  WHILE true THEN //Repeat forever!
+  WHILE true THEN // Repeat forever!
     //Randomize our position and angle
     image_angle = random(360);
     x = xprevious + random_range(-5, 5);

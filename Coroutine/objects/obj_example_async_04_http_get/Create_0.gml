@@ -8,6 +8,7 @@ COROUTINE BEGIN
   failed = false;
   
   // Make the request.
+  show_debug_message($"Making URL request: '{url}'!");
   ASYNC_REQUEST
     DO_REQUEST 
       return http_get(url);

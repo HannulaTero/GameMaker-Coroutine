@@ -180,9 +180,26 @@ function CoroutineTransform() constructor
     },
     
     
+    // Splits coroutine, more yielding points for manager.
+    // This will also set current value for coroutine.
+    ["SET"],
+    function(_node, _next, _break, _continue)
+    {
+      return { 
+        next: _next.execute,
+        call: _node.call, 
+        execute: function()
+        {
+          COROUTINE_CURRENT_TASK.result = coroutine_execute(call);
+          COROUTINE_CURRENT_EXECUTE = next;
+        }
+      };
+    },
+    
+    
     // Yields execution, and allows others also to do execution.
     // This will also set current value for coroutine.
-    ["YIELD_WITH"],
+    ["YIELD_SET"],
     function(_node, _next, _break, _continue)
     {
       return { 
@@ -200,7 +217,7 @@ function CoroutineTransform() constructor
     
     // Pauses and yields coroutine execution.
     // This will also set current value for coroutine.
-    ["PAUSE_WITH"],
+    ["PAUSE_SET"],
     function(_node, _next, _break, _continue)
     {
       return { 
@@ -253,6 +270,7 @@ function CoroutineTransform() constructor
             // Delete from active and yield. 
             ds_map_delete(COROUTINE_POOL_ACTIVE, self);
             COROUTINE_POOL_DELAYED[? self] = self;
+            delayed = true;
           
             // Return back to active after delay.
             time_source_reconfigure(delaySource, _delay, _unit, delayResume);

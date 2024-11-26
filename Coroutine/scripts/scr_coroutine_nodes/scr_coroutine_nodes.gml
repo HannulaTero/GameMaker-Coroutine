@@ -93,6 +93,20 @@ function CO_PAUSE()
 }
 
 
+/// @func CO_SET(_call);
+/// @desc
+/// @param {Function} _call
+/// @returns {Struct}
+function CO_SET(_call)
+{ 
+  gml_pragma("forceinline"); 
+  return {
+    name: "SET", 
+    call: method(undefined, _call) 
+  };
+}
+
+
 /// @func CO_YIELD_WITH(_call);
 /// @desc
 /// @param {Function} _call
@@ -101,7 +115,7 @@ function CO_YIELD_WITH(_call)
 { 
   gml_pragma("forceinline"); 
   return {
-    name: "YIELD_WITH", 
+    name: "YIELD_SET", 
     call: method(undefined, _call) 
   };
 }
@@ -115,7 +129,7 @@ function CO_PAUSE_WITH(_call)
 { 
   gml_pragma("forceinline"); 
   return {
-    name: "PAUSE_WITH", 
+    name: "PAUSE_SET", 
     call: method(undefined, _call)
   };
 }

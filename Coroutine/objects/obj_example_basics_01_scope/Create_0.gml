@@ -1,6 +1,9 @@
 /// @desc SCOPE.
 
+// In coroutines, you usually cannot use local variables "var i = 0;" because of code that macros generate.
+// So the best practice is to just always to use instance/struct variables.
 value = 100;
+
 
 // By default, coroutines have their own separate scope,
 // which makes coroutine encapsulated, and caller variables are protected. 

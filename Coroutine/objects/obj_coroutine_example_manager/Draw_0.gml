@@ -4,13 +4,13 @@ draw_set_font(ft_example);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 
-var _c = c_white;
-var _xGroup = room_width * 0.50 - groupIndex * 256;
-var _yGroup = room_height * 0.40;
+var _c = c_white
+var _xGroup = xstart - groupIndex * 256;
+var _yGroup = ystart;
 x = lerp(x, _xGroup, 0.25);
 y = lerp(y, _yGroup, 0.25);
 
-
+draw_sprite_ext(spr_example_plate, 0, xstart, ystart, 6, 1, 0, c_white, 0.1);
 for(var i = 0; i < groupCount; i++)
 {  
   _xGroup = x + i * 256;
@@ -37,7 +37,10 @@ for(var i = 0; i < groupCount; i++)
     draw_text_color(_x, _y, _name, _c, _c, _c, _c, _a);
   }
   
-  draw_text_color(_xGroup, _yGroup - 128, string_upper(_groupName), _c, _c, _c, _c, 1);
+  var _x = _xGroup;
+  var _y = _yGroup - 112;
+  draw_sprite_ext(spr_example_plate, 0, _x, _y, 6, 1, 0, c_black, 0.6);
+  draw_text_color(_x, _y, string_upper(_groupName), _c, _c, _c, _c, 1.0);
 }
 
 
