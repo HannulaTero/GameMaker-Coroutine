@@ -198,7 +198,7 @@ function CoroutineCompile() constructor
         {
           // Delete from active and yield. 
           ds_map_delete(COROUTINE_POOL_ACTIVE, self);
-          COROUTINE_POOL_PAUSED[? self] = self;
+          COROUTINE_POOL_DELAYED[? self] = self;
           
           // Return back to active after delay.
           time_source_reconfigure(delaySource, _delay, _unit, delayResume);

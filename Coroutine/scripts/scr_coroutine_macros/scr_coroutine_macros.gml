@@ -6,6 +6,7 @@
 
 #macro COROUTINE_POOL_ACTIVE        global.gCOROUTINE_POOL_ACTIVE       // Coroutines, which are active for execution.
 #macro COROUTINE_POOL_PAUSED        global.gCOROUTINE_POOL_PAUSED       // Paused coroutines, which can be resumed.
+#macro COROUTINE_POOL_DELAYED       global.gCOROUTINE_POOL_DELAYED      // Temporarily paused coroutines, which will resumed.
 
 #macro COROUTINE_CACHE_PROTOTYPES   global.gCOROUTINE_CACHE_PROTOTYPES  // Coroutine blueprints, which have already been made.
 #macro COROUTINE_ASYNC_REQUESTS     global.gCOROUTINE_ASYNC_REQUESTS    // Pending async requests, maps them to each async-type separately.

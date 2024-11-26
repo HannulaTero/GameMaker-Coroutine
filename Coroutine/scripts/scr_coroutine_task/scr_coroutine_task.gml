@@ -39,9 +39,9 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   onInit      = method(scope, prototype.onInit);
   onYield     = method(scope, prototype.onYield);
   onPause     = method(scope, prototype.onPause);
-  onCancel    = method(scope, prototype.onCancel);
-  onResume    = method(scope, prototype.onResume);
   onLaunch    = method(scope, prototype.onLaunch);
+  onResume    = method(scope, prototype.onResume);
+  onCancel    = method(scope, prototype.onCancel);
   onComplete  = method(scope, prototype.onComplete);
   onCleanup   = method(scope, prototype.onCleanup);
   onError     = method(scope, prototype.onError);
@@ -49,7 +49,11 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   
   // Set up delayer using separate time source, which is reconfigurated whenever necessary.
   // This seems to be slightly faster than using call_later (less GC'ing?).
-  delayResume = function() { Resume(); };
+  delayResume = function() 
+  { 
+    ds_map_delete(COROUTINE_POOL_DELAYED, self);
+    COROUTINE_POOL_ACTIVE[? self] = self; 
+  };
   delaySource = time_source_create(time_source_game, 1, time_source_units_seconds, delayResume);
   
   
@@ -217,6 +221,7 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     finished = true;
     ds_map_delete(COROUTINE_POOL_ACTIVE, self);
     ds_map_delete(COROUTINE_POOL_PAUSED, self);
+    ds_map_delete(COROUTINE_POOL_DELAYED, self);
     
     // Remove itself from all childs.
     var _childTasks = ds_map_keys_to_array(childTasks);

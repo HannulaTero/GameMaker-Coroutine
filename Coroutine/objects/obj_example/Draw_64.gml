@@ -6,10 +6,13 @@ draw_sprite_ext(spr_example_thing, 0, _x, _y, 1, 1, current_time, _c, 1);
 
 var _active = ds_map_size(COROUTINE_POOL_ACTIVE);
 var _paused = ds_map_size(COROUTINE_POOL_PAUSED);
-draw_text(32, 256, $"active : {_active}");
-draw_text(32, 288, $"paused : {_paused}");
-draw_text(32, 320, $"all    : {_active + _paused}");
-draw_text(32, 400, $"coroutine : {coroutine.Get()}");
+var _delayed = ds_map_size(COROUTINE_POOL_DELAYED);
+var i = 0;
+draw_text(32, 256 + 32 * i++, $"active : {_active}");
+draw_text(32, 256 + 32 * i++, $"paused : {_paused}");
+draw_text(32, 256 + 32 * i++, $"paused : {_delayed}");
+draw_text(32, 256 + 32 * i++, $"all    : {_active + _paused + _delayed}");
+draw_text(32, 256 + 32 * i++, $"coroutine : {coroutine.Get()}");
 
 if (keyboard_check_pressed(vk_enter))
 {

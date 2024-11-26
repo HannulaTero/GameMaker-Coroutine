@@ -8,9 +8,9 @@
 #macro ON_INIT          }), onInit: method(undefined, function(_params={}) {
 #macro ON_YIELD         }), onYield: method(undefined, function() {
 #macro ON_PAUSE         }), onPause: method(undefined, function() {
-#macro ON_CANCEL        }), onCancel: method(undefined, function() {
-#macro ON_RESUME        }), onResume: method(undefined, function() {
 #macro ON_LAUNCH        }), onLaunch: method(undefined, function() {
+#macro ON_RESUME        }), onResume: method(undefined, function() {
+#macro ON_CANCEL        }), onCancel: method(undefined, function() {
 #macro ON_COMPLETE      }), onComplete: method(undefined, function() {
 #macro ON_CLEANUP       }), onCleanup: method(undefined, function() {
 #macro ON_ERROR         }), onError: method(undefined, function(_error) {
@@ -81,15 +81,15 @@
 
 
 // Runtime async request, and its triggers.
-#macro ASYNC_REQUEST    (new CoroutineAsyncRequest({ option: ({
-#macro ASYNC_LISTENER   (new CoroutineAsyncListener({ option: ({
-#macro DO_REQUEST      }), onRequest: (function(_async) {
-#macro ON_PENDING       }), onPending: (function(_async) {
-#macro ON_SUCCESS       }), onSuccess: (function(_async) {
-#macro ON_FAILURE       }), onFailure: (function(_async) {
-#macro ON_TIMEOUT       }), onTimeout: (function(_async) {
-#macro ON_LISTEN        }), onListen: (function(_async) {
-#macro ASYNC_END        })})); 
+#macro ASYNC_REQUEST    (new CoroutineAsyncRequest({ option: (({
+#macro ASYNC_LISTENER   (new CoroutineAsyncListener({ option: (({
+#macro DO_REQUEST       })), onRequest: ((function(_async) {
+#macro ON_PENDING       })), onPending: ((function(_async) {
+#macro ON_SUCCESS       })), onSuccess: ((function(_async) {
+#macro ON_FAILURE       })), onFailure: ((function(_async) {
+#macro ON_TIMEOUT       })), onTimeout: ((function(_async) {
+#macro ON_LISTEN        })), onListen: ((function(_async) {
+#macro ASYNC_END        }))})); 
 
 
 

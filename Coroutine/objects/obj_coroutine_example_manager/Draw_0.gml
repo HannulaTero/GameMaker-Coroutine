@@ -10,23 +10,6 @@ var _yGroup = room_height * 0.40;
 x = lerp(x, _xGroup, 0.25);
 y = lerp(y, _yGroup, 0.25);
 
-array_foreach(groupNames, function(groupName, i)
-{
-  with { groupName, i } array_foreach(examples[$ groupName], function(example, j)
-  {
-    var _x = i;
-    var _y = j - exampleIndex;
-    var _alpha = (i == groupIndex) ? 1.0 : 0.5 - 0.0625 * abs(j - exampleIndex);
-    var _str = object_get_name(example);
-    _str = string_replace(_str, $"obj_example_{groupName}_", "");
-    _str = string_copy(_str, 4, string_length(_str) - 3);
-    
-    draw_set_alpha(_alpha);
-    draw_text_color(_x, _y, _str);
-  });
-});
-draw_set_alpha(1.0);
-
 
 for(var i = 0; i < groupCount; i++)
 {  

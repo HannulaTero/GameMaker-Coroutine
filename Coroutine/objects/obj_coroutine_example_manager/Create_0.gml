@@ -1,3 +1,5 @@
+/// @desc EXAMPLES.
+
 COROUTINE_SINGLETON
 
 show_debug_overlay(true, true);
@@ -13,6 +15,7 @@ examples = {
     obj_example_basics_03_prototype,
     obj_example_basics_04_dispatch,
     obj_example_basics_05_variables,
+    obj_example_basics_06_triggers,
   ],
   async : [
     obj_example_async_00_message,
@@ -24,6 +27,9 @@ examples = {
     obj_example_async_06_buffer_load,
     obj_example_async_07_audio_recording,
     obj_example_async_XX_listen_http,
+  ],
+  keywords : [
+  
   ]
 };
 
@@ -31,6 +37,10 @@ examples = {
 // Set up the selector.
 groupName = "basics";
 groupNames = struct_get_names(examples);
+groupNames = array_filter(groupNames, function(_name, i) 
+{ 
+  return (array_length(examples[$ _name]) > 0); 
+});
 array_sort(groupNames, true);
 
 groupCount = array_length(groupNames);

@@ -30,9 +30,9 @@ function CoroutinePrototype(_root) constructor
   onInit      = _define[$ "onInit"]     ?? _nop;
   onYield     = _define[$ "onYield"]    ?? _nop;
   onPause     = _define[$ "onPause"]    ?? _nop;
-  onCancel    = _define[$ "onCancel"]   ?? _nop;
-  onResume    = _define[$ "onResume"]   ?? _nop;
   onLaunch    = _define[$ "onLaunch"]   ?? _nop;
+  onResume    = _define[$ "onResume"]   ?? _nop;
+  onCancel    = _define[$ "onCancel"]   ?? _nop;
   onComplete  = _define[$ "onComplete"] ?? _nop;
   onCleanup   = _define[$ "onCleanup"] ?? _nop;
   onError     = _define[$ "onError"]    ?? _nop;

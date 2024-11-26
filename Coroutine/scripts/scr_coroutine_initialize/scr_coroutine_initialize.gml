@@ -3,6 +3,7 @@
 // Initialize globals.
 COROUTINE_POOL_ACTIVE       = ds_map_create();
 COROUTINE_POOL_PAUSED       = ds_map_create();
+COROUTINE_POOL_DELAYED      = ds_map_create();
 
 COROUTINE_CACHE_PROTOTYPES  = ds_map_create();
 COROUTINE_ASYNC_REQUESTS    = ds_map_create();
