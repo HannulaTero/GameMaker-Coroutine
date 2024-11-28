@@ -10,6 +10,9 @@
 // feather ignore GM1063
 function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
 {
+  static counter = 0;
+  identifier = counter++;
+  
   // Get the values from the prototype.
   prototype = _prototype;
   graph = _prototype.graph;
@@ -274,6 +277,15 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     }
     
     return self;
+  };
+  
+  
+  /// @func toString();
+  /// @desc
+  /// @returns {String}
+  static toString = function()
+  {
+    return string(identifier);
   };
 }
 

@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.444082,
+  "duration":0.0,
   "name":"snd_example",
   "parent":{
     "name":"Coroutine Examples",

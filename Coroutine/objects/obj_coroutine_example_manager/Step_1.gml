@@ -7,12 +7,12 @@ if (keyboard_check(vk_anykey) == false)
 if (keyboard_check_pressed(vk_enter))
 {
   instance_destroy(obj_example_base);
-  instance_create_depth(0, 0, 0, exampleActive);
+  instance_create_depth(0, 0, 0, groups[index].Get());
   exit;
 }
 
 
-// Get cursor movement..
+// Get cursor movement.
 var _xdir = sign(
   - keyboard_check_pressed(vk_left)
   + keyboard_check_pressed(vk_right)
@@ -24,34 +24,15 @@ var _ydir = sign(
 );
 
 
-// Select group index.
-groupIndex += _xdir;
+// Select group.
+index = clamp(index + _xdir, 0, count - 1);
 
-if (groupIndex < 0) 
-  groupIndex = groupCount - 1;
-  
-if (groupIndex >= groupCount) 
-  groupIndex = 0;
-  
-groupName = groupNames[groupIndex];
-  
   
 // Select example.
-var _exampleIndex = groupExampleIndex[$ groupName];
-var _exampleCount = array_length(examples[$ groupName]);
-_exampleIndex += _ydir;
-
-if (_exampleIndex < 0) 
-  _exampleIndex = _exampleCount - 1;
+var _group = groups[index];
+var _count = array_length(_group.examples);
+_group.index = clamp(_group.index + _ydir, 0, _count - 1);
+example = _group.Get();
   
-if (_exampleIndex >= _exampleCount) 
-  _exampleIndex = 0;
-  
-  
-// Update the example.
-groupExampleIndex[$ groupName] = _exampleIndex;
-exampleIndex = _exampleIndex;
-exampleActive = examples[$ groupName][_exampleIndex];
-exampleName = object_get_name(exampleActive);
 
 

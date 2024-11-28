@@ -8,8 +8,8 @@
   "name":"obj_example_keywords_02_pause",
   "overriddenProperties":[],
   "parent":{
-    "name":"Keywords",
-    "path":"folders/Coroutine Examples/Keywords.yy",
+    "name":"Examples Keywords",
+    "path":"folders/Coroutine Examples/Examples Keywords.yy",
   },
   "parentObjectId":{
     "name":"obj_example_base",

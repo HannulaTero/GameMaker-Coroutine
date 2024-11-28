@@ -6,18 +6,17 @@ filename = "buffer.save";
 dtype = buffer_f64;
 dsize = buffer_sizeof(dtype);
 count = 1024 * 1024 * 8;
+chunk = 1024;
 bytes = count * dsize;
 buffer = buffer_create(bytes, buffer_fixed, dsize);
 
 
-// Fill the contents of the buffer.
-// Because it is such big buffer, filling takes some itme.
-// So coroutine can be handy here.
-taskBufferCreate = COROUTINE BEGIN
-  chunk = 1024;
-  dtype = this.dtype;
-  count = this.count;
-  buffer = this.buffer;
+// Fill the contents of the buffer with random data.
+// Because it is such big buffer, filling takes some time, but coroutine splits the task to several frames. 
+// But because of performance penalty from coroutines, it is good to do in chunks.
+taskBufferCreate = COROUTINE scoped: false 
+BEGIN
+  show_debug_message("Start generating buffer data.");
   buffer_seek(buffer, buffer_seek_start, 0);
   WHILE count > 0 THEN
     repeat(min(count, chunk))
@@ -26,6 +25,7 @@ taskBufferCreate = COROUTINE BEGIN
     }
     count -= chunk;
   END
+  show_debug_message("Buffer filled.");
 FINISH DISPATCH 
 
 

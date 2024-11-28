@@ -87,9 +87,9 @@ BEGIN
   offset = 0;
   channel = audio_start_recording(recorderIndex);
   requestRecord = ASYNC_LISTENER
+      type: ev_async_audio_recording,
       name: "Record listener",
       desc: "This async event triggers when recorder has data to give",
-      type: ev_async_audio_recording
       
     ON_LISTEN
       if (channel != async_load[? "channel_index"])
@@ -113,12 +113,12 @@ BEGIN
   // Wait while recording is done.
   COROUTINE BEGIN
     time = current_time;
-    LOOP
-      IF this.requestRecord.isFinished() THEN BREAK END
+    WHILE (this.requestRecord.isFinished() == false) THEN 
       show_debug_message($"Recording... {(current_time - time) / 1_000.0} s");
       DELAY 0.5 SECONDS
     END
   FINISH DISPATCH
+  
   AWAIT_LISTENERS
   AWAIT_SUBTASKS
   
