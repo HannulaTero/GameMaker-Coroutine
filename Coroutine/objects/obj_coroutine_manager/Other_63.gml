@@ -16,7 +16,10 @@ with(COROUTINE_ASYNC_REQUESTS[? async_load[? "id"]])
     exit;
   }
 
-  if (_status == false)
+  // Condition is bugged in HTML5, it returns -1 even though should return false
+  // As GML interpretes false as 0, both cases are covered with <= 0
+  // https://github.com/YoYoGames/GameMaker-Bugs/issues/261
+  if (_status <= 0)
   {
     Failure();
     exit;

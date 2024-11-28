@@ -6,7 +6,7 @@ filename = "buffer.save";
 dtype = buffer_f64;
 dsize = buffer_sizeof(dtype);
 count = 1024 * 1024 * 8;
-chunk = 16;
+chunk = 1024;
 bytes = count * dsize;
 buffer = buffer_create(bytes, buffer_fixed, dsize);
 

@@ -1,4 +1,5 @@
 // feather ignore GM1051
+// feather ignore GM2023
 
 
 #macro COROUTINE        coroutine_create(function() { return { graph: {}, tables: [], labels: {}, define: ({ option: ({

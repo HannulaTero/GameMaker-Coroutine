@@ -2,7 +2,23 @@
 
 COROUTINE_SINGLETON
 
-show_debug_overlay(true, true);
+
+// Set listeners for each async event.
+array_foreach(ds_map_keys_to_array(COROUTINE_ASYNC_LISTENERS), function(_type, i)
+{
+  ASYNC_LISTENER type: _type
+  ON_LISTEN 
+    show_debug_message($"===============================================");
+    show_debug_message($"Async Listener");
+    show_debug_message($" - event event   : {event_type}");
+    show_debug_message($" - event number  : {event_number}");
+    show_debug_message($" - async status  : {async_load[? "status"]}");
+    show_debug_message($"===============================================");
+  ASYNC_END
+});
+
+
+// Set drawing location.
 xstart = room_width * 0.4;
 ystart = room_height * 0.4;
 x = xstart;
@@ -33,13 +49,36 @@ groups = [
     obj_example_basics_04_dispatch,
     obj_example_basics_05_triggers,
   ]), 
-  new Group("keywords", [
-    obj_example_keywords_00_pass,
-    obj_example_keywords_01_yield,
-    obj_example_keywords_02_pause,
-    obj_example_keywords_03_delay,
-    obj_example_keywords_04_set,
+  new Group("halting", [
+    obj_example_halting_00_pass,
+    obj_example_halting_01_yield,
+    obj_example_halting_02_pause,
+    obj_example_halting_03_delay,
+    obj_example_halting_04_set,
+    obj_example_halting_05_await,
   ]), 
+  new Group("controlflow", [
+    obj_example_controlflow_00_if_else,
+    obj_example_controlflow_01_if_chain,
+    obj_example_controlflow_02_switch,
+    obj_example_controlflow_03_loop,
+    obj_example_controlflow_04_while,
+    obj_example_controlflow_05_repeat,
+    obj_example_controlflow_06_do_until,
+    obj_example_controlflow_07_for,
+  ]),
+  new Group("foreach", [
+    obj_example_foreach_00_array,
+    obj_example_foreach_01_struct,
+    obj_example_foreach_02_ds_list,
+    obj_example_foreach_03_ds_map,
+    obj_example_foreach_04_string,
+    obj_example_foreach_05_number,
+    obj_example_foreach_06_range,
+    obj_example_foreach_07_buffer,
+    obj_example_foreach_08_buffer_view,
+    obj_example_foreach_09_object,
+  ]),
   new Group("async", [
     obj_example_async_00_message,
     obj_example_async_01_sound_end,
@@ -52,10 +91,17 @@ groups = [
   ]),
 ];
 
+
 // Set up the selector.
 index = 0;
 count = array_length(groups);
 example = undefined;
 
+
+// For calculating average FPS.
+fpsFrames = 15;
+fpsAvg = 0.0;
+fpsSum = 0.0;
+alarm[0] = fpsFrames;
 
 

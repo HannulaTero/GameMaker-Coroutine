@@ -12,7 +12,7 @@ function CoroutineAsyncRequest(_params) constructor
   type = _params.option[$ "type"];
   name = _params.option[$ "name"] ?? $"ASYNC Request[{identifier}]";
   desc = _params.option[$ "desc"] ?? "";
-  scope = _params.option[$ "scope"] ?? other; 
+  this = _params.option[$ "this"] ?? other; 
   timeout = _params.option[$ "timeout"]; // seconds.
   retries = _params.option[$ "retries"] ?? 0;
   request = _params.option[$ "request"];
@@ -33,13 +33,13 @@ function CoroutineAsyncRequest(_params) constructor
   // Callbacks.
   var _nop = function() {};
   onRequest = _params[$ "onRequest"];
-  onPending = method(scope, _params[$ "onPending"] ?? _nop);
-  onSuccess = method(scope, _params[$ "onSuccess"] ?? _nop);
-  onFailure = method(scope, _params[$ "onFailure"] ?? _nop);
-  onTimeout = method(scope, _params[$ "onTimeout"] ?? _nop);
+  onPending = method(this, _params[$ "onPending"] ?? _nop);
+  onSuccess = method(this, _params[$ "onSuccess"] ?? _nop);
+  onFailure = method(this, _params[$ "onFailure"] ?? _nop);
+  onTimeout = method(this, _params[$ "onTimeout"] ?? _nop);
   
   if (onRequest != undefined) 
-    onRequest = method(scope, _params[$ "onRequest"]);
+    onRequest = method(this, _params[$ "onRequest"]);
   
   
   // Do the initialization steps.

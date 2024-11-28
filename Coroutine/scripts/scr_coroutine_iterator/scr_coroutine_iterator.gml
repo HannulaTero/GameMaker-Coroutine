@@ -108,8 +108,10 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   static asRange = function()
   {
     start = item.start;
-    count = floor((item.stop - item.start) / item.step);
-    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = start + item.step * index; };
+    stop = item.stop;
+    step = item.step;
+    count = floor((stop - start) / step);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = start + step * index; };
     GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };
@@ -122,8 +124,11 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
     data = item.data;
     dtype = item.dtype;
     dsize = item.dsize;
-    count = floor((item.stop - item.start) / item.step);
-    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = buffer_peek(data, (start + item.step * index) * dsize, dtype); };
+    start = item.start;
+    stop = item.stop;
+    step = item.step;
+    count = floor((stop - start) / step);
+    GetVal = function() { COROUTINE_CURRENT_SCOPE[$ nameVal] = buffer_peek(data, (start + step * index) * dsize, dtype); };
     GetKey = function() { COROUTINE_CURRENT_SCOPE[$ nameKey] = index; };
     return self;
   };

@@ -1,15 +1,15 @@
 /// @desc DRAW LIST OF EXAMPLES.
 
 
-// Animated movement.
-x = lerp(x, xstart - index * 240, 0.25);
-y = lerp(y, ystart, 0.25);
-
-
 // Draw settings.
 draw_set_font(ft_example);
 draw_set_halign(fa_left);
 draw_set_valign(fa_middle);
+
+
+// Animated movement.
+x = lerp(x, xstart - index * 240, 0.25);
+y = lerp(y, ystart, 0.25);
 
 
 // Selection backplate.

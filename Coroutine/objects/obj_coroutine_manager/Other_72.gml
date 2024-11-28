@@ -9,16 +9,38 @@ with(COROUTINE_ASYNC_REQUESTS[? async_load[? "id"]])
 {
   // Trigger request based on status.
   var _status = async_load[? "status"];
-  if (_status == true)
+  
+  // Action for all other.
+  if (os_browser == browser_not_a_browser)
   {
-    onSuccess(self);
-    Destroy();
-    exit;
-  }
+    if (_status == true)
+    {
+      onSuccess(self);
+      Destroy();
+      exit;
+    }
 
-  if (_status == false)
+    if (_status == false)
+    {
+      Failure();
+      exit;
+    }
+  }
+  // But for HTML5, it's different story.
+  else
   {
-    Failure();
-    exit;
+    switch(_status)
+    {
+      case 200: 
+        onSuccess(self);
+        Destroy();
+        break;
+      case 404:
+        Failure();
+        break;
+      default:
+        show_debug_message($"Async Save/Load request[{_request}]: Unknown status '{_status}'");
+        break;
+    }
   }
 }

@@ -4,6 +4,7 @@
 // Coroutines can have "triggers", which execute code in certain events.
 // These are not part of regular execution loop of coroutine task.
 // Therefore you cannot use coroutine syntax or logic within triggers.
+// -> Note, you can launch another coroutine task, but I don't think you want do that.
 // Trigger -keywords start with "ON_*", and you can have multiple different triggers.
 
 
