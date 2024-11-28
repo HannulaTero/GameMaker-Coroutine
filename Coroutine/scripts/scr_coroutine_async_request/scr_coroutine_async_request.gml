@@ -6,10 +6,11 @@
 function CoroutineAsyncRequest(_params) constructor 
 {
   static counter = 0;
+  identifier = counter++;
   
   // Async variables.
   type = _params.option[$ "type"];
-  name = _params.option[$ "name"] ?? $"ASYNC Request[{ptr(self)}]";
+  name = _params.option[$ "name"] ?? $"ASYNC Request[{identifier}]";
   desc = _params.option[$ "desc"] ?? "";
   scope = _params.option[$ "scope"] ?? other; 
   timeout = _params.option[$ "timeout"]; // seconds.
@@ -46,7 +47,7 @@ function CoroutineAsyncRequest(_params) constructor
   if (COROUTINE_CURRENT_TASK != undefined)
   {
     parent = COROUTINE_CURRENT_TASK;
-    parent.asyncRequests[? self] = self;
+    parent.asyncRequests[? identifier] = self;
   }
   
   
@@ -153,7 +154,7 @@ function CoroutineAsyncRequest(_params) constructor
     if (timer != undefined)
       call_cancel(timer);
     if (parent != undefined)
-      ds_map_delete(parent.asyncRequests, self);
+      ds_map_delete(parent.asyncRequests, identifier);
     return self;
   };
 }

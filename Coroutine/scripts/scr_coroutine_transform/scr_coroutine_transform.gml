@@ -268,8 +268,8 @@ function CoroutineTransform() constructor
           with(COROUTINE_CURRENT_TASK)
           {
             // Delete from active and yield. 
-            ds_map_delete(COROUTINE_POOL_ACTIVE, self);
-            COROUTINE_POOL_DELAYED[? self] = self;
+            ds_map_delete(COROUTINE_POOL_ACTIVE, identifier);
+            COROUTINE_POOL_DELAYED[? identifier] = self;
             delayed = true;
           
             // Return back to active after delay.

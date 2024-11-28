@@ -55,8 +55,8 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   // This seems to be slightly faster than using call_later (less GC'ing?).
   delayResume = function() 
   { 
-    ds_map_delete(COROUTINE_POOL_DELAYED, self);
-    COROUTINE_POOL_ACTIVE[? self] = self; 
+    ds_map_delete(COROUTINE_POOL_DELAYED, identifier);
+    COROUTINE_POOL_ACTIVE[? identifier] = self; 
     delayed = false;
   };
   delaySource = time_source_create(time_source_game, 1, time_source_units_seconds, delayResume);
@@ -73,11 +73,11 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
       scope[$ _key] = _item;
     });
   }
-  COROUTINE_POOL_ACTIVE[? self] = self;
+  COROUTINE_POOL_ACTIVE[? identifier] = self;
   if (COROUTINE_CURRENT_TASK != undefined)
   {
     parent = COROUTINE_CURRENT_TASK;
-    parent.childTasks[? self] = self;
+    parent.childTasks[? identifier] = self;
   }
   
   
@@ -122,9 +122,9 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     // Take a undeterminated break.
     paused = true;
     onPause();
-    ds_map_delete(COROUTINE_POOL_ACTIVE, self);
-    ds_map_delete(COROUTINE_POOL_DELAYED, self);
-    COROUTINE_POOL_PAUSED[? self] = self;
+    ds_map_delete(COROUTINE_POOL_ACTIVE, identifier);
+    ds_map_delete(COROUTINE_POOL_DELAYED, identifier);
+    COROUTINE_POOL_PAUSED[? identifier] = self;
     if (time_source_get_state(delaySource) != time_source_state_stopped)
     {
       time_source_stop(delaySource);
@@ -147,8 +147,8 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     // Return to the usual action.
     paused = false;
     onResume();
-    ds_map_delete(COROUTINE_POOL_PAUSED, self);
-    COROUTINE_POOL_ACTIVE[? self] = self;
+    ds_map_delete(COROUTINE_POOL_PAUSED, identifier);
+    COROUTINE_POOL_ACTIVE[? identifier] = self;
     return self;
   };
   
@@ -238,33 +238,33 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     paused = false;
     delayed = false;
     finished = true;
-    ds_map_delete(COROUTINE_POOL_ACTIVE, self);
-    ds_map_delete(COROUTINE_POOL_PAUSED, self);
-    ds_map_delete(COROUTINE_POOL_DELAYED, self);
+    ds_map_delete(COROUTINE_POOL_ACTIVE, identifier);
+    ds_map_delete(COROUTINE_POOL_PAUSED, identifier);
+    ds_map_delete(COROUTINE_POOL_DELAYED, identifier);
     
     // Remove itself from all childs.
     var _childTasks = ds_map_keys_to_array(childTasks);
-    array_foreach(_childTasks, function(_child, i)
+    array_foreach(_childTasks, function(_identifier, i)
     {
-      _child.parent = undefined;
+      childTasks[? _identifier].parent = undefined;
     });
     array_resize(_childTasks, 0);
     ds_map_destroy(childTasks);
     
     // Remove all async requests.
     var _asyncRequests = ds_map_keys_to_array(asyncRequests);
-    array_foreach(_asyncRequests, function(_async, i)
+    array_foreach(_asyncRequests, function(_identifier, i)
     {
-      _async.Destroy();
+      asyncRequests[? _identifier].Destroy();
     });
     array_resize(_asyncRequests, 0);
     ds_map_destroy(asyncRequests);
     
     // Remove all async listeners.
     var _asyncListeners = ds_map_keys_to_array(asyncListeners);
-    array_foreach(_asyncListeners, function(_async, i)
+    array_foreach(_asyncListeners, function(_identifier, i)
     {
-      _async.Destroy();
+      asyncListeners[? _identifier].Destroy();
     });
     array_resize(_asyncListeners, 0);
     ds_map_destroy(asyncListeners);
@@ -273,7 +273,7 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     time_source_destroy(delaySource);
     if (parent != undefined) 
     {
-      ds_map_delete(parent.childTasks, self);
+      ds_map_delete(parent.childTasks, identifier);
     }
     
     return self;

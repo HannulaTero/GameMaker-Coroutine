@@ -5,10 +5,11 @@
 function CoroutineAsyncListener(_params) constructor 
 {
   static counter = 0;
+  identifier = counter++;
   
   // Async variables.
   type = _params.option[$ "type"];
-  name = _params.option[$ "name"] ?? $"ASYNC Listener[{ptr(self)}]";
+  name = _params.option[$ "name"] ?? $"ASYNC Listener[{identifier}]";
   desc = _params.option[$ "desc"] ?? "";
   scope = _params.option[$ "scope"] ?? other; 
   timeout = _params.option[$ "timeout"]; // seconds.
@@ -35,14 +36,14 @@ function CoroutineAsyncListener(_params) constructor
     
   if (ds_map_exists(COROUTINE_ASYNC_LISTENERS, type) == false)
     throw($"ASYNC Listener: async event type is invalid: '{type}'.");
-  COROUTINE_ASYNC_LISTENERS[? type][? self] = onListen;
+  COROUTINE_ASYNC_LISTENERS[? type][? identifier] = self;
   
   
   // To upkeep what asyncs have been initialized within coroutine.
   if (COROUTINE_CURRENT_TASK != undefined)
   {
     parent = COROUTINE_CURRENT_TASK;
-    parent.asyncListeners[? self] = self;
+    parent.asyncListeners[? identifier] = self;
   }
   
      
@@ -88,11 +89,11 @@ function CoroutineAsyncListener(_params) constructor
     // Put itself into right state, and remove data.
     paused = false;
     finished = true;
-    ds_map_delete(COROUTINE_ASYNC_LISTENERS[? type], self);
+    ds_map_delete(COROUTINE_ASYNC_LISTENERS[? type], identifier);
     if (timer != undefined)
       call_cancel(timer);
     if (parent != undefined)
-      ds_map_delete(parent.asyncListeners, self);
+      ds_map_delete(parent.asyncListeners, identifier);
     return self;
   };
 }

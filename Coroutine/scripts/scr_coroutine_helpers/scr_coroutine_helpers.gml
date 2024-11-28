@@ -33,15 +33,15 @@ function coroutine_create(_funcAST)
 function coroutine_async_listen()
 {
   gml_pragma("forceinline");
-  // Map acts as set, and keys hold listeners. So no need to read the map itself.
-  var _listeners = ds_map_keys_to_array(COROUTINE_ASYNC_LISTENERS[? event_number]);
-  var _count = array_length(_listeners);
+  var _listeners = COROUTINE_ASYNC_LISTENERS[? event_number];
+  var _identifiers = ds_map_keys_to_array(_listeners);
+  var _count = array_length(_identifiers);
   for(var i = 0; i < _count; i++)
   {
-    var _listener = _listeners[i];
+    var _listener = _listeners[? _identifiers[i]];
     _listener.onListen(_listener);
   }
-  array_resize(_listeners, 0);
+  array_resize(_identifiers, 0);
 }
 
 
@@ -86,7 +86,7 @@ function coroutine_frame_time_get()
 function coroutine_frame_time_usage()
 {
   gml_pragma("forceinline");
-  return (current_time - COROUTINE_FRAME_TIME_BEGIN) / game_get_speed(gamespeed_microseconds);
+  return (current_time - COROUTINE_FRAME_TIME_BEGIN) * 1_000.0 / game_get_speed(gamespeed_microseconds);
 }
 
 

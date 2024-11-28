@@ -6,7 +6,7 @@ filename = "buffer.save";
 dtype = buffer_f64;
 dsize = buffer_sizeof(dtype);
 count = 1024 * 1024 * 8;
-chunk = 1024;
+chunk = 16;
 bytes = count * dsize;
 buffer = buffer_create(bytes, buffer_fixed, dsize);
 
@@ -36,6 +36,7 @@ COROUTINE BEGIN
   AWAIT this.taskBufferCreate.isFinished() PASS
   
   // Make the request.
+  show_debug_message("Started saving the buffer.");
   request = ASYNC_REQUEST
     DO_REQUEST return buffer_save_async(this.buffer, this.filename, 0, this.bytes);
     ON_SUCCESS show_debug_message($"[{_async.request}] Success!");

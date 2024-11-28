@@ -17,7 +17,7 @@ var _index = 0;
 var _coroutines = ds_map_keys_to_array(COROUTINE_POOL_ACTIVE);
 array_shuffle_ext(_coroutines); // To give coroutines equal change.
 
-with(_coroutines[_index])
+with(COROUTINE_POOL_ACTIVE[? _coroutines[_index]])
 {
   // Preparations.
   COROUTINE_CURRENT_TASK    = self;
@@ -56,7 +56,7 @@ try
       if (++_index >= _count) break;
     
       // Fetch next coroutine.
-      with(_coroutines[_index])
+      with(COROUTINE_POOL_ACTIVE[? _coroutines[_index]])
       {
         // Preparations.
         COROUTINE_CURRENT_TASK    = self;

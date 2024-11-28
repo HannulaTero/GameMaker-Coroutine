@@ -9,7 +9,7 @@ for(var i = 0; i < _count; i++)
   instance_create_layer(_x, _y, "Instances", obj_example_thing);
 }
 
-
+/*
 COROUTINE BEGIN
 
   ASYNC_LISTENER type: ev_async_web
