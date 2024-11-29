@@ -91,7 +91,8 @@ groups = [
     obj_example_async_07_audio_recording,
   ]),
   new Group("misc", [
-    obj_example_misc_00_subtasks,
+    obj_example_misc_00_syntax,
+    obj_example_misc_01_subtasks,
   ]),
 ];
 

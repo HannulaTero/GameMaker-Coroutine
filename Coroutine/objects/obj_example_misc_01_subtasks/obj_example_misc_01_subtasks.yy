@@ -1,11 +1,11 @@
 {
   "$GMObject":"",
-  "%Name":"obj_example_misc_00_subtasks",
+  "%Name":"obj_example_misc_01_subtasks",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_example_misc_00_subtasks",
+  "name":"obj_example_misc_01_subtasks",
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Misc",

@@ -77,6 +77,7 @@
 #macro CONTINUE         return CO_RUNTIME_CONTINUE()
 #macro BREAK            return CO_RUNTIME_BREAK()
 #macro EXIT             return CO_RUNTIME_RETURN(undefined)
+#macro CANCEL           return CO_RUNTIME_CANCEL()
 #macro RETURN           for(var ____;; { return CO_RUNTIME_RETURN(____); }) ____ =
 #macro GOTO             for(var ____;; { return CO_RUNTIME_GOTO(____); }) ____ =
 #macro PRINT            for(var ____;; { show_debug_message(____); break; }) ____ =

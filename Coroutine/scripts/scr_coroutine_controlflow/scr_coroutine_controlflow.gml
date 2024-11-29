@@ -40,8 +40,25 @@ function CO_RUNTIME_RETURN(_return)
   COROUTINE_CURRENT_YIELDED = true;
   with(COROUTINE_CURRENT_TASK)
   {
-    result = _return;
+    result = _return ?? result;
     onComplete();
+    Destroy(self);
+  }
+  return undefined;
+}
+
+
+/// @func CO_RUNTIME_CANCEL();
+/// @desc 
+/// @returns {Undefined}
+// feather ignore GM1041
+// feather ignore GM1049
+function CO_RUNTIME_CANCEL()
+{
+  COROUTINE_CURRENT_YIELDED = true;
+  with(COROUTINE_CURRENT_TASK)
+  {
+    onCancel();
     Destroy(self);
   }
   return undefined;

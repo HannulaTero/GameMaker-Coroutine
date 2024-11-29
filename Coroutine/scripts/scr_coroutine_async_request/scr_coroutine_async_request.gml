@@ -140,7 +140,6 @@ function CoroutineAsyncRequest(_params) constructor
   
   /// @func Destroy();
   /// @desc Async request is removed.
-  /// @returns {Struct.CoroutineAsyncRequest}
   static Destroy = function()
   {
     // Can't destroy what has already been destroyed.

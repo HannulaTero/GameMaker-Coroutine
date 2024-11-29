@@ -79,7 +79,6 @@ function CoroutineAsyncListener(_params) constructor
   
   /// @func Destroy();
   /// @desc Async listen is removed.
-  /// @returns {Struct.CoroutineAsyncListener}
   static Destroy = function()
   {
     // Can't destroy what has already been destroyed.

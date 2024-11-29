@@ -42,7 +42,6 @@ function CoroutinePrototype(_root) constructor
   /// @desc Creates new active task of prototype.
   /// @param {Id.Instance|Struct} _this
   /// @param {Struct} _vars
-  /// @returns {Struct.CoroutineTask}
   static Dispatch = function(_this=other, _vars=undefined) 
   { 
     return new CoroutineTask(self, _this, _vars); 

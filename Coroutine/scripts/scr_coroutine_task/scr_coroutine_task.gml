@@ -224,7 +224,6 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   
   /// @func Destroy();
   /// @desc Directly destroyes the coroutine without triggering onCancel.
-  /// @returns {Struct.CoroutineTask}
   static Destroy = function() 
   { 
     // Can't destroy what has already been destroyed.
