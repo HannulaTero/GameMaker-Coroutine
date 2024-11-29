@@ -463,24 +463,6 @@ function CoroutineTransform() constructor
     },
     
     
-    // 
-    // 
-    ["ASYNC"],
-    function(_node, _next, _break, _continue)
-    {
-      return {
-        next: _next.execute,
-        call: _node.call,
-        type: _node.type,
-        execute: function()
-        {
-          // TODO
-          COROUTINE_CURRENT_EXECUTE = next;
-        }
-      };
-    },
-    
-    
     // If-statement, regular branch statement.
     // 
     ["IF"],

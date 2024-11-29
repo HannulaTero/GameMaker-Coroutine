@@ -94,6 +94,7 @@ groups = [
     obj_example_misc_00_syntax,
     obj_example_misc_01_subtasks,
     obj_example_misc_02_1000_instances,
+    obj_example_misc_03_surface_oddeven,
   ]),
 ];
 

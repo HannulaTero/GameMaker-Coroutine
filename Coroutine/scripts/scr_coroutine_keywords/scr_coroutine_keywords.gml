@@ -41,12 +41,11 @@
 #macro AWAIT            }), CO_AWAIT("COND", function() { return 
 #macro AWAIT_ASYNC      }), CO_AWAIT("ASYNC", function() { return 
 #macro AWAIT_COROUTINE  }), CO_AWAIT("COROUTINE", function() { return
-#macro AWAIT_BROADCAST  }), CO_AWAIT("BROADCAST", function() { return  
+#macro AWAIT_BROADCAST  }), CO_AWAIT("BROADCAST", function() { return  // Not implemented yet.
   
 #macro AWAIT_SUBTASKS   }), CO_AWAIT_SUBTASKS(), CO_STMT(function() {
 #macro AWAIT_REQUESTS   }), CO_AWAIT_REQUESTS(), CO_STMT(function() {
 #macro AWAIT_LISTENERS  }), CO_AWAIT_LISTENERS(), CO_STMT(function() {
-#macro ASYNC            }), CO_ASYNC((function() { return
 
 #macro IF               }), CO_IF_CHAIN((function() { return
 #macro ELIF             })]), (function() { return

@@ -196,22 +196,6 @@ function CO_AWAIT_LISTENERS()
 }
 
 
-/// @func CO_ASYNC(_type, _body);
-/// @desc
-/// @param {String} _type
-/// @param {Struct} _body
-/// @returns {Struct}
-function CO_ASYNC(_type, _body)
-{ 
-  gml_pragma("forceinline"); 
-  return {
-    name: "ASYNC", 
-    body: _body, 
-    type: _type 
-  }; 
-}
-
-
 /// @func CO_TIMEOUT(_call, _type);
 /// @desc
 /// @param {Function} _call
