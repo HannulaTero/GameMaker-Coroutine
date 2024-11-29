@@ -6,21 +6,15 @@
 
 // Most of keywords generate graph, but there are couple runtime-executed keywords.
 // 
-// feather ignore GM2047
-COROUTINE BEGIN
-  LOOP
-    BREAK;          // Similar to GML break. Must be called inside any loop-statement.
-    CONTINUE;       // Similar to GML continue. Must be called inside any loop-statement.
-    RESTART;        // Jumps directly to the start of the task, doesn't do any checking.
-    CANCEL;         // Stops task and triggers onCancel.
-    EXIT;           // Stops task and triggers onComplete, doesn't change task result -value.
-    RETURN "value"; // Stops task and triggers onComplete, and sets result -value.
-    GOTO "label";   // Jump directly to any defined label within task.
-    PRINT "Hello!"  // Just convenience, same as: show_debug_message("Hello!");
+// BREAK;           Similar to GML break. Must be called inside any loop-statement.
+// CONTINUE;        Similar to GML continue. Must be called inside any loop-statement.
+// RESTART;         Jumps directly to the start of the task, doesn't do any checking.
+// CANCEL;          Stops task and triggers onCancel.
+// EXIT;            Stops task and triggers onComplete, doesn't change task result -value.
+// RETURN "value";  Stops task and triggers onComplete, and sets result -value.
+// GOTO "label";    Jump directly to any defined label within task.
+// PRINT "Hello!"   Just convenience, same as: show_debug_message("Hello!");
     
-  END
-FINISH DISPATCH
-
 
 // Usually THEN requires closing END, but in few expections (LOOP, SWITCH)
 COROUTINE BEGIN 

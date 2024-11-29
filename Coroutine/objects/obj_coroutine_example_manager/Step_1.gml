@@ -6,7 +6,6 @@ if (keyboard_check(vk_anykey) == false)
 
 if (keyboard_check_pressed(vk_enter))
 {
-  instance_destroy(obj_example_base);
   instance_create_depth(0, 0, 0, groups[index].Get());
   exit;
 }

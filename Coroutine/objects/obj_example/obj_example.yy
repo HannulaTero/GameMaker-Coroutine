@@ -10,8 +10,8 @@
   "name":"obj_example",
   "overriddenProperties":[],
   "parent":{
-    "name":"Testing",
-    "path":"folders/Coroutine Examples/Testing.yy",
+    "name":"Random testing",
+    "path":"folders/Coroutine Examples/Random testing.yy",
   },
   "parentObjectId":null,
   "persistent":false,

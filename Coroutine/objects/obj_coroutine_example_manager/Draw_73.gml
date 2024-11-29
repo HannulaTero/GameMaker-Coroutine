@@ -5,7 +5,7 @@
   fpsSum += fps_real;
   var i = 0;
   var _x = 16;
-  var _y = 16;
+  var _y = 128;
   draw_set_font(ft_example);
   draw_set_halign(fa_left);
   draw_set_valign(fa_top);

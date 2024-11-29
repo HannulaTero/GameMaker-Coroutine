@@ -1,5 +1,5 @@
 /// @desc EXAMPLES.
-
+show_debug_overlay(true, true);
 COROUTINE_SINGLETON
 
 
@@ -93,6 +93,7 @@ groups = [
   new Group("misc", [
     obj_example_misc_00_syntax,
     obj_example_misc_01_subtasks,
+    obj_example_misc_02_1000_instances,
   ]),
 ];
 

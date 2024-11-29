@@ -1,7 +1,7 @@
 
-#macro COROUTINE_NAME       ("Coroutine for GML")
+#macro COROUTINE_NAME       ("Coroutines for GML")
 #macro COROUTINE_CREDITS    ("Tero Hannula")
-#macro COROUTINE_VERSION    ("v2024.11.25.0")
+#macro COROUTINE_VERSION    ("v2024.11.29.0")
 
 
 #macro COROUTINE_POOL_ACTIVE        global.gCOROUTINE_POOL_ACTIVE       // Coroutines, which are active for execution.

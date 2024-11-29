@@ -1,18 +1,21 @@
 {
   "$GMObject":"",
-  "%Name":"obj_example_thung",
+  "%Name":"obj_example_misc_02_1000_instances",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_example_thung",
+  "name":"obj_example_misc_02_1000_instances",
   "overriddenProperties":[],
   "parent":{
-    "name":"Random testing",
-    "path":"folders/Coroutine Examples/Random testing.yy",
+    "name":"Examples Misc",
+    "path":"folders/Coroutine Examples/Examples Misc.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_example_base",
+    "path":"objects/obj_example_base/obj_example_base.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -30,10 +33,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":{
-    "name":"spr_example_thing",
-    "path":"sprites/spr_example_thing/spr_example_thing.yy",
-  },
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

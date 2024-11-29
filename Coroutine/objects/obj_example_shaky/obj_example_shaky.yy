@@ -1,16 +1,15 @@
 {
   "$GMObject":"",
-  "%Name":"obj_example_thung",
+  "%Name":"obj_example_shaky",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_example_thung",
+  "name":"obj_example_shaky",
   "overriddenProperties":[],
   "parent":{
-    "name":"Random testing",
-    "path":"folders/Coroutine Examples/Random testing.yy",
+    "name":"Examples Misc",
+    "path":"folders/Coroutine Examples/Examples Misc.yy",
   },
   "parentObjectId":null,
   "persistent":false,
