@@ -66,6 +66,7 @@ groups = [
     obj_example_controlflow_05_repeat,
     obj_example_controlflow_06_do_until,
     obj_example_controlflow_07_for,
+    obj_example_controlflow_08_goto,
   ]),
   new Group("foreach", [
     obj_example_foreach_00_array,

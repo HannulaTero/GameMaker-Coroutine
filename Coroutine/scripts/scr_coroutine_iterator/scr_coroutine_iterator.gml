@@ -90,6 +90,7 @@ function CoroutineIterator(_item=undefined, _nameKey=undefined, _nameVal=undefin
   /// @desc Sets iterator state for object.
   static asObject = function()
   {
+    // Works only for single object-type, as array is iterable-type already.
     var _index = 0;
     var _object = item;
     var _instances = array_create(instance_number(item));

@@ -20,11 +20,14 @@ function CoroutineRange() constructor
       {
         start = _item[$ "start"] ?? start;
         stop = _item[$ "stop"] ?? stop;
-        step = _item[$ "step"] ?? step;
+        step = _item[$ "step"] ?? sign(stop - start);
       }
       else
       {
+        // Count from zero towards number.
+        start = 0;
         stop = _item;
+        step = sign(_item);
       }
       break;
     }
@@ -34,6 +37,7 @@ function CoroutineRange() constructor
     {
       start = argument[0];
       stop = argument[1];
+      step = sign(stop - start);
       break;
     }
   

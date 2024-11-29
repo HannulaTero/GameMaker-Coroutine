@@ -1,125 +1,64 @@
-/// @desc FOREACH.
+/// @desc FOREACH IN RANGE.
 
 
-// There is no foreach -statement in GM, just array_foreach and struct_foreach -functions.
-// FOREACH will accept usual iterable items, and iterate each item.
-COROUTINE
-ON_CLEANUP
-  ds_list_destroy(list);
-  ds_map_destroy(map);
-  buffer_delete(buffer);
-  instance_destroy(obj_example_instance);
 
-BEGIN 
-  // Initializing different datastructures, which are acceptable.
-  array = [10, 20, 30, 40];
-  struct = { text: "hello world!", number: 123, a: 0, b: 1, c: 2 }; 
-  text = "HELLO WORLD!";
-  
-  list = ds_list_create();
-  ds_list_add(list, -1, -2, -3, -4);
-  
-  map = ds_map_create();
-  ds_map_add(map, "apple", 200);
-  ds_map_add(map, "orange", 400);
-  ds_map_add(map, "kiwi", 600);
-  ds_map_add(map, "grape fruit", 550);
-  
-  dtype = buffer_f64;
-  dsize = buffer_sizeof(dtype);
-  bytes = 64;
-  buffer = buffer_create(bytes, buffer_fixed, dsize);
-  buffer_seek(buffer, buffer_seek_start, 0);
-  repeat(bytes / dsize) 
-  {
-    buffer_write(buffer, dtype, random(256.0));
-  }
-  
-  repeat(5)
-  {
-    instance_create_depth(random(256), random(256), 0, obj_example_instance);
-  }
-  
+COROUTINE BEGIN 
 
-  // Iterating over array.
-  PRINT "iterating over array.";
-  FOREACH key, value IN array THEN
-    show_debug_message($"array[{key}] = {value};");
-    DELAY 3 FRAMES
-  END
-
-  // Iterating keys are both optional.
-  PRINT "iterating over another array.";
-  FOREACH value IN [11, 22, 33, 44] THEN
-    show_debug_message($"item in array: {value}");
-    DELAY 3 FRAMES
-  END
-
-  // Iterating keys can also be renamed.
-  PRINT "iterating over ds_map.";
-  FOREACH fruit: key, cost: value IN map THEN
-    show_debug_message($"map[? {fruit}] = {cost};");
-    DELAY 3 FRAMES
-  END
-
-  // If you have nested foreach, then renaming identifiers is useful.
-  PRINT "iterating over struct.";
-  FOREACH key, value IN struct THEN
-    show_debug_message($"struct.{key} = {value};");
-    DELAY 3 FRAMES
-  END
+  // Iterating over number can be useful, but it is rather limited.
+  // So this coroutine system provides way to iterate over given range.
+  // Note, that start-value is inclusive, stop-value is exclusive.
   
-  // 
-  PRINT "iterating over list.";
-  FOREACH key, value IN list THEN
-    show_debug_message($"list[| {key}] = {value};");
-    DELAY 3 FRAMES
-  END
+  // RANGE accepts 1 to 3 arguments, or struct holding arguments.
+  // RANGE expects start, stop and step.
   
-  // Iterating over string puts index and character as key-value.
-  PRINT "iterating over string.";
-  FOREACH key, value IN text THEN
-    show_debug_message($"string_char_at(text, {key}) = '{value}';");
-    DELAY 3 FRAMES
-  END
-  
-  // You can also iterate over number by giving it as iterable.
-  PRINT "iterating over number.";
-  FOREACH key, value IN 10 THEN
-    show_debug_message($"number {key} = '{value}';");
-    DELAY 3 FRAMES
-  END
-  
-  // But you can also give numeric range, which is iterated over.
-  // This you can specify start and end values, and what is step -size.
-  PRINT "iterating over range.";
-  FOREACH key, value IN RANGE(40, 10, -3) THEN
+  // When you give single argument, it acts like you have given number to iterate.
+  // So it starts from 0 and iterates to given number with step-size 1.
+  PRINT "iterating over RANGE(10).";
+  FOREACH key, value IN RANGE(10) THEN
     show_debug_message($"range {key} = {value};");
     DELAY 3 FRAMES
   END
+  PRINT "done.";
   
-  // Iterating over buffer just gives raw bytes.
-  PRINT "iterating over buffer.";
-  FOREACH key, value IN buffer THEN
-    show_debug_message($"buffer_peek(buffer, buffer_u8, {key}) = {value};");
+  
+  // When you give second argument, they act as "start, end" -values.
+  // The step-size still stays 1.
+  PRINT "iterating over RANGE(5, 15).";
+  FOREACH key, value IN RANGE(5, 15) THEN
+    show_debug_message($"range {key} = {value};");
     DELAY 3 FRAMES
   END
+  PRINT "done.";
   
-  // But you can give specific way of viewing buffer, so it knows how to read values.
-  // VIEW has optional arguments and ways to specify iteration.
-  PRINT "iterating over buffer viewing values as buffer_f64.";
-  FOREACH key, value IN VIEW(buffer, buffer_f64) THEN
-    show_debug_message($"buffer_peek(buffer, buffer_f64, {key}) = {value};");
+  
+  // You can also iterate backwars by placing larger value first.
+  // The step-size still stays 1.
+  PRINT "iterating over RANGE(15, 5).";
+  FOREACH key, value IN RANGE(15, 5) THEN
+    show_debug_message($"range {key} = {value};");
     DELAY 3 FRAMES
   END
+  PRINT "done.";
   
-  // Finally you can also give objects as iterable.
-  PRINT "iterating over instances of object.";
-  FOREACH key, value IN obj_example_instance THEN
-    show_debug_message($"instance[{key}].x = {value.x};");
-    show_debug_message($"instance[{key}].y = {value.y};");
+  
+  // The third argument will be the step-size, which cannot be 0.
+  // 
+  PRINT "iterating over RANGE(-15, 15, 3).";
+  FOREACH key, value IN RANGE(-15, 15, 3) THEN
+    show_debug_message($"range {key} = {value};");
     DELAY 3 FRAMES
   END
+  PRINT "done.";
+  
+  
+  // Finally, you can also do the same, but give values with struct.
+  // The values are optional. Using struct can be helpful, if it is used elsewhere.
+  PRINT "iterating over RANGE({ start: -50, stop: 50, step: 10 }).";
+  FOREACH key, value IN RANGE({ start: -50, stop: 50, step: 10 }) THEN
+    show_debug_message($"range {key} = {value};");
+    DELAY 3 FRAMES
+  END
+  PRINT "done.";
 
 
 FINISH DISPATCH 
