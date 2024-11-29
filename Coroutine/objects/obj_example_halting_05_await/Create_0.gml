@@ -44,33 +44,9 @@ taskC = COROUTINE BEGIN
 FINISH DISPATCH
 
 
-// AWAIT_SUBTASKS awaits that all subtasks of given tasks, and doesn't need handles.
-// So, if task has launched other tasks, it awaits them all before continuing.
-taskD = COROUTINE BEGIN
-
-  // Wait previous task to finish.
-  show_debug_message("Task C is waiting...");
-  AWAIT_COROUTINE this.taskC PASS
-
-  // Launch subtasks.
-  COROUTINE BEGIN PRINT "subtask[0] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[0] end" FINISH DISPATCH
-  COROUTINE BEGIN PRINT "subtask[1] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[1] end" FINISH DISPATCH
-  COROUTINE BEGIN PRINT "subtask[2] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[2] end" FINISH DISPATCH
-  COROUTINE BEGIN PRINT "subtask[3] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[3] end" FINISH DISPATCH
-  COROUTINE BEGIN PRINT "subtask[4] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[5] end" FINISH DISPATCH
-
-  // Wait subtasks to finish.
-  show_debug_message("Task D launched subtasks!");
-  AWAIT_SUBTASKS
-  
-  // Begin working after first one.
-  show_debug_message("Task D is working...");
-  DELAY 1.5 SECONDS
-  show_debug_message("Task D is done!");
-
-FINISH DISPATCH
-
-
+// Also there are other AWAIT_* types, look for other related examples.
+// Following will await all task's own subtasks, requests or listeners.
+// AWAIT_SUBTASKS, AWAIT_REQUESTS, AWAIT_LISTENERS
 
 
 

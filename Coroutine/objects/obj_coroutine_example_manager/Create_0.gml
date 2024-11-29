@@ -90,6 +90,9 @@ groups = [
     obj_example_async_06_buffer_load,
     obj_example_async_07_audio_recording,
   ]),
+  new Group("misc", [
+    obj_example_misc_00_subtasks,
+  ]),
 ];
 
 
