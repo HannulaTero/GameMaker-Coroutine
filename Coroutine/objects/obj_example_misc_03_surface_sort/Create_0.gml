@@ -63,7 +63,8 @@ BEGIN
   SET "Pushing\nData to Surface" PASS
   surface = surface_create(size[0], size[1]);
   buffer_set_surface(buffer, surface, 0);
-  
+  SET "Random pixels" PASS
+  DELAY 2 SECONDS  
   
   // Start sorting.
   // Uses odd-even sort, which is highly inefficient.
@@ -141,8 +142,8 @@ BEGIN
       FOREACH i: value IN RANGE(0, this.count) THEN
     
         // Chunkify, if input/output are large.
-        FOREACH xpos: value IN RANGE(0, this.size[0], wchunk) THEN
-        FOREACH ypos: value IN RANGE(0, this.size[1], hchunk) THEN
+        FOR xpos = 0; COND xpos < this.size[0]; ITER xpos += wchunk THEN
+        FOR ypos = 0; COND ypos < this.size[1]; ITER ypos += hchunk THEN
           shader_set_uniform_f(uniOffset, i mod 2);
           surface_set_target(tempB);
           draw_surface_stretched(tempA, xpos, ypos, wchunk, hchunk);
