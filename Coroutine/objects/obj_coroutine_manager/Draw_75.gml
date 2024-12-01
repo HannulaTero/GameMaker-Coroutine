@@ -1,7 +1,16 @@
 /// @desc COROUTINE EXECUTION.
 //
 // In Draw GUI event, so it would be last thing to do.
-// But also as draw event, so coroutines can draw.
+// But also as draw event, so coroutines can draw
+
+
+// Get the maximum time used for coroutines.
+// Rescale margin to accommodate heavy GPU calculations, which usage time can't be directly calculated.
+var _gameSpeed = game_get_speed(gamespeed_microseconds) / 1_000.0;
+var _timeBegin = COROUTINE_FRAME_TIME_BEGIN;
+
+margin = lerp(margin, 0.9 * sqr(_gameSpeed / max(_gameSpeed, delta_time / 1_000.0)), 0.1);
+var _maxTime = current_time + margin * _gameSpeed;
 
 
 // No active coroutines, quit early.
@@ -29,11 +38,6 @@ with(COROUTINE_POOL_ACTIVE[? _coroutines[_index]])
   // Launch the coroutine.
   onLaunch();
 }
-
-
-// Fetch these beforehand for slight optimization.
-var _gameSpeed = game_get_speed(gamespeed_microseconds) / 1_000.0;
-var _timeBegin = COROUTINE_FRAME_TIME_BEGIN;
 
 
 // Do-until to ensure something happens, even if frame-budget is exceeded.
@@ -72,8 +76,7 @@ try
   }
   
   // As this check is regularly done, it should be optimized.
-  // So even though separate function exists, this is how it's done now.
-  until(((current_time - _timeBegin) / _gameSpeed) >= margin);
+  until(current_time >= _maxTime);
 } 
 
 // Something wrong happened while executing coroutine.
@@ -84,8 +87,8 @@ catch(_error)
   COROUTINE_CURRENT_TASK.execute = method_get_self(COROUTINE_CURRENT_EXECUTE).next;
   COROUTINE_CURRENT_TASK.onError();
 }
-  
-  
+
+
 // Check if time ran out and Coroutine was forced to yield.
 if (COROUTINE_CURRENT_YIELDED == false)
 {
