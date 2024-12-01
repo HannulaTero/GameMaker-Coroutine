@@ -101,6 +101,16 @@ function CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
   };
   
   
+  /// @func Set(_value);
+  /// @desc Set current result of coroutine.
+  /// @param {Any} _value
+  static Set = function(_value) 
+  { 
+    result = _value;
+    return self;
+  };
+  
+  
   /// @func Execute(_func);
   /// @desc Executes function in the coroutine's scope.
   /// @param {Function} _func

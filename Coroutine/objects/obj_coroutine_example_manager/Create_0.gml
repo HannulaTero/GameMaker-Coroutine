@@ -12,7 +12,9 @@ array_foreach(ds_map_keys_to_array(COROUTINE_ASYNC_LISTENERS), function(_type, i
     show_debug_message($"Async Listener");
     show_debug_message($" - event event   : {event_type}");
     show_debug_message($" - event number  : {event_number}");
-    show_debug_message($" - async status  : {async_load[? "status"]}");
+    if (async_load != -1)
+    && (async_load != undefined)
+      show_debug_message($" - async status  : {async_load[? "status"]}");
     show_debug_message($"===============================================");
   ASYNC_END
 });
@@ -95,6 +97,7 @@ groups = [
     obj_example_misc_01_subtasks,
     obj_example_misc_02_1000_instances,
     obj_example_misc_03_surface_sort,
+    obj_example_misc_04_sprite_broadcast,
   ]),
 ];
 

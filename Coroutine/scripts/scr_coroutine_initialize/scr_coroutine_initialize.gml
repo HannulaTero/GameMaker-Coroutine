@@ -35,6 +35,7 @@ array_foreach([
   ev_async_audio_playback,
   ev_async_audio_playback_ended,
   ev_async_system_event,
+  ev_broadcast_message,
 ], function(_type, i) 
 {
   COROUTINE_ASYNC_LISTENERS[? _type] = ds_map_create();
