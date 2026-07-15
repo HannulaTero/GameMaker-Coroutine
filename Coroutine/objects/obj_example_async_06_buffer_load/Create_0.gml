@@ -30,11 +30,11 @@ COROUTINE BEGIN
   
   // Await for the result.
   AWAIT_REQUESTS
-  if (request.hasFailed())
-  {
+  IF request.hasFailed() THEN
     show_debug_message($"Loading buffer has failed!");
     EXIT;
-  }
+  END
+  
   show_debug_message($"Buffer has been loaded!");
   
 FINISH DISPATCH
