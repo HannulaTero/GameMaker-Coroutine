@@ -1,8 +1,8 @@
 {
-  "$GMProject":"",
+  "$GMProject":"v1",
   "%Name":"Coroutine",
   "AudioGroups":[
-    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
   "configs":{
     "children":[],
@@ -26,6 +26,7 @@
     {"$GMFolder":"","%Name":"Asynchronous","folderPath":"folders/Coroutine/Runtime/Asynchronous.yy","name":"Asynchronous","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Foreach Iterator","folderPath":"folders/Coroutine/Runtime/Foreach Iterator.yy","name":"Foreach Iterator","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
+  "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[],
   "isEcma":false,
   "LibraryEmitters":[],
@@ -96,6 +97,7 @@
     {"id":{"name":"room_example","path":"rooms/room_example/room_example.yy",},},
     {"id":{"name":"scr_coroutine_async_listener","path":"scripts/scr_coroutine_async_listener/scr_coroutine_async_listener.yy",},},
     {"id":{"name":"scr_coroutine_async_request","path":"scripts/scr_coroutine_async_request/scr_coroutine_async_request.yy",},},
+    {"id":{"name":"scr_coroutine_compile","path":"scripts/scr_coroutine_compile/scr_coroutine_compile.yy",},},
     {"id":{"name":"scr_coroutine_controlflow","path":"scripts/scr_coroutine_controlflow/scr_coroutine_controlflow.yy",},},
     {"id":{"name":"scr_coroutine_helpers","path":"scripts/scr_coroutine_helpers/scr_coroutine_helpers.yy",},},
     {"id":{"name":"scr_coroutine_initialize","path":"scripts/scr_coroutine_initialize/scr_coroutine_initialize.yy",},},

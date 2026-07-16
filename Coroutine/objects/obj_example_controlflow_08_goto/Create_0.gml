@@ -59,3 +59,44 @@ COROUTINE BEGIN
 
 FINISH DISPATCH 
 
+
+
+// Gotos are useful to break out nested loops.
+COROUTINE BEGIN
+
+  DELAY 1.0 SECONDS
+  PRINT $"Jumping out of nested loops with goto";
+  
+  WHILE true THEN
+    show_debug_message("1st loop: while") 
+    
+    FOR i = 0 COND i < 10 ITER i++ THEN
+      show_debug_message("2nd loop: for")  
+      
+      LOOP 
+        show_debug_message("3rd loop: loop")  
+        
+        REPEAT 10 THEN
+          show_debug_message("4th loop: repeat")  
+          GOTO "quit nested loop";
+          
+        END 
+      END 
+    END 
+  END
+  
+  LABEL "quit nested loop" PASS
+  show_debug_message("Broke out of all loops in one go.");  
+  
+FINISH DISPATCH 
+
+
+
+
+
+
+
+
+
+
+
