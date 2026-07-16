@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__Coroutine_Create",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__Coroutine_Create",
+  "parent":{
+    "name":"General",
+    "path":"folders/Coroutine/General.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -30,27 +30,33 @@ FINISH DISPATCH
 COROUTINE BEGIN
   show_debug_message("Begin long execution.");
   
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
-  time = current_time; while((current_time - time) < 16) {} PASS
+  self.LongLoop = function() {
+    var _time = current_time + irandom_range(1, 32); 
+    while(current_time < _time) { };
+    show_debug_message("Finished!");
+  };
+  
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
+  self.LongLoop(); PASS
 
   show_debug_message("Finished execution.");
   

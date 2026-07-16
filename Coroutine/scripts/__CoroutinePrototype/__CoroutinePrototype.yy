@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__CoroutinePrototype",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__CoroutinePrototype",
+  "parent":{
+    "name":"Prototype",
+    "path":"folders/Coroutine/Parsing/Prototype.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

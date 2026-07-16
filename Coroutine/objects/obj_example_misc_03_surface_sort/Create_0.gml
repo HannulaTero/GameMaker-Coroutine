@@ -73,7 +73,7 @@ BEGIN
   COROUTINE
     ON_INIT
       shader = shd_example_sort_oddeven;
-      uniLayout = shader_get_uniform(shader, "uniLayout");
+      uniShape = shader_get_uniform(shader, "uniShape");
       uniOffset = shader_get_uniform(shader, "uniOffset");
       uniCount = shader_get_uniform(shader, "uniCount");
       
@@ -99,7 +99,7 @@ BEGIN
         tempB = surface_create(size[0], size[1]);
       }
       shader_set(shader);
-      shader_set_uniform_f_array(uniLayout, size);
+      shader_set_uniform_f_array(uniShape, size);
       shader_set_uniform_f(uniCount, count);
       gpu_push_state();
       gpu_set_blendenable(false);
