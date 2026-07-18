@@ -23,7 +23,7 @@ FINISH DISPATCH
 
 
 // To wait for subtasks to finish before continuing, you should use AWAIT
-// one way is to wait each subtask separately: AWAIT subtask.isFinished() PASS
+// one way is to wait each subtask separately: AWAIT subtask.IsFinished() PASS
 // Another is to use AWAIT_SUBTASKS
 
 

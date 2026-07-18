@@ -8,8 +8,8 @@ function __CoroutineRange() constructor
 {
   // Declare variables.
   start = 0;
-  stop = 0;
-  step = 1;
+  stop  = 0;
+  step  = 1;
   
   
   switch(argument_count)
@@ -20,16 +20,16 @@ function __CoroutineRange() constructor
       var _item = argument[0];
       if (is_struct(_item))
       {
-        start = _item[$ "start"] ?? start;
-        stop = _item[$ "stop"] ?? stop;
-        step = _item[$ "step"] ?? sign(stop - start);
+        start = _item[$ "start"]  ?? start;
+        stop  = _item[$ "stop"]   ?? stop;
+        step  = _item[$ "step"]   ?? sign(stop - start);
       }
       else
       {
         // Count from zero towards number.
         start = 0;
-        stop = _item;
-        step = sign(_item);
+        stop  = _item;
+        step  = sign(_item);
       }
       break;
     }
@@ -38,8 +38,8 @@ function __CoroutineRange() constructor
     case 2:
     {
       start = argument[0];
-      stop = argument[1];
-      step = sign(stop - start);
+      stop  = argument[1];
+      step  = sign(stop - start);
       break;
     }
   
@@ -47,8 +47,8 @@ function __CoroutineRange() constructor
     case 3: 
     {
       start = argument[0];
-      stop = argument[1];
-      step = argument[2];
+      stop  = argument[1];
+      step  = argument[2];
       break;
     }
   

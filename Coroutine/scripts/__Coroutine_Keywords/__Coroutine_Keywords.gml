@@ -1,19 +1,29 @@
-
+// feather ignore GM1051 - To ignore ending macros with semicolons. 
+/*
+  Macros use parenthesis to ensure correct keyword usages (force THEN ... END etc.)
+  
+  If some macros doesn't end with semicolon, following expansion can happen:
+    keyword(...) (...)
+  Second parenthesis are interpreted as function call, even though that's not intention.
+  With semicolons with macros in correct places, there is no ambiguity:
+    keyword(...); (...);
+  
+*/
 
 
 #macro __COROUTINE_KEYWORD__COROUTINE         __Coroutine_Create(function() { return { graph: { }, tables: [ ], labels: { }, define: ({ option: ({
 
 
 // Coroutine triggers.                        
-#macro __COROUTINE_KEYWORD__ON_INIT           }), onInit: method(undefined, function(_params={}) {
-#macro __COROUTINE_KEYWORD__ON_YIELD          }), onYield: method(undefined, function() {
-#macro __COROUTINE_KEYWORD__ON_PAUSE          }), onPause: method(undefined, function() {
-#macro __COROUTINE_KEYWORD__ON_LAUNCH         }), onLaunch: method(undefined, function() {
-#macro __COROUTINE_KEYWORD__ON_RESUME         }), onResume: method(undefined, function() {
-#macro __COROUTINE_KEYWORD__ON_CANCEL         }), onCancel: method(undefined, function() {
+#macro __COROUTINE_KEYWORD__ON_INIT           }), onInit:     method(undefined, function(_params={}) {
+#macro __COROUTINE_KEYWORD__ON_YIELD          }), onYield:    method(undefined, function() {
+#macro __COROUTINE_KEYWORD__ON_PAUSE          }), onPause:    method(undefined, function() {
+#macro __COROUTINE_KEYWORD__ON_LAUNCH         }), onLaunch:   method(undefined, function() {
+#macro __COROUTINE_KEYWORD__ON_RESUME         }), onResume:   method(undefined, function() {
+#macro __COROUTINE_KEYWORD__ON_CANCEL         }), onCancel:   method(undefined, function() {
 #macro __COROUTINE_KEYWORD__ON_COMPLETE       }), onComplete: method(undefined, function() {
-#macro __COROUTINE_KEYWORD__ON_CLEANUP        }), onCleanup: method(undefined, function() {
-#macro __COROUTINE_KEYWORD__ON_ERROR          }), onError: method(undefined, function(_error) {
+#macro __COROUTINE_KEYWORD__ON_CLEANUP        }), onCleanup:  method(undefined, function() {
+#macro __COROUTINE_KEYWORD__ON_ERROR          }), onError:    method(undefined, function(_error) {
 
 
 // Coroutine statements.                      
@@ -23,7 +33,7 @@
 #macro __COROUTINE_KEYWORD__PASS              }), __CoroutineNode_STMT(function() {
 #macro __COROUTINE_KEYWORD__SET               }), __CoroutineNode_SET(function() { return
 #macro __COROUTINE_KEYWORD__END               }) ])), __CoroutineNode_STMT(function() {
-#macro __COROUTINE_KEYWORD__DISPATCH          .Dispatch(self);
+#macro __COROUTINE_KEYWORD__DISPATCH          .Dispatch(self); 
 
 #macro __COROUTINE_KEYWORD__LABEL             }), __CoroutineNode_LABEL({ label: 
 #macro __COROUTINE_KEYWORD__YIELD             }), __CoroutineNode_YIELD(), __CoroutineNode_STMT(function() {
@@ -89,6 +99,6 @@
 #macro __COROUTINE_KEYWORD__ON_SUCCESS        })), onSuccess: ((function(_async) {
 #macro __COROUTINE_KEYWORD__ON_FAILURE        })), onFailure: ((function(_async) {
 #macro __COROUTINE_KEYWORD__ON_TIMEOUT        })), onTimeout: ((function(_async) {
-#macro __COROUTINE_KEYWORD__ON_LISTEN         })), onListen: ((function(_async) {
-#macro __COROUTINE_KEYWORD__ASYNC_END         })) }))
+#macro __COROUTINE_KEYWORD__ON_LISTEN         })), onListen:  ((function(_async) {
+#macro __COROUTINE_KEYWORD__ASYNC_END         })) }));
 

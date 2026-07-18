@@ -35,6 +35,7 @@ COROUTINE BEGIN
   
   // Await for the result.
   AWAIT_REQUESTS
+  
   if (failed)
   {
     show_debug_message($"URL '{url}' get did not succeed!");
@@ -42,7 +43,6 @@ COROUTINE BEGIN
   }
   show_debug_message($"URL '{url}' has been fetched!");
   show_debug_message($"{data}");
-  
   
 FINISH DISPATCH 
 

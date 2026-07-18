@@ -6,8 +6,8 @@
   "name":"obj_example_base",
   "overriddenProperties":[],
   "parent":{
-    "name":"Coroutine Examples",
-    "path":"folders/Coroutine Examples.yy",
+    "name":"Coroutine x Examples",
+    "path":"folders/Coroutine x Examples.yy",
   },
   "parentObjectId":null,
   "persistent":false,

@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"__CoroutineRange",
   "parent":{
-    "name":"Foreach Iterator",
-    "path":"folders/Coroutine/Runtime/Foreach Iterator.yy",
+    "name":"Range",
+    "path":"folders/Coroutine Runtime/Runtime/Range.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

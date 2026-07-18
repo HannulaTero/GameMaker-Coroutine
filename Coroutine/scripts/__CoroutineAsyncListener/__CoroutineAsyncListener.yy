@@ -6,7 +6,7 @@
   "name":"__CoroutineAsyncListener",
   "parent":{
     "name":"Async Listener",
-    "path":"folders/Coroutine/Runtime/Async Listener.yy",
+    "path":"folders/Coroutine Runtime/Runtime/Async Listener.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

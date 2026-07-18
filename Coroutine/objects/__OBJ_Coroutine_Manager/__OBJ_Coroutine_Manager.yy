@@ -25,7 +25,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Runtime",
-    "path":"folders/Coroutine/Runtime.yy",
+    "path":"folders/Coroutine Runtime/Runtime.yy",
   },
   "parentObjectId":null,
   "persistent":false,

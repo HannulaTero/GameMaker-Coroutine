@@ -9,7 +9,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Halting",
-    "path":"folders/Coroutine Examples/Examples Halting.yy",
+    "path":"folders/Coroutine x Examples/Examples Halting.yy",
   },
   "parentObjectId":{
     "name":"obj_example_base",

@@ -33,7 +33,7 @@
   "name":"RM_Coroutine_Testing_Instances",
   "parent":{
     "name":"Random testing",
-    "path":"folders/Coroutine Examples/Random testing.yy",
+    "path":"folders/Coroutine x Examples/Random testing.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

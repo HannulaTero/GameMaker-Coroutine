@@ -7,5 +7,9 @@
 */
 function __Coroutine_Execute(_callback)
 {
-  with(COROUTINE_CURRENT_SCOPE) return _callback();
+  gml_pragma("forceinline");
+  with(COROUTINE_CURRENT_SCOPE) 
+  {
+    return _callback();
+  }
 }

@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"__CoroutineView",
   "parent":{
-    "name":"Foreach Iterator",
-    "path":"folders/Coroutine/Runtime/Foreach Iterator.yy",
+    "name":"View",
+    "path":"folders/Coroutine Runtime/Runtime/View.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

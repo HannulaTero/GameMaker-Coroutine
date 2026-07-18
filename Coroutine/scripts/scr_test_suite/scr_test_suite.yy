@@ -6,7 +6,7 @@
   "name":"scr_test_suite",
   "parent":{
     "name":"Random testing",
-    "path":"folders/Coroutine Examples/Random testing.yy",
+    "path":"folders/Coroutine x Examples/Random testing.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

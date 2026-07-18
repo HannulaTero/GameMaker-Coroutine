@@ -6,7 +6,7 @@
   "name":"__CoroutineTask",
   "parent":{
     "name":"CoroutineTask",
-    "path":"folders/Coroutine/Runtime/CoroutineTask.yy",
+    "path":"folders/Coroutine Runtime/Runtime/CoroutineTask.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

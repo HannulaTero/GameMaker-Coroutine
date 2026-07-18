@@ -6,7 +6,7 @@
   "name":"__Coroutine_Execute",
   "parent":{
     "name":"General",
-    "path":"folders/Coroutine/General.yy",
+    "path":"folders/Coroutine Runtime/General.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

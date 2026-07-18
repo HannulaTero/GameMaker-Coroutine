@@ -6,7 +6,7 @@
   "name":"__Coroutine_FrameTime_Get",
   "parent":{
     "name":"General",
-    "path":"folders/Coroutine/General.yy",
+    "path":"folders/Coroutine Runtime/General.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

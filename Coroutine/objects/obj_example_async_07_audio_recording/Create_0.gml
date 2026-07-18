@@ -76,7 +76,7 @@ BEGIN
   
   // Check whether acceptable recorder was received. 
   AWAIT_REQUESTS
-  if (requestIndex.hasFailed())
+  if (requestIndex.HasFailed())
   {
     show_debug_message("Aborting the recording.");
     EXIT;
@@ -113,7 +113,7 @@ BEGIN
   // Wait while recording is done.
   COROUTINE BEGIN
     time = current_time;
-    WHILE (this.requestRecord.isFinished() == false) THEN 
+    WHILE (this.requestRecord.IsFinished() == false) THEN 
       show_debug_message($"Recording... {(current_time - time) / 1_000.0} s");
       DELAY 0.5 SECONDS
     END

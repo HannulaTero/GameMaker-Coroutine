@@ -33,7 +33,7 @@ FINISH DISPATCH
 COROUTINE BEGIN
 
   // Wait until buffer contents have been filled.
-  AWAIT this.taskBufferCreate.isFinished() PASS
+  AWAIT this.taskBufferCreate.IsFinished() PASS
   
   // Make the request.
   show_debug_message("Started saving the buffer.");
@@ -45,7 +45,7 @@ COROUTINE BEGIN
   
   // Await for the result.
   AWAIT_REQUESTS
-  if (request.hasFailed())
+  if (request.HasFailed())
   {
     show_debug_message($"Saving buffer has failed!");
     EXIT;

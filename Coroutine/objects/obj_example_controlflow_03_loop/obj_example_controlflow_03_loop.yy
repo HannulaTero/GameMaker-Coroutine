@@ -9,7 +9,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Control Flow",
-    "path":"folders/Coroutine Examples/Examples Control Flow.yy",
+    "path":"folders/Coroutine x Examples/Examples Control Flow.yy",
   },
   "parentObjectId":{
     "name":"obj_example_base",

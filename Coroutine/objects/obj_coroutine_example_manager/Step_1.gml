@@ -1,7 +1,9 @@
 /// @desc SELECT GROUP & EXAMPLE
 
 if (keyboard_check(vk_anykey) == false)
+{
   exit;
+}
 
 
 if (keyboard_check_pressed(vk_enter))

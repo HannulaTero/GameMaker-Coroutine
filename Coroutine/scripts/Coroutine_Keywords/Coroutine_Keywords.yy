@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Coroutine_Keywords",
   "parent":{
-    "name":"Coroutine",
-    "path":"folders/Coroutine.yy",
+    "name":"Coroutine Runtime",
+    "path":"folders/Coroutine Runtime.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

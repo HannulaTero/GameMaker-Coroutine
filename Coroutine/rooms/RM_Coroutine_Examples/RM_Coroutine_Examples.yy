@@ -17,8 +17,8 @@
   ],
   "name":"RM_Coroutine_Examples",
   "parent":{
-    "name":"Coroutine Examples",
-    "path":"folders/Coroutine Examples.yy",
+    "name":"Coroutine x Examples",
+    "path":"folders/Coroutine x Examples.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

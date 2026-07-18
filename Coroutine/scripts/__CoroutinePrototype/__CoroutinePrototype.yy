@@ -6,7 +6,7 @@
   "name":"__CoroutinePrototype",
   "parent":{
     "name":"Prototype",
-    "path":"folders/Coroutine/Parsing/Prototype.yy",
+    "path":"folders/Coroutine Runtime/Parsing/Prototype.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

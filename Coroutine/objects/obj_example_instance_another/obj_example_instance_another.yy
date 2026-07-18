@@ -8,8 +8,8 @@
   "name":"obj_example_instance_another",
   "overriddenProperties":[],
   "parent":{
-    "name":"Coroutine Examples",
-    "path":"folders/Coroutine Examples.yy",
+    "name":"Coroutine x Examples",
+    "path":"folders/Coroutine x Examples.yy",
   },
   "parentObjectId":null,
   "persistent":false,

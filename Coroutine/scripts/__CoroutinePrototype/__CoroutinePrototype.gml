@@ -10,12 +10,16 @@ function __CoroutinePrototype(_root) constructor
   static counter = 0;
   
   
+  // Static methods.
+  static Dispatch = __CoroutinePrototype__Dispatch;
+  
+  
   // Get the instructions.
-  root = _root;
-  nodes = _root.nodes;
-  graph = _root.graph;
-  final = _root.final;
-  labels = _root.labels;
+  root    = _root;
+  nodes   = _root.nodes;
+  graph   = _root.graph;
+  final   = _root.final;
+  labels  = _root.labels;
   
   
   // Get the options.
@@ -38,18 +42,6 @@ function __CoroutinePrototype(_root) constructor
   onComplete  = _define[$ "onComplete"] ?? _nop;
   onCleanup   = _define[$ "onCleanup"] ?? _nop;
   onError     = _define[$ "onError"]    ?? _nop;
-  
-  
-  /**
-  * Creates new active task of prototype.
-  *
-  * @param {Id.Instance | Struct} _this
-  * @param {Struct} _vars
-  */ 
-  static Dispatch = function(_this=other, _vars=undefined) 
-  { 
-    return new __CoroutineTask(self, _this, _vars); 
-  };
 }
 
 

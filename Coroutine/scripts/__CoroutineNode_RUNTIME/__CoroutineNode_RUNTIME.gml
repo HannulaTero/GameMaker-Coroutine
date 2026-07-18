@@ -1,4 +1,9 @@
 
+/*
+  
+  These "nodes" are runtime functions, which return required information for execution.
+  
+*/ 
 
 
 
@@ -50,7 +55,7 @@ function __CoroutineNode_RUNTIME_RETURN(_return)
   {
     result = _return ?? result;
     onComplete();
-    Destroy(self);
+    Destroy();
   }
   return undefined;
 }

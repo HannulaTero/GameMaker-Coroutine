@@ -6,7 +6,7 @@
   "name":"__Coroutine_Keywords",
   "parent":{
     "name":"Initialization",
-    "path":"folders/Coroutine/Initialization.yy",
+    "path":"folders/Coroutine Runtime/Initialization.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -1,26 +1,20 @@
 
 
 /**
-* Creates lookup-mapping from given array.
+* Creates lookup-mapping from given arguments
 * 
-* @param {Array<Any>} _array
 * @returns {Struct}
 */
-function __Coroutine_Mapping(_array)
+function __Coroutine_Mapping()
 {
-  var _mapping = {};
-  var _countOuter = array_length(_array);
-  for(var i = 0; i < _countOuter; i+=2)
+  var _mapping = { };
+  
+  for(var i = 0; i < argument_count; i += 2)
   {
-    var _lhs = _array[i + 0];
-    var _rhs = _array[i + 1];
-    _rhs = method(undefined, _rhs);
-    
-    var _countInner = array_length(_lhs);
-    for(var j = 0; j < _countInner; j++)
-    {
-      _mapping[$ _lhs[j]] = _rhs;
-    }
+    var _lhs = argument[i + 0];
+    var _rhs = argument[i + 1];
+    _mapping[$ _lhs] = method(undefined, _rhs);
   }
+  
   return _mapping;
 }

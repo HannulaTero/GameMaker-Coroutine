@@ -119,8 +119,8 @@
   "maintainGms1Font":false,
   "name":"ft_example",
   "parent":{
-    "name":"Coroutine Examples",
-    "path":"folders/Coroutine Examples.yy",
+    "name":"Coroutine x Examples",
+    "path":"folders/Coroutine x Examples.yy",
   },
   "pointRounding":0,
   "ranges":[

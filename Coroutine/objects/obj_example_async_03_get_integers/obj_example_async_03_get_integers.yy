@@ -9,7 +9,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Asyncs",
-    "path":"folders/Coroutine Examples/Examples Asyncs.yy",
+    "path":"folders/Coroutine x Examples/Examples Asyncs.yy",
   },
   "parentObjectId":{
     "name":"obj_example_base",

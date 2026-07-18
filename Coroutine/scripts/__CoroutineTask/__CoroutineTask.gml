@@ -9,32 +9,55 @@
 */
 function __CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
 {
+  // Static variables.
   static counter = 0;
+  
+  
+  // Static methods.
+  static Cancel       = __CoroutineTask__Cancel;
+  static Destroy      = __CoroutineTask__Destroy;
+  static Dispatch     = __CoroutineTask__Dispatch;
+  static Execute      = __CoroutineTask__Execute;
+  static Get          = __CoroutineTask__Get;
+  static HasChilds    = __CoroutineTask__HasChilds;
+  static HasListeners = __CoroutineTask__HasListeners;
+  static HasRequests  = __CoroutineTask__HasRequests;
+  static IsDelayed    = __CoroutineTask__IsDelayed;
+  static IsFinished   = __CoroutineTask__IsFinished;
+  static IsPaused     = __CoroutineTask__IsPaused;
+  static Pause        = __CoroutineTask__Pause;
+  static Resume       = __CoroutineTask__Resume;
+  static Set          = __CoroutineTask__Set;
+  static toString     = __CoroutineTask__toString;
+  
+  
+  // Unique identifier for tasks.
   identifier = counter++;
+  
   
   // Get the values from the prototype.
   prototype = _prototype;
-  graph = _prototype.graph;
-  labels = _prototype.labels;
-  final = _prototype.final;
+  graph     = _prototype.graph;
+  labels    = _prototype.labels;
+  final     = _prototype.final;
 
 
   // Execution states.
   // Locals are used up-keeping of timers and iterations for the execution.
   // Scope holds variables of coroutine, and reference to original self.
   var _self = self;
-  this = _this;
-  local = [];
-  scope = prototype.scoped ? { this: _this, coroutine: _self } : _this;
-  execute = graph.execute;
+  this      = _this;
+  local     = [];
+  scope     = prototype.scoped ? { this: _this, coroutine: _self } : _this;
+  execute   = graph.execute;
   childTasks = ds_map_create();
   asyncRequests = ds_map_create();
   asyncListeners = ds_map_create();
-  parent = undefined;
-  result = undefined;
-  finished = false;
-  delayed = false;
-  paused = false;
+  parent    = undefined;
+  result    = undefined;
+  finished  = false;
+  delayed   = false;
+  paused    = false;
   
   
   // Triggers.
@@ -78,259 +101,6 @@ function __CoroutineTask(_prototype, _this=other, _vars=undefined) constructor
     parent = COROUTINE_CURRENT_TASK;
     parent.childTasks[? identifier] = self;
   }
-  
-  
-  
-  /**
-  * Creates new active task of same prototype.
-  * 
-  * @param {Id.Instance|Struct} _this
-  * @param {Struct} _vars
-  * @returns {Struct.__CoroutineTask}
-  */ 
-  static Dispatch = function(_this=other, _vars=undefined) 
-  { 
-    return prototype.Dispatch(_this, _vars); 
-  };
-  
-  
-  
-  /**
-  * Returns current result of coroutine.
-  * 
-  * @returns {Any}
-  */ 
-  static Get = function() 
-  { 
-    return result;
-  };
-  
-  
-  
-  /**
-  * Set current result of coroutine.
-  * 
-  * @param {Any} _value
-  */ 
-  static Set = function(_value) 
-  { 
-    result = _value;
-    return self;
-  };
-  
-  
-  
-  /**
-  * Executes function in the coroutine's scope.
-  * 
-  * @param {Function} _func
-  */ 
-  static Execute = function(_func) 
-  {
-    with scope return _func();
-  };
-  
-  
-  
-  /**
-  * 
-  */ 
-  static Pause = function() 
-  {
-    // Can't pause if it's already paused or destroyed.
-    if (finished == true) 
-    || (paused == true)
-      return self;
-      
-    // Take a undeterminated break.
-    paused = true;
-    onPause();
-    ds_map_delete(COROUTINE_POOL_ACTIVE, identifier);
-    ds_map_delete(COROUTINE_POOL_DELAYED, identifier);
-    COROUTINE_POOL_PAUSED[? identifier] = self;
-    if (time_source_get_state(delaySource) != time_source_state_stopped)
-    {
-      time_source_stop(delaySource);
-    }
-    
-    return self;
-  };
-  
-  
-  
-  /**
-  * 
-  */ 
-  static Resume = function() 
-  { 
-    // Can't resume if it's not paused or destroyed.
-    if (finished == true) 
-    || (delayed == true)
-    || (paused == false)
-      return self;
-      
-    // Return to the usual action.
-    paused = false;
-    onResume();
-    ds_map_delete(COROUTINE_POOL_PAUSED, identifier);
-    COROUTINE_POOL_ACTIVE[? identifier] = self;
-    return self;
-  };
-  
-  
-  
-  /**
-  * Destroyes the coroutine, and calls onCancel -trigger.
-  */ 
-  static Cancel = function() 
-  {
-    // Can't cancel if already finished.
-    if (finished == true)
-      return self;
-    
-    // Trigger and remove itself.
-    onCancel();
-    Destroy();
-    return self; 
-  };
-  
-  
-  
-  /**
-  * 
-  * @returns {Bool}
-  */ 
-  static hasChilds = function() 
-  { 
-    return (ds_map_size(childTasks) > 0);
-  };
-  
-  
-  
-  /**
-  * Whether has pending async requests.
-  * 
-  * @returns {Bool}
-  */ 
-  static hasRequests = function() 
-  { 
-    return (ds_map_size(asyncRequests) > 0);
-  };
-  
-  
-  
-  /**
-  * Whether has async listeners.
-  * 
-  * @returns {Bool}
-  */ 
-  static hasListeners = function() 
-  { 
-    return (ds_map_size(asyncListeners) > 0);
-  };
-  
-  
-  
-  /**
-  * 
-  * @returns {Bool}
-  */ 
-  static isPaused = function() 
-  {
-    return paused; 
-  };
-  
-  
-  
-  /**
-  * 
-  * @returns {Bool}
-  */ 
-  static isDelayed = function() 
-  {
-    return delayed; 
-  };
-  
-  
-  
-  /**
-  * 
-  * @returns {Bool}
-  */ 
-  static isFinished = function() 
-  { 
-    return finished;
-  };
-  
-  
-  
-  /**
-  * Directly destroyes the coroutine without triggering onCancel.
-  */ 
-  static Destroy = function() 
-  { 
-    // Can't destroy what has already been destroyed.
-    if (finished == true) 
-      return self;
-    
-    // Trigger Cleanup.
-    onCleanup();
-    
-    // Put itself into right state, and remove data.
-    paused = false;
-    delayed = false;
-    finished = true;
-    ds_map_delete(COROUTINE_POOL_ACTIVE, identifier);
-    ds_map_delete(COROUTINE_POOL_PAUSED, identifier);
-    ds_map_delete(COROUTINE_POOL_DELAYED, identifier);
-    
-    // Remove itself from all childs.
-    var _childTasks = ds_map_keys_to_array(childTasks);
-    array_foreach(_childTasks, function(_identifier, i)
-    {
-      childTasks[? _identifier].parent = undefined;
-    });
-    array_resize(_childTasks, 0);
-    ds_map_destroy(childTasks);
-    
-    // Remove all async requests.
-    var _asyncRequests = ds_map_keys_to_array(asyncRequests);
-    array_foreach(_asyncRequests, function(_identifier, i)
-    {
-      asyncRequests[? _identifier].Destroy();
-    });
-    array_resize(_asyncRequests, 0);
-    ds_map_destroy(asyncRequests);
-    
-    // Remove all async listeners.
-    var _asyncListeners = ds_map_keys_to_array(asyncListeners);
-    array_foreach(_asyncListeners, function(_identifier, i)
-    {
-      asyncListeners[? _identifier].Destroy();
-    });
-    array_resize(_asyncListeners, 0);
-    ds_map_destroy(asyncListeners);
-    
-    // Destroy the delay-timer.
-    time_source_destroy(delaySource);
-    if (parent != undefined) 
-    {
-      ds_map_delete(parent.childTasks, identifier);
-    }
-    
-    return self;
-  };
-  
-  
-  
-  /**
-  * 
-  * @returns {String}
-  */ 
-  static toString = function()
-  {
-    return string(identifier);
-  };
 }
 
 

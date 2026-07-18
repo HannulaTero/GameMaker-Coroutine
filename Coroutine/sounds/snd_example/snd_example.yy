@@ -14,8 +14,8 @@
   "exportDir":"",
   "name":"snd_example",
   "parent":{
-    "name":"Coroutine Examples",
-    "path":"folders/Coroutine Examples.yy",
+    "name":"Coroutine x Examples",
+    "path":"folders/Coroutine x Examples.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

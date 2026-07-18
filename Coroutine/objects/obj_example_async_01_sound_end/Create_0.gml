@@ -1,4 +1,4 @@
-/// @desc WAIT SOUND TO FININSH.
+/// @desc WAIT SOUND TO FINISH.
 
 
 // You can give settings for async action. 

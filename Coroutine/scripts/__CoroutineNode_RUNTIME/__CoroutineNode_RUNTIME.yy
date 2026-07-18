@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"__CoroutineNode_RUNTIME",
   "parent":{
-    "name":"Runtime",
-    "path":"folders/Coroutine/Runtime.yy",
+    "name":"Parsing",
+    "path":"folders/Coroutine Runtime/Parsing.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

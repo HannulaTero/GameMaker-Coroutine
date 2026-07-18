@@ -6,7 +6,7 @@
   "name":"__CoroutineTransform",
   "parent":{
     "name":"Transform",
-    "path":"folders/Coroutine/Parsing/Transform.yy",
+    "path":"folders/Coroutine Runtime/Parsing/Transform.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

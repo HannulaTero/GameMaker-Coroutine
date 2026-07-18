@@ -9,7 +9,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Basics",
-    "path":"folders/Coroutine Examples/Examples Basics.yy",
+    "path":"folders/Coroutine x Examples/Examples Basics.yy",
   },
   "parentObjectId":{
     "name":"obj_example_base",

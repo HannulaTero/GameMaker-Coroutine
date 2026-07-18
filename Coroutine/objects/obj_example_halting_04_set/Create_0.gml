@@ -36,7 +36,7 @@ FINISH DISPATCH
 // Helper cororutine for printing out current result of first coroutine.
 // This showcases use of ".Get()" method.
 COROUTINE BEGIN
-  WHILE this.coroutine.isFinished() == false THEN
+  WHILE this.coroutine.IsFinished() == false THEN
     DELAY 0.25 SECONDS
     show_debug_message(this.coroutine.Get());
   END

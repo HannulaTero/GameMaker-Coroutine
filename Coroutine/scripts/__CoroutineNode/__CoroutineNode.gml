@@ -1,3 +1,8 @@
+/*
+
+  These are functions, which are used within macro.
+
+*/
 
 
 /**

@@ -16,11 +16,11 @@ taskA = COROUTINE BEGIN
 FINISH DISPATCH
 
 
-// Coroutine tasks have "isFinished()" -method, which can be utilized for waiting other task to finish first..
+// Coroutine tasks have "IsFinished()" -method, which can be utilized for waiting other task to finish first..
 taskB = COROUTINE BEGIN
   // Wait previous task to finish.
   show_debug_message("Task B is waiting...");
-  AWAIT this.taskA.isFinished() PASS
+  AWAIT this.taskA.IsFinished() PASS
   
   // Begin working.
   show_debug_message("Task B is working...");
@@ -29,7 +29,7 @@ taskB = COROUTINE BEGIN
 FINISH DISPATCH
 
 
-// AWAIT_COROUTINE awaits given task, so it does not require "isFinished".
+// AWAIT_COROUTINE awaits given task, so it does not require "IsFinished".
 // This also accepts array of tasks, so it can wait for multiple coroutines at once.
 taskC = COROUTINE BEGIN
   // Wait previous task to finish.

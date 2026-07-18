@@ -30,7 +30,7 @@ COROUTINE BEGIN
   
   // Await for the result.
   AWAIT_REQUESTS
-  if (request.hasFailed())
+  if (request.HasFailed())
   {
     show_debug_message($"Loading buffer has failed!");
     EXIT;

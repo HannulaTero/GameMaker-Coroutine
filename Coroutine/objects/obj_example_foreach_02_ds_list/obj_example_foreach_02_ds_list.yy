@@ -9,7 +9,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Examples Foreach",
-    "path":"folders/Coroutine Examples/Examples Foreach.yy",
+    "path":"folders/Coroutine x Examples/Examples Foreach.yy",
   },
   "parentObjectId":{
     "name":"obj_example_base",

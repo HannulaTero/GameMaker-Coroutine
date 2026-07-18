@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"__CoroutineAsync_Request",
+  "%Name":"__CoroutineAsyncRequest___DoRequest",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__CoroutineAsync_Request",
+  "name":"__CoroutineAsyncRequest___DoRequest",
   "parent":{
     "name":"Async Request",
-    "path":"folders/Coroutine/Runtime/Async Request.yy",
+    "path":"folders/Coroutine Runtime/Runtime/Async Request.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

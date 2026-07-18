@@ -1,42 +1,63 @@
 
+
 /**
+* 
 * 
 * @param {Struct} _params
 */
 function __CoroutineAsyncListener(_params) constructor 
 {
+  // Static variables.
   static counter = 0;
+  
+  
+  // Static methods.
+  static Destroy    = __CoroutineAsyncListener__Destroy;
+  static Get        = __CoroutineAsyncListener__Get;
+  static IsFinished = __CoroutineAsyncListener__IsFinished;
+  
+  
+  // Unique identifier.
   identifier = counter++;
   
+  
   // Async variables.
-  type = _params.option[$ "type"];
-  name = _params.option[$ "name"] ?? $"ASYNC Listener[{identifier}]";
-  desc = _params.option[$ "desc"] ?? "";
-  this = _params.option[$ "this"] ?? other; 
-  timeout = _params.option[$ "timeout"]; // seconds.
-  result = undefined;
-  paused = false;
-  finished = false;
-  parent = undefined;
-  timer = undefined;
+  type      = _params.option[$ "type"];
+  name      = _params.option[$ "name"] ?? $"ASYNC Listener[{identifier}]";
+  desc      = _params.option[$ "desc"] ?? "";
+  this      = _params.option[$ "this"] ?? other; 
+  timeout   = _params.option[$ "timeout"]; // seconds.
+  result    = undefined;
+  paused    = false;
+  finished  = false;
+  parent    = undefined;
+  timer     = undefined;
   
   
   // Callbacks.
-  var _nop = function() {};
-  onListen = _params[$ "onListen"];
+  var _nop  = function() {};
+  onListen  = _params[$ "onListen"];
   onTimeout = _params[$ "onTimeout"] ?? _nop;
   
   
   // Sanity check:
   if (onListen == undefined)
+  {
     throw($"ASYNC Listener: onListen must be defined.");
-  onListen = method(this, onListen);
+  }
   
   if (type == undefined)
+  {
     throw($"ASYNC Listener: expected a async event -type.");
+  }
     
   if (ds_map_exists(COROUTINE_ASYNC_LISTENERS, type) == false)
+  {
     throw($"ASYNC Listener: async event type is invalid: '{type}'.");
+  }
+  
+  onListen = method(this, onListen);
+  
   COROUTINE_ASYNC_LISTENERS[? type][? identifier] = self;
   
   
@@ -49,6 +70,7 @@ function __CoroutineAsyncListener(_params) constructor
   
      
   // Make timeout -timer.
+  // This is not repeated.
   if (timeout != undefined)
   {
     timer = call_later(timeout, time_source_units_seconds, function()
@@ -58,50 +80,6 @@ function __CoroutineAsyncListener(_params) constructor
       Destroy();
     });
   }
-  
-  
-  /**
-  * Async listen current result.
-  * 
-  * @returns {Any}
-  */
-  static Get = function()
-  {
-    return result;
-  };
-  
-  
-  
-  /**
-  * 
-  * @returns {Bool}
-  */ 
-  static isFinished = function() 
-  { 
-    return finished;
-  };
-  
-  
-  
-  /**
-  * Async listen is removed.
-  */
-  static Destroy = function()
-  {
-    // Can't destroy what has already been destroyed.
-    if (finished == true) 
-      return self;
-      
-    // Put itself into right state, and remove data.
-    paused = false;
-    finished = true;
-    ds_map_delete(COROUTINE_ASYNC_LISTENERS[? type], identifier);
-    if (timer != undefined)
-      call_cancel(timer);
-    if (parent != undefined)
-      ds_map_delete(parent.asyncListeners, identifier);
-    return self;
-  };
 }
 
 

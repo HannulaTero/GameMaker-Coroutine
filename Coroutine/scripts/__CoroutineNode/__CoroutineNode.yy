@@ -6,7 +6,7 @@
   "name":"__CoroutineNode",
   "parent":{
     "name":"Parsing",
-    "path":"folders/Coroutine/Parsing.yy",
+    "path":"folders/Coroutine Runtime/Parsing.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
