@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"snd_example",
+  "%Name":"SND_Example",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -10,17 +10,17 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.0,
+  "duration":2.971882,
   "exportDir":"",
-  "name":"snd_example",
+  "name":"SND_Example",
   "parent":{
-    "name":"Coroutine x Examples",
-    "path":"folders/Coroutine x Examples.yy",
+    "name":"Assets",
+    "path":"folders/Korutiini x Examples/Assets.yy",
   },
   "preload":false,
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"snd_example.mp3",
+  "soundFile":"SND_Example.mp3",
   "volume":1.0,
 }

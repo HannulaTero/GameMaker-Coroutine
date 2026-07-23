@@ -1,0 +1,48 @@
+
+/**
+* Structure for holding blueprints for creating coroutine -tasks.
+* 
+* @param {Struct} _root
+*/ 
+function __KorutiiniPrototype(_root) constructor
+{
+  // Static variables.
+  static counter = 0;
+  
+  
+  // Static methods.
+  static Dispatch = __KorutiiniPrototype__Dispatch;
+  
+  
+  // Get the instructions.
+  root    = _root;
+  nodes   = _root.nodes;
+  graph   = _root.graph;
+  final   = _root.final;
+  labels  = _root.labels;
+  
+  
+  // Get the options.
+  var _option = _root.define.option;
+  name    = _option[$ "name"]   ?? $"KorutiiniPrototype_{counter++}";
+  desc    = _option[$ "desc"]   ?? "";
+  slot    = _option[$ "slot"]   ?? 1.0;
+  scoped  = _option[$ "scoped"] ?? true;
+  
+  
+  // Get the triggers.
+  var _nop = function() {};
+  var _define = _root.define;
+  onInit      = _define[$ "onInit"]     ?? _nop;
+  onYield     = _define[$ "onYield"]    ?? _nop;
+  onPause     = _define[$ "onPause"]    ?? _nop;
+  onLaunch    = _define[$ "onLaunch"]   ?? _nop;
+  onResume    = _define[$ "onResume"]   ?? _nop;
+  onCancel    = _define[$ "onCancel"]   ?? _nop;
+  onComplete  = _define[$ "onComplete"] ?? _nop;
+  onCleanup   = _define[$ "onCleanup"] ?? _nop;
+  onError     = _define[$ "onError"]    ?? _nop;
+}
+
+
+
