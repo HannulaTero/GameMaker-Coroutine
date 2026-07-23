@@ -12,7 +12,7 @@ KORUTIINI BEGIN
   
   // Listens to the event.
   ASYNC_LISTENER type: ev_async_dialog
-    ON_LISTEN show_debug_message($"Listener: {async_load[? "result"]}");
+    ON_LISTEN KorutiiniExample_Log($"Listener: {async_load[? "result"]}");
   ASYNC_END
   
   // Make the request.
@@ -24,8 +24,8 @@ KORUTIINI BEGIN
   
   // Await for the result.
   AWAIT_REQUESTS
-  show_debug_message($"String has been fetched!");
-  show_debug_message($"User wrote: {text}");
+  KorutiiniExample_Log($"String has been fetched!");
+  KorutiiniExample_Log($"User wrote: {text}");
   
 FINISH DISPATCH 
 

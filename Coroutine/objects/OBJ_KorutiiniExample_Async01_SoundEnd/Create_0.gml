@@ -12,12 +12,12 @@ KORUTIINI BEGIN
       name: "Sound end",
       desc: "Waits action until sound has stopped",
       request: audio_play_sound(SND_Example, 0, false),
-    ON_SUCCESS show_debug_message($"[{_async.request}] Success!");
+    ON_SUCCESS KorutiiniExample_Log($"[{_async.request}] Success!");
   ASYNC_END
   
   // Await for the result.
   AWAIT_REQUESTS
-  show_debug_message($"Sound has finished!");
+  KorutiiniExample_Log($"Sound has finished!");
   
 FINISH DISPATCH
 

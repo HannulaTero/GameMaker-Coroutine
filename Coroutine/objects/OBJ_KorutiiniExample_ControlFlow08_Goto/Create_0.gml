@@ -68,16 +68,16 @@ KORUTIINI BEGIN
   PRINT $"Jumping out of nested loops with goto";
   
   WHILE true THEN
-    show_debug_message("1st loop: while") 
+    KorutiiniExample_Log("1st loop: while") 
     
     FOR i = 0 COND i < 10 ITER i++ THEN
-      show_debug_message("2nd loop: for")  
+      KorutiiniExample_Log("2nd loop: for")  
       
       LOOP 
-        show_debug_message("3rd loop: loop")  
+        KorutiiniExample_Log("3rd loop: loop")  
         
         REPEAT 10 THEN
-          show_debug_message("4th loop: repeat")  
+          KorutiiniExample_Log("4th loop: repeat")  
           GOTO "quit nested loop";
           
         END 
@@ -86,7 +86,7 @@ KORUTIINI BEGIN
   END
   
   LABEL "quit nested loop" PASS
-  show_debug_message("Broke out of all loops in one go.");  
+  KorutiiniExample_Log("Broke out of all loops in one go.");  
   
 FINISH DISPATCH 
 

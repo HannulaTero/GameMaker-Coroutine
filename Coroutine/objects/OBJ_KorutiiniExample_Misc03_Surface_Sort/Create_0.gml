@@ -37,7 +37,7 @@ BEGIN
   // Generate random data for buffer to put into surface.
   SET "Generating\nBuffer data" PASS
   KORUTIINI BEGIN
-    show_debug_message("Start generating buffer data.");
+    KorutiiniExample_Log("Start generating buffer data.");
     left = this.count;
     chunk = 256;
     dtype = this.dtype;
@@ -53,8 +53,8 @@ BEGIN
       }
       left -= chunk;
     END
-    show_debug_message("Buffer filled.");
-    show_debug_message($"----------------------------------------");
+    KorutiiniExample_Log("Buffer filled.");
+    KorutiiniExample_Log($"----------------------------------------");
   FINISH DISPATCH 
   AWAIT_SUBTASKS
   
@@ -112,10 +112,10 @@ BEGIN
     ON_YIELD
       gpu_pop_state();
       shader_reset();
-      show_debug_message($"did {iterations} iterations.");
-      show_debug_message($"time taken {(get_timer() - timer) / 1_000.0} ms.");
-      show_debug_message($"progress {(i / this.count) * 100.0} %.");
-      show_debug_message($"----------------------------------------");
+      KorutiiniExample_Log($"did {iterations} iterations.");
+      KorutiiniExample_Log($"time taken {(get_timer() - timer) / 1_000.0} ms.");
+      KorutiiniExample_Log($"progress {(i / this.count) * 100.0} %.");
+      KorutiiniExample_Log($"----------------------------------------");
     
     
     // Make sure final results are stored in target surface.
@@ -133,7 +133,7 @@ BEGIN
     
     // Do the actual sorting. Do in chunks, so coroutine can pause.
     BEGIN
-      show_debug_message("Started sorting.");
+      KorutiiniExample_Log("Started sorting.");
       wchunk = min(128, this.size[0]);
       hchunk = min(128, this.size[1]);
     
@@ -155,7 +155,7 @@ BEGIN
         tempA = tempC;
         iterations++;
       END
-      show_debug_message("Surface sorted.");
+      KorutiiniExample_Log("Surface sorted.");
     FINISH
   DISPATCH
   AWAIT_SUBTASKS

@@ -17,7 +17,7 @@ KORUTIINI
     // Note, that this doesn't do any fail-safe if during iteration some instances are destroyed.
     PRINT "iterating over instances of 'obj_example_instance'.";
     FOREACH key, inst: value IN OBJ_KorutiiniExample_EntityA THEN
-      show_debug_message($"instance[{key}] = \{ x: {inst.x}, y: {inst.y} \};");
+      KorutiiniExample_Log($"instance[{key}] = \{ x: {inst.x}, y: {inst.y} \};");
       DELAY 3 FRAMES
     END
     PRINT "done.";

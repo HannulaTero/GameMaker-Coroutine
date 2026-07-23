@@ -16,7 +16,7 @@ buffer = buffer_create(bytes, buffer_fixed, dsize);
 // But because of performance penalty from coroutines, it is good to do in chunks.
 taskBufferCreate = KORUTIINI scoped: false 
 BEGIN
-  show_debug_message("Start generating buffer data.");
+  KorutiiniExample_Log("Start generating buffer data.");
   buffer_seek(buffer, buffer_seek_start, 0);
   WHILE count > 0 THEN
     repeat(min(count, chunk))
@@ -25,7 +25,7 @@ BEGIN
     }
     count -= chunk;
   END
-  show_debug_message("Buffer filled.");
+  KorutiiniExample_Log("Buffer filled.");
 FINISH DISPATCH 
 
 
@@ -36,21 +36,21 @@ KORUTIINI BEGIN
   AWAIT this.taskBufferCreate.IsFinished() PASS
   
   // Make the request.
-  show_debug_message("Started saving the buffer.");
+  KorutiiniExample_Log("Started saving the buffer.");
   request = ASYNC_REQUEST
     DO_REQUEST return buffer_save_async(this.buffer, this.filename, 0, this.bytes);
-    ON_SUCCESS show_debug_message($"[{_async.request}] Success!");
-    ON_FAILURE show_debug_message($"[{_async.request}] Failure!");
+    ON_SUCCESS KorutiiniExample_Log($"[{_async.request}] Success!");
+    ON_FAILURE KorutiiniExample_Log($"[{_async.request}] Failure!");
   ASYNC_END
   
   // Await for the result.
   AWAIT_REQUESTS
   if (request.HasFailed())
   {
-    show_debug_message($"Saving buffer has failed!");
+    KorutiiniExample_Log($"Saving buffer has failed!");
     EXIT;
   }
-  show_debug_message($"Buffer has been saved!");
+  KorutiiniExample_Log($"Buffer has been saved!");
   
 FINISH DISPATCH
 

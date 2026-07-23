@@ -14,7 +14,7 @@ KORUTIINI BEGIN
 
   ASYNC_LISTENER type: ev_async_web
     ON_LISTEN
-      show_debug_message(async_load[? "result"]);
+      KorutiiniExample_Log(async_load[? "result"]);
   ASYNC_END
 
 
@@ -27,7 +27,7 @@ KORUTIINI BEGIN
     REPEAT 100 THEN
       result += 1;
     END END END
-    show_debug_message((get_timer() - time) / 1000);
+    KorutiiniExample_Log((get_timer() - time) / 1000);
   END
   
 FINISH DISPATCH

@@ -10,17 +10,36 @@ array_foreach(_asyncListenersList, function(_type, i)
 {
   ASYNC_LISTENER type: _type
   ON_LISTEN 
-    show_debug_message($"===============================================");
-    show_debug_message($"Async Listener");
-    show_debug_message($" - event event   : {event_type}");
-    show_debug_message($" - event number  : {event_number}");
+    KorutiiniExample_Log($"===============================================");
+    KorutiiniExample_Log($"Async Listener");
+    KorutiiniExample_Log($" - event event   : {event_type}");
+    KorutiiniExample_Log($" - event number  : {event_number}");
     if (async_load != -1)
     && (async_load != undefined)
-      show_debug_message($" - async status  : {async_load[? "status"]}");
-    show_debug_message($"===============================================");
+    {
+      KorutiiniExample_Log($" - async status  : {async_load[? "status"]}");
+    }
+    KorutiiniExample_Log($"===============================================");
   ASYNC_END
 });
 array_resize(_asyncListenersList, 0);
+
+
+// For logging out the console messages.
+alarm[1] = 300;
+self.logs = [ ];
+self.Log = function(_message)
+{
+  alarm[1] = 300;
+  array_insert(self.logs, 0, _message);
+  var _maxCount = 64;
+  var _count = array_length(self.logs);
+  if (_count > _maxCount)
+  {
+    array_delete(self.logs, _count - 1, -_count);
+  }
+};
+
 
 
 // Set drawing location.
@@ -31,7 +50,7 @@ y = ystart;
 
 
 // Group construct.
-Group = function(_name, _examples) constructor
+self.Group = function(_name, _examples) constructor
 {
   name = _name;
   index = 0;

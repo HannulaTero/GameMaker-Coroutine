@@ -5,13 +5,13 @@
 // But it can be used independently to split GML code in chunks.
 // PASS does not halt execution by itself, it just helps split GML code into chunks.
 KORUTIINI BEGIN
-  show_debug_message("First");
+  KorutiiniExample_Log("First");
   PASS
-  show_debug_message("Second");
+  KorutiiniExample_Log("Second");
   PASS
-  show_debug_message("Third");
+  KorutiiniExample_Log("Third");
   PASS
-  show_debug_message("Fourth");
+  KorutiiniExample_Log("Fourth");
   PASS
 FINISH DISPATCH
 
@@ -28,7 +28,7 @@ FINISH DISPATCH
 // Following example would normally stutter game for long time, 
 // but manager is able to split execution to several frames because of PASS. 
 KORUTIINI BEGIN
-  show_debug_message("Begin long execution.");
+  KorutiiniExample_Log("Begin long execution.");
   
   // This function loops 15-32 ms
   // -> This means it can take multiple frames.
@@ -37,7 +37,7 @@ KORUTIINI BEGIN
   {
     var _time = current_time + irandom_range(50, 100); 
     while(current_time < _time) { };
-    show_debug_message($"Loop [{self.counter}] done!");
+    KorutiiniExample_Log($"Loop [{self.counter}] done!");
     self.counter += 1;
   };
   
@@ -68,7 +68,7 @@ KORUTIINI BEGIN
   self.LongLoop(); PASS
   self.LongLoop(); PASS
 
-  show_debug_message("Finished execution.");
-  show_debug_message(" -> With coroutine splitting, game didn't freeze.");
+  KorutiiniExample_Log("Finished execution.");
+  KorutiiniExample_Log(" -> With coroutine splitting, game didn't freeze.");
   
 FINISH DISPATCH

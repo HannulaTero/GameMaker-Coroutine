@@ -18,7 +18,7 @@ KORUTIINI BEGIN
   
   ASYNC_LISTENER type: ev_broadcast_message
     ON_LISTEN
-      show_debug_message($"broadcast element id: {event_data[? "element_id"]}");
+      KorutiiniExample_Log($"broadcast element id: {event_data[? "element_id"]}");
       var _element = event_data[? "element_id"];
       if (layer_get_element_type(_element) != layerelementtype_instance)
         return;
@@ -31,7 +31,7 @@ KORUTIINI BEGIN
   
   LOOP
     AWAIT coroutine.Get() != undefined PASS 
-    show_debug_message($"broadcast: {coroutine.Get()}");
+    KorutiiniExample_Log($"broadcast: {coroutine.Get()}");
     if (coroutine.Get() == "destroy")
     {
       instance_destroy(this);

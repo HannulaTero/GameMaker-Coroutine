@@ -9,26 +9,26 @@ KORUTIINI BEGIN
 
   // Iterating over array.
   FOREACH key, value IN array THEN
-    show_debug_message($"array[{key}] = {value};");
+    KorutiiniExample_Log($"array[{key}] = {value};");
     DELAY 3 FRAMES
   END
-  show_debug_message("First array done!");
+  KorutiiniExample_Log("First array done!");
   
 
   // Iterator keys are both optional.
   FOREACH IN array THEN
-    show_debug_message($"Why iterate over if you don't use iterator keys?");
+    KorutiiniExample_Log($"Why iterate over if you don't use iterator keys?");
     DELAY 3 FRAMES
   END
-  show_debug_message("Second array done!");
+  KorutiiniExample_Log("Second array done!");
   
 
   // Both iterator keys can also be renamed.
   FOREACH i: key, text: value IN ["HELLO", "WORLD", "!", "GOOD", "DAY"] THEN
-    show_debug_message($"[{i}] {text}");
+    KorutiiniExample_Log($"[{i}] {text}");
     DELAY 3 FRAMES
   END
-  show_debug_message("Third array done!");
+  KorutiiniExample_Log("Third array done!");
 
 FINISH DISPATCH 
 

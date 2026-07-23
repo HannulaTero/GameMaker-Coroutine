@@ -13,7 +13,7 @@ KORUTIINI BEGIN
   // Note, that start-value is inclusive, stop-value is exclusive.
   PRINT $"iterating over number: {numberA}.";
   FOREACH key, value IN numberA THEN
-    show_debug_message($"{key} => {value};");
+    KorutiiniExample_Log($"{key} => {value};");
     DELAY 3 FRAMES
   END
   PRINT "done.";
@@ -23,7 +23,7 @@ KORUTIINI BEGIN
   // It starts from zero and goes towars number like positive number.
   PRINT $"iterating over number: {numberB}.";
   FOREACH key, value IN numberB THEN
-    show_debug_message($"{key} => {value};");
+    KorutiiniExample_Log($"{key} => {value};");
     DELAY 3 FRAMES
   END
   PRINT "done.";

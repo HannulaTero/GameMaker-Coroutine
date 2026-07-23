@@ -5,22 +5,22 @@
 KORUTIINI BEGIN
 
   IF choose(true, false) THEN
-    show_debug_message("THEN-branch");
+    KorutiiniExample_Log("THEN-branch");
     
   ELIF choose(true, false) THEN
-    show_debug_message("ELIF[0]-branch");
+    KorutiiniExample_Log("ELIF[0]-branch");
     
   ELIF choose(true, false) THEN
-    show_debug_message("ELIF[1]-branch");
+    KorutiiniExample_Log("ELIF[1]-branch");
     
   ELIF choose(true, false) THEN
-    show_debug_message("ELIF[2]-branch");
+    KorutiiniExample_Log("ELIF[2]-branch");
     
   ELIF choose(true, false) THEN
-    show_debug_message("ELIF[3]-branch");
+    KorutiiniExample_Log("ELIF[3]-branch");
     
   ELSE
-    show_debug_message("ELSE-branch");
+    KorutiiniExample_Log("ELSE-branch");
     
   END
 

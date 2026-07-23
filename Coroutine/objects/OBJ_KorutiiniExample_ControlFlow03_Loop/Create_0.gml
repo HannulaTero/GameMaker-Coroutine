@@ -9,10 +9,10 @@
 task = KORUTIINI BEGIN
 
   LOOP 
-    show_debug_message("Hello world!");
+    KorutiiniExample_Log("Hello world!");
     YIELD
   END
-  show_debug_message("It will never get here!");
+  KorutiiniExample_Log("It will never get here!");
 
 FINISH DISPATCH 
 
@@ -22,5 +22,5 @@ FINISH DISPATCH
 KORUTIINI BEGIN 
   DELAY 1.0 SECONDS 
   this.task.Destroy();
-  show_debug_message("Another coroutine broke the loop!");
+  KorutiiniExample_Log("Another coroutine broke the loop!");
 FINISH DISPATCH

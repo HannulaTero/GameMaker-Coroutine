@@ -8,9 +8,9 @@ KORUTIINI
   slot: 1.0,
   scoped: true,
 BEGIN
-  show_debug_message("Wait 4 seconds...");
+  KorutiiniExample_Log("Wait 4 seconds...");
   DELAY 4_000.0 MILLIS
-  show_debug_message("Hei maailma!");
+  KorutiiniExample_Log("Hei maailma!");
 FINISH DISPATCH
 
 

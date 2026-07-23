@@ -15,7 +15,7 @@ KORUTIINI
     // Behaves same as array, numberic key and value.
     PRINT "iterating over list.";
     FOREACH key, value IN list THEN
-      show_debug_message($"list[| {key}] = {value};");
+      KorutiiniExample_Log($"list[| {key}] = {value};");
       DELAY 3 FRAMES
     END
     PRINT "done.";

@@ -21,7 +21,7 @@ KORUTIINI
     // Iterating over buffer just gives raw bytes us usigned 8bit integers.
     PRINT "iterating over buffer as raw bytes.";
     FOREACH key, value IN buffer THEN
-      show_debug_message($"buffer_peek(buffer, buffer_u8, {key}) = {value};");
+      KorutiiniExample_Log($"buffer_peek(buffer, buffer_u8, {key}) = {value};");
       DELAY 3 FRAMES
     END
     PRINT "done.";

@@ -26,7 +26,7 @@ KORUTIINI BEGIN
   ASYNC_END
   
   // Await both. 
-  show_debug_message("Waiting for answers.");
+  KorutiiniExample_Log("Waiting for answers.");
   AWAIT_REQUESTS
   
   // Succession test.
@@ -34,14 +34,14 @@ KORUTIINI BEGIN
   || (is_string(width))
   || (is_string(height))
   {
-    show_debug_message("Failed to fetch the size.");
+    KorutiiniExample_Log("Failed to fetch the size.");
     EXIT;
   }
   
   // Set the final values.
   this.width = width;
   this.height = height;
-  show_debug_message($"Fetched size: [{width}, {height}].");
+  KorutiiniExample_Log($"Fetched size: [{width}, {height}].");
   
 FINISH DISPATCH
 

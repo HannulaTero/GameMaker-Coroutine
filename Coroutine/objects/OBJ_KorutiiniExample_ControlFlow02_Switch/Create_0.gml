@@ -4,10 +4,10 @@
 // Simplest switch-statement does not have cases or default action.
 // Practically this example does nothing.
 KORUTIINI BEGIN
-  show_debug_message("First example.");
+  KorutiiniExample_Log("First example.");
   SWITCH 0 
   END
-  show_debug_message("done.");
+  KorutiiniExample_Log("done.");
 FINISH DISPATCH
 
 
@@ -15,11 +15,11 @@ FINISH DISPATCH
 // In following example default action is always selected.
 KORUTIINI BEGIN
   DELAY 0.5 SECONDS
-  show_debug_message("Second example.");
+  KorutiiniExample_Log("Second example.");
   SWITCH irandom(5) 
-    DEFAULT show_debug_message(" - Default case");
+    DEFAULT KorutiiniExample_Log(" - Default case");
   END
-  show_debug_message("done.");
+  KorutiiniExample_Log("done.");
 FINISH DISPATCH
 
 
@@ -27,14 +27,14 @@ FINISH DISPATCH
 // In following example if case is not found, then it does not select anything, as default is not defined.
 KORUTIINI BEGIN
   DELAY 1.0 SECONDS
-  show_debug_message("Third example.");
+  KorutiiniExample_Log("Third example.");
   SWITCH irandom(5) 
-    CASE 0 THEN show_debug_message(" - Case 0");
-    CASE 1 THEN show_debug_message(" - Case 1"); 
-    CASE 2 THEN show_debug_message(" - Case 2");
-    CASE 3 THEN show_debug_message(" - Case 3");
+    CASE 0 THEN KorutiiniExample_Log(" - Case 0");
+    CASE 1 THEN KorutiiniExample_Log(" - Case 1"); 
+    CASE 2 THEN KorutiiniExample_Log(" - Case 2");
+    CASE 3 THEN KorutiiniExample_Log(" - Case 3");
   END
-  show_debug_message("done.");
+  KorutiiniExample_Log("done.");
 FINISH DISPATCH
 
 
@@ -42,16 +42,16 @@ FINISH DISPATCH
 // In following example cases are defined between 0 to 8, and default value is chosen otherwise., 
 KORUTIINI BEGIN
   DELAY 1.5 SECONDS
-  show_debug_message("Fourth example.");
+  KorutiiniExample_Log("Fourth example.");
   SWITCH irandom(10) 
-    CASE [0, 1, 2] THEN show_debug_message(" - Case 0 to 2");
-    CASE [3, 4, 5] THEN show_debug_message(" - Case 3 to 5"); 
-    CASE 6 THEN show_debug_message(" - Case 6");
-    CASE 7 THEN show_debug_message(" - Case 7");
-    CASE 8 THEN show_debug_message(" - Case 8");
-    DEFAULT show_debug_message(" - Default case");
+    CASE [0, 1, 2] THEN KorutiiniExample_Log(" - Case 0 to 2");
+    CASE [3, 4, 5] THEN KorutiiniExample_Log(" - Case 3 to 5"); 
+    CASE 6 THEN KorutiiniExample_Log(" - Case 6");
+    CASE 7 THEN KorutiiniExample_Log(" - Case 7");
+    CASE 8 THEN KorutiiniExample_Log(" - Case 8");
+    DEFAULT KorutiiniExample_Log(" - Default case");
   END
-  show_debug_message("done.");
+  KorutiiniExample_Log("done.");
 FINISH DISPATCH
 
 

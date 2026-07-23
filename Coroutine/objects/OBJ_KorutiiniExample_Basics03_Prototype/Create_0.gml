@@ -2,13 +2,13 @@
 
 // When you define coroutine, you are actually creating a "prototype" for it.
 // This prototype is cached and reused across different dispatches of same prototype.
-show_debug_message("Prototypes don't do execution.");
+KorutiiniExample_Log("Prototypes don't do execution.");
 
 
 // Following code will only create coroutine prototype.
 // Notice the missing "DISPATCH", which would create a new active coroutine task.
 KORUTIINI BEGIN 
-  show_debug_message("To be or not to be.");
+  KorutiiniExample_Log("To be or not to be.");
 FINISH
 
 
@@ -16,7 +16,7 @@ FINISH
 // Note, since prototype has not been dispatched, it does not have any active tasks yet.
 prototype = KORUTIINI BEGIN 
   DELAY irandom_range(30, 120) FRAMES 
-  show_debug_message("That's the question.");
+  KorutiiniExample_Log("That's the question.");
 FINISH
 
 

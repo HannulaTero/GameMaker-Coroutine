@@ -8,7 +8,7 @@ KORUTIINI BEGIN FINISH DISPATCH
 // So let's print hello world.
 // This will create a new active coroutine, which will be executed end of the frame.
 KORUTIINI BEGIN 
-  show_debug_message("HELLO WORLD!");
+  KorutiiniExample_Log("HELLO WORLD!");
 FINISH DISPATCH
 
 
@@ -16,7 +16,7 @@ FINISH DISPATCH
 // Other delay-types are: MICROS, MILLIS and FRAMES.
 KORUTIINI BEGIN
   DELAY 1.0 SECONDS
-  show_debug_message("HELLO WORLD AGAIN!");
+  KorutiiniExample_Log("HELLO WORLD AGAIN!");
 FINISH DISPATCH
 
 

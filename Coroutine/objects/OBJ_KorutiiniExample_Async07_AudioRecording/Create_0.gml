@@ -66,10 +66,10 @@ BEGIN
         _async.Failure();
         return;
       }
-      show_debug_message($"Recorder [{recorderIndex}] was selected.");
+      KorutiiniExample_Log($"Recorder [{recorderIndex}] was selected.");
     
     ON_FAILURE
-      show_debug_message($"Selecting recorder has failed.");
+      KorutiiniExample_Log($"Selecting recorder has failed.");
       
   ASYNC_END
   
@@ -78,7 +78,7 @@ BEGIN
   AWAIT_REQUESTS
   if (requestIndex.HasFailed())
   {
-    show_debug_message("Aborting the recording.");
+    KorutiiniExample_Log("Aborting the recording.");
     EXIT;
   }
     
@@ -103,7 +103,7 @@ BEGIN
       // Finish listening.
       if (offset >= this.bytes)
       {
-        show_debug_message("Recording finished!");
+        KorutiiniExample_Log("Recording finished!");
         audio_stop_recording(channel);
         _async.Destroy();
       }
@@ -114,7 +114,7 @@ BEGIN
   KORUTIINI BEGIN
     time = current_time;
     WHILE (this.requestRecord.IsFinished() == false) THEN 
-      show_debug_message($"Recording... {(current_time - time) / 1_000.0} s");
+      KorutiiniExample_Log($"Recording... {(current_time - time) / 1_000.0} s");
       DELAY 0.5 SECONDS
     END
   FINISH DISPATCH
@@ -135,13 +135,13 @@ BEGIN
   
   
   // Now finally play sound!
-  show_debug_message($"Sound starts playing now!");
+  KorutiiniExample_Log($"Sound starts playing now!");
   ASYNC_REQUEST
     DO_REQUEST return audio_play_sound(this.sound, 0, false);
-    ON_SUCCESS show_debug_message($"[{_async.request}] Success!");
+    ON_SUCCESS KorutiiniExample_Log($"[{_async.request}] Success!");
   ASYNC_END
   AWAIT_REQUESTS
-  show_debug_message($"Sound has played!");
+  KorutiiniExample_Log($"Sound has played!");
   
   
 FINISH DISPATCH

@@ -119,8 +119,8 @@
   "maintainGms1Font":false,
   "name":"FONT_Example",
   "parent":{
-    "name":"Assets",
-    "path":"folders/Korutiini x Examples/Assets.yy",
+    "name":"Korutiini x Examples",
+    "path":"folders/Korutiini x Examples.yy",
   },
   "pointRounding":0,
   "ranges":[

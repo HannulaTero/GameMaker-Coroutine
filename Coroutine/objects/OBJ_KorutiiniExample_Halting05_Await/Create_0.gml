@@ -7,25 +7,25 @@
 
 // Here is example task, which waits until another one is one.
 taskA = KORUTIINI BEGIN 
-  show_debug_message("Task A is waiting...");
+  KorutiiniExample_Log("Task A is waiting...");
   AWAIT choose(true, false) PASS
   
-  show_debug_message("Task A is working...");
+  KorutiiniExample_Log("Task A is working...");
   DELAY 0.5 SECONDS
-  show_debug_message("Task A is done!");
+  KorutiiniExample_Log("Task A is done!");
 FINISH DISPATCH
 
 
 // Coroutine tasks have "IsFinished()" -method, which can be utilized for waiting other task to finish first..
 taskB = KORUTIINI BEGIN
   // Wait previous task to finish.
-  show_debug_message("Task B is waiting...");
+  KorutiiniExample_Log("Task B is waiting...");
   AWAIT this.taskA.IsFinished() PASS
   
   // Begin working.
-  show_debug_message("Task B is working...");
+  KorutiiniExample_Log("Task B is working...");
   DELAY 1.5 SECONDS
-  show_debug_message("Task B is done!");
+  KorutiiniExample_Log("Task B is done!");
 FINISH DISPATCH
 
 
@@ -33,13 +33,13 @@ FINISH DISPATCH
 // This also accepts array of tasks, so it can wait for multiple coroutines at once.
 taskC = KORUTIINI BEGIN
   // Wait previous task to finish.
-  show_debug_message("Task C is waiting...");
+  KorutiiniExample_Log("Task C is waiting...");
   AWAIT_KORUTIINI this.taskB PASS
   
   // Begin working.
-  show_debug_message("Task C is working...");
+  KorutiiniExample_Log("Task C is working...");
   DELAY 1.5 SECONDS
-  show_debug_message("Task C is done!");
+  KorutiiniExample_Log("Task C is done!");
 
 FINISH DISPATCH
 

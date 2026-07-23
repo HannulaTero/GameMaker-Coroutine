@@ -8,7 +8,7 @@ KORUTIINI BEGIN
   failed = false;
   
   // Make the request.
-  show_debug_message($"Making URL request: '{url}'!");
+  KorutiiniExample_Log($"Making URL request: '{url}'!");
   ASYNC_REQUEST
     DO_REQUEST 
       return http_get(url);
@@ -21,14 +21,14 @@ KORUTIINI BEGIN
       {
         _progress = $"{(_contentLength / _sizeDownloaded) * 100.0} %"
       }
-      show_debug_message($"[{_async.request}] Pending {_progress}");
+      KorutiiniExample_Log($"[{_async.request}] Pending {_progress}");
       
     ON_SUCCESS 
-      show_debug_message($"[{_async.request}] Success!");
+      KorutiiniExample_Log($"[{_async.request}] Success!");
       data = async_load[? "result"];
       
     ON_FAILURE 
-      show_debug_message($"[{_async.request}] Failure!");
+      KorutiiniExample_Log($"[{_async.request}] Failure!");
       failed = true;
       
   ASYNC_END
@@ -38,11 +38,11 @@ KORUTIINI BEGIN
   
   if (failed)
   {
-    show_debug_message($"URL '{url}' get did not succeed!");
+    KorutiiniExample_Log($"URL '{url}' get did not succeed!");
     EXIT;
   }
-  show_debug_message($"URL '{url}' has been fetched!");
-  show_debug_message($"{data}");
+  KorutiiniExample_Log($"URL '{url}' has been fetched!");
+  KorutiiniExample_Log($"{data}");
   
 FINISH DISPATCH 
 

@@ -12,7 +12,7 @@
 // One way to utilize this is to store what coroutine is currently doing.
 coroutine = KORUTIINI BEGIN
 
-  show_debug_message("Coroutine started");
+  KorutiiniExample_Log("Coroutine started");
   
   SET "Started" PASS 
   DELAY 1.0 SECONDS
@@ -26,7 +26,7 @@ coroutine = KORUTIINI BEGIN
   
   // As you may have noticed, PASS is used after value for separating purposes.
   // This is not necessary, if next value is coroutine related syntax -keyword.
-  show_debug_message("Coroutine finished");
+  KorutiiniExample_Log("Coroutine finished");
   SET "Finished"
   DELAY 1.0 SECONDS
 
@@ -38,7 +38,7 @@ FINISH DISPATCH
 KORUTIINI BEGIN
   WHILE (this.coroutine.IsFinished() == false) THEN
     DELAY 0.25 SECONDS
-    show_debug_message(this.coroutine.Get());
+    KorutiiniExample_Log(this.coroutine.Get());
   END
 FINISH DISPATCH
 

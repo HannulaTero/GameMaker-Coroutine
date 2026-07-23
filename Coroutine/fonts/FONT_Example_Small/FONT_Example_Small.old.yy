@@ -1,6 +1,6 @@
 {
   "$GMFont":"",
-  "%Name":"FONT_Example",
+  "%Name":"FONT_Example_Small",
   "AntiAlias":1,
   "applyKerning":0,
   "ascender":17,
@@ -117,7 +117,7 @@
   "last":0,
   "lineHeight":24,
   "maintainGms1Font":false,
-  "name":"FONT_Example",
+  "name":"FONT_Example_Small",
   "parent":{
     "name":"Assets",
     "path":"folders/Korutiini x Examples/Assets.yy",

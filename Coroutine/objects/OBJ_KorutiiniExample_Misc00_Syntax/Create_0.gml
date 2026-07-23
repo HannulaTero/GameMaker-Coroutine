@@ -13,7 +13,7 @@
 // EXIT;            Stops task and triggers onComplete, doesn't change task result -value.
 // RETURN "value";  Stops task and triggers onComplete, and sets result -value.
 // GOTO "label";    Jump directly to any defined label within task.
-// PRINT "Hello!"   Just convenience, same as: show_debug_message("Hello!");
+// PRINT "Hello!"   Just convenience, same as: KorutiiniExample_Log("Hello!");
     
 
 // Usually THEN requires closing END, but in few expections (LOOP, SWITCH)

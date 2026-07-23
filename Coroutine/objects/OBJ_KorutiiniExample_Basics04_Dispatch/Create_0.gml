@@ -4,7 +4,7 @@
 // Task-handle is returned to control task outside the coroutine execution.
 coroutine = KORUTIINI BEGIN 
   DELAY irandom_range(20, 30) FRAMES 
-  show_debug_message("I think, therefore I am.");
+  KorutiiniExample_Log("I think, therefore I am.");
 FINISH DISPATCH
 
 
@@ -12,7 +12,7 @@ FINISH DISPATCH
 // You can think prototype as a function, and active task as execution of function.
 prototype = KORUTIINI BEGIN 
   DELAY irandom_range(40, 60) FRAMES 
-  show_debug_message("You think, therefore you are?");
+  KorutiiniExample_Log("You think, therefore you are?");
 FINISH
 
 coroutine = prototype.Dispatch();

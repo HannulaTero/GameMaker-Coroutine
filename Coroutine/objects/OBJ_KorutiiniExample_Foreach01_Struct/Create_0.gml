@@ -16,7 +16,7 @@ KORUTIINI BEGIN
   // Key is always a string.
   PRINT "iterating over struct.";
   FOREACH key, value IN struct THEN
-    show_debug_message($"struct.{key} = {value};");
+    KorutiiniExample_Log($"struct.{key} = {value};");
     DELAY 3 FRAMES
   END
   PRINT "iterating done!";

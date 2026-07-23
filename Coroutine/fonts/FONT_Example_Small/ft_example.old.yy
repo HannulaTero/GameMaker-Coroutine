@@ -1,6 +1,6 @@
 {
   "$GMFont":"",
-  "%Name":"FONT_Example",
+  "%Name":"ft_example",
   "AntiAlias":1,
   "applyKerning":0,
   "ascender":17,
@@ -117,10 +117,10 @@
   "last":0,
   "lineHeight":24,
   "maintainGms1Font":false,
-  "name":"FONT_Example",
+  "name":"ft_example",
   "parent":{
-    "name":"Assets",
-    "path":"folders/Korutiini x Examples/Assets.yy",
+    "name":"Coroutine x Examples",
+    "path":"folders/Coroutine x Examples.yy",
   },
   "pointRounding":0,
   "ranges":[

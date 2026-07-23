@@ -7,10 +7,10 @@ KORUTIINI BEGIN
 
   index = 0;
   WHILE (irandom(20) != 0) THEN
-    show_debug_message($"Loopity loop! [{index++}]");
+    KorutiiniExample_Log($"Loopity loop! [{index++}]");
     DELAY 3 FRAMES
   END
-  show_debug_message("Loop finished!");
+  KorutiiniExample_Log("Loop finished!");
 
 FINISH DISPATCH 
 

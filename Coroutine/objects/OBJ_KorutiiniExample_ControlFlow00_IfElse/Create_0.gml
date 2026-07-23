@@ -5,9 +5,9 @@
 KORUTIINI BEGIN
 
   IF choose(true, false) THEN
-    show_debug_message("THEN-branch");
+    KorutiiniExample_Log("THEN-branch");
   ELSE
-    show_debug_message("ELSE-branch");
+    KorutiiniExample_Log("ELSE-branch");
   END
 
 FINISH DISPATCH

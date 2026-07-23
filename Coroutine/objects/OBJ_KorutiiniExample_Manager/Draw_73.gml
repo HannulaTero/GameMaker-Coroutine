@@ -1,5 +1,6 @@
 /// @desc DRAW INFORMATION.
 
+
 // Draw FPS
 {
   fpsSum += fps_real;
@@ -15,8 +16,6 @@
   draw_set_alpha(1.0);
 }
 
-
-
 // Draw the counts.
 {
   var _i = 0;
@@ -30,11 +29,29 @@
   draw_set_halign(fa_left);
   draw_set_valign(fa_bottom);
   draw_set_alpha(0.5);
-  draw_text(16, (_y + 24 * _i++), $"active  : {_active}");
-  draw_text(16, (_y + 24 * _i++), $"paused  : {_paused}");
-  draw_text(16, (_y + 24 * _i++), $"delayed : {_delayed}");
-  draw_text(16, (_y + 24 * _i++), $"all     : {_active + _paused + _delayed}");
+  draw_text(_x, (_y + 24 * _i++), $"active  : {_active}");
+  draw_text(_x, (_y + 24 * _i++), $"paused  : {_paused}");
+  draw_text(_x, (_y + 24 * _i++), $"delayed : {_delayed}");
+  draw_text(_x, (_y + 24 * _i++), $"all     : {_active + _paused + _delayed}");
   draw_set_alpha(1.0);
+
+
+  // Draw the logs.
+  draw_set_font(FONT_Example_Small);
+  draw_set_halign(fa_left);
+  draw_set_valign(fa_bottom);
+  draw_set_color(c_green);
+  var _count = array_length(self.logs);
+  _count = min(16, _count);
+  _x = 256;
+  _y = room_height - 16;
+  _i = 0;
+  for(var i = 0; i < _count; i++)
+  {
+    draw_set_alpha(((_count - i) / _count));
+    draw_text(_x, (_y + 16 * _i--), self.logs[i]);
+  }
+  draw_set_color(c_white);
 }
 
 

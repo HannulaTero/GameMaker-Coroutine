@@ -9,7 +9,7 @@ value = 100;
 // which makes coroutine encapsulated, and caller variables are protected. 
 KORUTIINI BEGIN
   value = 200;
-  show_debug_message(value);
+  KorutiiniExample_Log(value);
 FINISH DISPATCH
 
 
@@ -17,15 +17,15 @@ FINISH DISPATCH
 // This way you can access and edit variables of caller within coroutine.
 KORUTIINI BEGIN
   value = 200;
-  show_debug_message(value);
-  show_debug_message(this.value);
+  KorutiiniExample_Log(value);
+  KorutiiniExample_Log(this.value);
 FINISH DISPATCH
 
 
 // Sometimes it's better to use caller's scope directly instead.
 // This can be done by defining coroutine non-scoped. 
 KORUTIINI scoped: false BEGIN
-  show_debug_message(value);
+  KorutiiniExample_Log(value);
 FINISH DISPATCH
 
 

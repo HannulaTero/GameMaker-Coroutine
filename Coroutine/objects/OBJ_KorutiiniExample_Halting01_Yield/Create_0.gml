@@ -4,13 +4,13 @@
 // Yield is way to halt execution for rest of the frame for given coroutine task.
 // This allows other tasks to also execute during the frame.
 KORUTIINI BEGIN
-  show_debug_message("[0] One...");
+  KorutiiniExample_Log("[0] One...");
   YIELD
-  show_debug_message("[0] Two...");
+  KorutiiniExample_Log("[0] Two...");
   YIELD
-  show_debug_message("[0] Three...");
+  KorutiiniExample_Log("[0] Three...");
   YIELD
-  show_debug_message("[0] GO!");
+  KorutiiniExample_Log("[0] GO!");
   YIELD
 FINISH DISPATCH
 
@@ -22,13 +22,13 @@ FINISH DISPATCH
 // If there are lot of tasks, and frame-budget is exceeding all the time, it is good to have random order to give each task equal change.
 KORUTIINI BEGIN
   YIELD
-  show_debug_message("[1] Hey!");
+  KorutiiniExample_Log("[1] Hey!");
   YIELD
-  show_debug_message("[1] Hoy!");
+  KorutiiniExample_Log("[1] Hoy!");
   YIELD
-  show_debug_message("[1] Hiya!");
+  KorutiiniExample_Log("[1] Hiya!");
   YIELD
-  show_debug_message("[1] Hoya!");
+  KorutiiniExample_Log("[1] Hoya!");
 FINISH DISPATCH
 
 
@@ -36,14 +36,14 @@ FINISH DISPATCH
 // This means you can set to global states to correct state for coroutine execution, and then return to previous one.
 KORUTIINI 
 
-ON_YIELD  show_debug_message("Trigger: [2] Yielded");
-ON_LAUNCH show_debug_message("Trigger: [2] Launched");
+ON_YIELD  KorutiiniExample_Log("Trigger: [2] Yielded");
+ON_LAUNCH KorutiiniExample_Log("Trigger: [2] Launched");
 
 BEGIN
   YIELD
-  show_debug_message("[2] ...!");
-  show_debug_message("[2] ooo!");
+  KorutiiniExample_Log("[2] ...!");
+  KorutiiniExample_Log("[2] ooo!");
   YIELD
-  show_debug_message("[2] OOOO!");
-  show_debug_message("[2] 0000!");
+  KorutiiniExample_Log("[2] OOOO!");
+  KorutiiniExample_Log("[2] 0000!");
 FINISH DISPATCH

@@ -23,7 +23,7 @@ KORUTIINI
   // Index will not be byte-offset, but instead item index.
   PRINT "iterating over buffer viewing values as buffer_f64.";
   FOREACH key, value IN VIEW(buffer, dtype) THEN
-    show_debug_message($"buffer_peek(buffer, buffer_f64, {key}) = {value};");
+    KorutiiniExample_Log($"buffer_peek(buffer, buffer_f64, {key}) = {value};");
     DELAY 3 FRAMES
   END
   PRINT "done.";
@@ -32,7 +32,7 @@ KORUTIINI
   // You can iterate over same buffer with different "views"
   PRINT "iterating over same buffer, but viewing values as buffer_u32.";
   FOREACH key, value IN VIEW(buffer, buffer_u32) THEN
-    show_debug_message($"buffer_peek(buffer, buffer_u32, {key}) = {value};");
+    KorutiiniExample_Log($"buffer_peek(buffer, buffer_u32, {key}) = {value};");
     DELAY 3 FRAMES
   END
   PRINT "done.";
@@ -41,7 +41,7 @@ KORUTIINI
   // VIEW has optional arguments similar to RANGE. 
   PRINT "iterating over slice of buffer, viewing values as buffer_f64.";
   FOREACH key, value IN VIEW(buffer, buffer_u32, 10, 20) THEN
-    show_debug_message($"buffer_peek(buffer, buffer_f64, {key}) = {value};");
+    KorutiiniExample_Log($"buffer_peek(buffer, buffer_f64, {key}) = {value};");
     DELAY 3 FRAMES
   END
   PRINT "done.";
@@ -57,7 +57,7 @@ KORUTIINI
       step: 2,
     }) 
   THEN
-    show_debug_message($"buffer_peek(buffer, buffer_f64, {key}) = {value};");
+    KorutiiniExample_Log($"buffer_peek(buffer, buffer_f64, {key}) = {value};");
     DELAY 3 FRAMES
   END
   PRINT "done.";

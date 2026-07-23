@@ -9,11 +9,11 @@ KORUTIINI BEGIN
   COND i < 10;
   ITER i++;
   THEN
-    show_debug_message($"For loop iteration [{i}]");
+    KorutiiniExample_Log($"For loop iteration [{i}]");
     DELAY 3 FRAMES
   END
   
-  show_debug_message("Loop finished!");
+  KorutiiniExample_Log("Loop finished!");
 
 FINISH DISPATCH 
 

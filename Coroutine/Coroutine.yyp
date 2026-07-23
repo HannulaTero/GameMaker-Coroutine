@@ -49,6 +49,7 @@
   },
   "name":"Coroutine",
   "resources":[
+    {"id":{"name":"FONT_Example_Small","path":"fonts/FONT_Example_Small/FONT_Example_Small.yy",},},
     {"id":{"name":"FONT_Example","path":"fonts/FONT_Example/FONT_Example.yy",},},
     {"id":{"name":"__OBJ_Korutiini_Manager","path":"objects/__OBJ_Korutiini_Manager/__OBJ_Korutiini_Manager.yy",},},
     {"id":{"name":"__OBJ_Korutiini_Timer","path":"objects/__OBJ_Korutiini_Timer/__OBJ_Korutiini_Timer.yy",},},
@@ -196,6 +197,7 @@
     {"id":{"name":"__KorutiiniView","path":"scripts/__KorutiiniView/__KorutiiniView.yy",},},
     {"id":{"name":"Korutiini_Feather","path":"scripts/Korutiini_Feather/Korutiini_Feather.yy",},},
     {"id":{"name":"Korutiini_Keywords","path":"scripts/Korutiini_Keywords/Korutiini_Keywords.yy",},},
+    {"id":{"name":"KorutiiniExample_Log","path":"scripts/KorutiiniExample_Log/KorutiiniExample_Log.yy",},},
     {"id":{"name":"SRC_KorutiiniTestSuite_Syntax","path":"scripts/SRC_KorutiiniTestSuite_Syntax/SRC_KorutiiniTestSuite_Syntax.yy",},},
     {"id":{"name":"SHD_KorutiiniExample_SurfaceSort","path":"shaders/SHD_KorutiiniExample_SurfaceSort/SHD_KorutiiniExample_SurfaceSort.yy",},},
     {"id":{"name":"SND_Example","path":"sounds/SND_Example/SND_Example.yy",},},

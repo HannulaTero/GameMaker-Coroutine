@@ -7,12 +7,12 @@ KORUTIINI BEGIN
 
   index = 0;
   repeats = irandom(20);
-  show_debug_message($"Example will do {repeats} repeats!");
+  KorutiiniExample_Log($"Example will do {repeats} repeats!");
   REPEAT repeats THEN
-    show_debug_message($"Repeat at [{++index}]");
+    KorutiiniExample_Log($"Repeat at [{++index}]");
     DELAY 3 FRAMES
   END
-  show_debug_message("Loop finished!");
+  KorutiiniExample_Log("Loop finished!");
 
 FINISH DISPATCH 
 

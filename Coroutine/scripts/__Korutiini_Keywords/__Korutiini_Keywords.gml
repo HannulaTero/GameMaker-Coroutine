@@ -80,7 +80,8 @@
 #macro __KORUTIINI_KEYWORD__VIEW              new __KorutiiniView
 
 
-// Runtime evaluated statements.              
+// Runtime evaluated statements.   
+// -> These allow placing inside regular GML statements.
 #macro __KORUTIINI_KEYWORD__RESTART           return __KorutiiniNode_RUNTIME_RESTART()
 #macro __KORUTIINI_KEYWORD__CONTINUE          return __KorutiiniNode_RUNTIME_CONTINUE()
 #macro __KORUTIINI_KEYWORD__BREAK             return __KorutiiniNode_RUNTIME_BREAK()

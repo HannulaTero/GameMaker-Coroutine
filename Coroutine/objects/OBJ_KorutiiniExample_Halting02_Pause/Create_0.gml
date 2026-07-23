@@ -7,15 +7,15 @@
 coroutine = KORUTIINI 
 
 ON_PAUSE  
-  show_debug_message("Trigger: Coroutine paused.");
+  KorutiiniExample_Log("Trigger: Coroutine paused.");
   
 ON_RESUME 
-  show_debug_message("Trigger: Coroutine resumed.");
+  KorutiiniExample_Log("Trigger: Coroutine resumed.");
   
 BEGIN
-  show_debug_message("Coroutine started!");
+  KorutiiniExample_Log("Coroutine started!");
   PAUSE
-  show_debug_message("Coroutine finished!.");
+  KorutiiniExample_Log("Coroutine finished!.");
 FINISH DISPATCH
 
 

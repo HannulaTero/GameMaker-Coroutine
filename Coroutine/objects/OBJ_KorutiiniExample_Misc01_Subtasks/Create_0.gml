@@ -39,11 +39,11 @@ KORUTIINI BEGIN
   KORUTIINI BEGIN PRINT "subtask[2] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[2] end" FINISH DISPATCH
   KORUTIINI BEGIN PRINT "subtask[3] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[3] end" FINISH DISPATCH
   KORUTIINI BEGIN PRINT "subtask[4] begin" DELAY random_range(0.2, 5.0) SECONDS PRINT "subtask[5] end" FINISH DISPATCH
-  show_debug_message("Task launched subtasks!");
+  KorutiiniExample_Log("Task launched subtasks!");
 
   // Wait subtasks to finish.
   AWAIT_SUBTASKS
-  show_debug_message("All subtasks are done!");
+  KorutiiniExample_Log("All subtasks are done!");
   
 FINISH DISPATCH
 

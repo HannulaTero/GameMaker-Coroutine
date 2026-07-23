@@ -15,24 +15,24 @@ KORUTIINI
   desc: "Here are settings."
   
   // Then you can optionally define any trigger -action.
-  ON_INIT      show_debug_message("Triggered: onInit");     // Once when coroutine is created.
-  ON_YIELD     show_debug_message("Triggered: onYield");    // Whenever coroutine yields, from code or frame-time is not enough.
-  ON_PAUSE     show_debug_message("Triggered: onPause");    // Whenever coroutine is paused, from code or user-called.
-  ON_RESUME    show_debug_message("Triggered: onResume");   // Whenever coroutine resumes from paused state.
-  ON_LAUNCH    show_debug_message("Triggered: onLaunch");   // Coroutine begins execution from yield or pause.
-  ON_CANCEL    show_debug_message("Triggered: onCancel");   // Coroutine is cancelled, will not execute body anymore.
-  ON_COMPLETE  show_debug_message("Triggered: onComplete"); // Once when coroutine reached finish-state.
-  ON_CLEANUP   show_debug_message("Triggered: onCleanup");  // Once when coroutine is Destroyed.
-  ON_ERROR     show_debug_message("Triggered: onError");    // Whenever error is met. Coroutine tries skip to next execution step.
+  ON_INIT      KorutiiniExample_Log("Triggered: onInit");     // Once when coroutine is created.
+  ON_YIELD     KorutiiniExample_Log("Triggered: onYield");    // Whenever coroutine yields, from code or frame-time is not enough.
+  ON_PAUSE     KorutiiniExample_Log("Triggered: onPause");    // Whenever coroutine is paused, from code or user-called.
+  ON_RESUME    KorutiiniExample_Log("Triggered: onResume");   // Whenever coroutine resumes from paused state.
+  ON_LAUNCH    KorutiiniExample_Log("Triggered: onLaunch");   // Coroutine begins execution from yield or pause.
+  ON_CANCEL    KorutiiniExample_Log("Triggered: onCancel");   // Coroutine is cancelled, will not execute body anymore.
+  ON_COMPLETE  KorutiiniExample_Log("Triggered: onComplete"); // Once when coroutine reached finish-state.
+  ON_CLEANUP   KorutiiniExample_Log("Triggered: onCleanup");  // Once when coroutine is Destroyed.
+  ON_ERROR     KorutiiniExample_Log("Triggered: onError");    // Whenever error is met. Coroutine tries skip to next execution step.
   
   // Finally coroutine body definition.
   BEGIN
     REPEAT 5 THEN
-      show_debug_message(" - Executing a loop!");
+      KorutiiniExample_Log(" - Executing a loop!");
     END
     REPEAT 5 THEN
       DELAY 0.2 SECONDS
-      show_debug_message(" - Executing a loop with delay!");
+      KorutiiniExample_Log(" - Executing a loop with delay!");
     END
   FINISH
   

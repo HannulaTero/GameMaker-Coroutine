@@ -17,7 +17,7 @@ KORUTIINI
     // iterating over ds_map is similar to struct, but keys can be non-string.
     PRINT "iterating over ds_map.";
     FOREACH fruit: key, cost: value IN map THEN
-      show_debug_message($"map[? {fruit}] = {cost};");
+      KorutiiniExample_Log($"map[? {fruit}] = {cost};");
       DELAY 3 FRAMES
     END
     PRINT "done.";

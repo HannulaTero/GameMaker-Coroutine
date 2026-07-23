@@ -7,12 +7,12 @@
 KORUTIINI BEGIN
 
   DO 
-    show_debug_message($"Dododoo!");
+    KorutiiniExample_Log($"Dododoo!");
   UNTIL 
     true
   END
   
-  show_debug_message("Loop finished!");
+  KorutiiniExample_Log("Loop finished!");
 
 FINISH DISPATCH 
 
@@ -21,12 +21,12 @@ FINISH DISPATCH
 KORUTIINI BEGIN
 
   DO 
-    show_debug_message($"Duupiduu!");
+    KorutiiniExample_Log($"Duupiduu!");
     YIELD
   UNTIL 
     (irandom(10) == 0)
   END
   
-  show_debug_message("Loop finished!");
+  KorutiiniExample_Log("Loop finished!");
 
 FINISH DISPATCH 
