@@ -127,7 +127,7 @@ function __KorutiiniNode_SET(_call)
 * @param {Function} _call
 * @returns {Struct}
 */
-function __KorutiiniNode_YIELD_WITH(_call)
+function __KorutiiniNode_YIELD_SET(_call)
 { 
   gml_pragma("forceinline"); 
   return {
@@ -142,7 +142,7 @@ function __KorutiiniNode_YIELD_WITH(_call)
 * @param {Function} _call
 * @returns {Struct}
 */
-function __KorutiiniNode_PAUSE_WITH(_call)
+function __KorutiiniNode_PAUSE_SET(_call)
 { 
   gml_pragma("forceinline"); 
   return {
@@ -155,7 +155,7 @@ function __KorutiiniNode_PAUSE_WITH(_call)
 /**
 * 
 * @param {Function} _call
-* @param {String} _type
+* @param {String}   _type
 * @returns {Struct}
 */
 function __KorutiiniNode_DELAY(_call, _type)
@@ -171,7 +171,7 @@ function __KorutiiniNode_DELAY(_call, _type)
 
 /**
 * 
-* @param {String} _type
+* @param {String}   _type
 * @param {Function} _call
 * @returns {Struct}
 */
@@ -221,7 +221,7 @@ function __KorutiiniNode_AWAIT_LISTENERS()
 /**
 * 
 * @param {Function} _call
-* @param {String} _type
+* @param {String}   _type
 * @returns {Struct}
 */
 function __KorutiiniNode_TIMEOUT(_call, _type) 
@@ -340,7 +340,7 @@ function __KorutiiniNode_LOOP(_body)
 /**
 * 
 * @param {Function} _cond
-* @param {Struct} _body
+* @param {Struct}   _body
 * @returns {Struct}
 */
 function __KorutiiniNode_WHILE(_cond, _body) 
@@ -357,7 +357,7 @@ function __KorutiiniNode_WHILE(_cond, _body)
 /**
 * 
 * @param {Function} _call
-* @param {Struct} _body
+* @param {Struct}   _body
 * @returns {Struct}
 */
 function __KorutiiniNode_REPEAT(_call, _body) 
@@ -373,8 +373,8 @@ function __KorutiiniNode_REPEAT(_call, _body)
 
 /**
 * 
-* @param {Struct} _body
-* @param {Array<Function>} _cond 
+* @param {Struct}           _body
+* @param {Array<Function>}  _cond 
 * @returns {Struct}
 */
 function __KorutiiniNode_DO(_body, _cond) 
@@ -395,7 +395,7 @@ function __KorutiiniNode_DO(_body, _cond)
 * @param {Function} _init
 * @param {Function} _cond
 * @param {Function} _iter
-* @param {Struct} _body
+* @param {Struct}   _body
 * @returns {Struct}
 */
 function __KorutiiniNode_FOR(_init, _cond, _iter, _body) 
@@ -417,7 +417,7 @@ function __KorutiiniNode_FOR(_init, _cond, _iter, _body)
 * 
 * @param {Function} _names
 * @param {Function} _item
-* @param {Struct} _body
+* @param {Struct}   _body
 * @returns {Struct}
 */
 function __KorutiiniNode_FOREACH(_names, _item, _body) 

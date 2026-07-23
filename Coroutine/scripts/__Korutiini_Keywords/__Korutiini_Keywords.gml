@@ -38,8 +38,8 @@
 #macro __KORUTIINI_KEYWORD__LABEL             }), __KorutiiniNode_LABEL({ label: 
 #macro __KORUTIINI_KEYWORD__YIELD             }), __KorutiiniNode_YIELD(), __KorutiiniNode_STMT(function() {
 #macro __KORUTIINI_KEYWORD__PAUSE             }), __KorutiiniNode_PAUSE(), __KorutiiniNode_STMT(function() {
-#macro __KORUTIINI_KEYWORD__YIELD_SET         }), __KorutiiniNode_YIELD_WITH(function() { return
-#macro __KORUTIINI_KEYWORD__PAUSE_SET         }), __KorutiiniNode_PAUSE_WITH(function() { return
+#macro __KORUTIINI_KEYWORD__YIELD_SET         }), __KorutiiniNode_YIELD_SET(function() { return
+#macro __KORUTIINI_KEYWORD__PAUSE_SET         }), __KorutiiniNode_PAUSE_SET(function() { return
 
 #macro __KORUTIINI_KEYWORD__DELAY             }), __KorutiiniNode_DELAY(function() { return
 #macro __KORUTIINI_KEYWORD__MICROS            }, "<MICROS>"), __KorutiiniNode_STMT(function() {

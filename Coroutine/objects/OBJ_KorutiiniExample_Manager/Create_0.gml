@@ -30,14 +30,15 @@ alarm[1] = 300;
 self.logs = [ ];
 self.Log = function(_message)
 {
-  alarm[1] = 300;
+  show_debug_message(_message);
   array_insert(self.logs, 0, _message);
   var _maxCount = 64;
   var _count = array_length(self.logs);
   if (_count > _maxCount)
   {
-    array_delete(self.logs, _count - 1, -_count);
+    array_delete(self.logs, -1, (_maxCount - _count));
   }
+  alarm[1] = 300;
 };
 
 

@@ -35,9 +35,11 @@ KORUTIINI BEGIN
   self.counter = 0;
   self.LongLoop = function() 
   {
-    var _time = current_time + irandom_range(50, 100); 
-    while(current_time < _time) { };
-    KorutiiniExample_Log($"Loop [{self.counter}] done!");
+    var _beginTime = current_time;
+    var _breakTime = current_time + irandom_range(50, 100); 
+    while(current_time < _breakTime) { };
+    var _timeTaken = (current_time -_beginTime) ;
+    KorutiiniExample_Log($"Loop [{self.counter}] done in {_timeTaken} ms");
     self.counter += 1;
   };
   
@@ -69,6 +71,7 @@ KORUTIINI BEGIN
   self.LongLoop(); PASS
 
   KorutiiniExample_Log("Finished execution.");
-  KorutiiniExample_Log(" -> With coroutine splitting, game didn't freeze.");
+  KorutiiniExample_Log(" -> Executed 20 native GML loops.");
+  KorutiiniExample_Log(" -> With splitting in-between loops, game didn't freeze for whole duration.");
   
 FINISH DISPATCH

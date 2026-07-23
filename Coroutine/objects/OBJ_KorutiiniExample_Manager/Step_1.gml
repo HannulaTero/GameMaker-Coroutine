@@ -8,7 +8,12 @@ if (keyboard_check(vk_anykey) == false)
 
 if (keyboard_check_pressed(vk_enter))
 {
-  instance_create_depth(0, 0, 0, groups[index].Get());
+  var _example = groups[index].Get();
+  var _exampleName = object_get_name(_example);
+  _exampleName = string_replace(_exampleName ,"OBJ_KorutiiniExample_", "");
+  self.Log($"---");
+  self.Log($"Launching example : {_exampleName}");
+  instance_create_depth(0, 0, 0, _example);
   exit;
 }
 
