@@ -57,8 +57,8 @@
 #macro LABEL            __KORUTIINI_KEYWORD__LABEL
 #macro YIELD            __KORUTIINI_KEYWORD__YIELD
 #macro PAUSE            __KORUTIINI_KEYWORD__PAUSE
-#macro YIELD_WITH       __KORUTIINI_KEYWORD__YIELD_WITH
-#macro PAUSE_WITH       __KORUTIINI_KEYWORD__PAUSE_WITH
+#macro YIELD_SET        __KORUTIINI_KEYWORD__YIELD_SET
+#macro PAUSE_SET        __KORUTIINI_KEYWORD__PAUSE_SET
 
 
 #endregion
@@ -169,3 +169,4 @@
 #endregion
 //
 //=============================================================
+

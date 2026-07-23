@@ -11,6 +11,7 @@
 */
 
 
+// Korutiini handles.
 #macro __KORUTIINI_KEYWORD__KORUTIINI         __Korutiini_Create(function() { return { graph: { }, tables: [ ], labels: { }, define: ({ option: ({
 
 
