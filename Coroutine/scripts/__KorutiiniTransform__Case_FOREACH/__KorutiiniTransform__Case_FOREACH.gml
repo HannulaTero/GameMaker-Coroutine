@@ -10,7 +10,8 @@ function __KorutiiniTransform__Case_FOREACH(_node, _next, _break, _continue)
 {
   // Reserve local for storing iterator.
   var _register = register++;
-      
+  
+  
   // Initializes iterator. 
   var _init = {
     next: undefined,
@@ -26,7 +27,8 @@ function __KorutiiniTransform__Case_FOREACH(_node, _next, _break, _continue)
       KORUTIINI_CURRENT_EXECUTE = next;
     }
   }
-      
+  
+  
   // Does the loop iteration.
   var _loop = {
     next: undefined,
@@ -47,13 +49,15 @@ function __KorutiiniTransform__Case_FOREACH(_node, _next, _break, _continue)
       }
     }
   };
-      
+  
+  
   // Solve body and then patch, as loop target must be known beforehand.
   var _body = Generate(_node.body, _loop, _next, _loop);
   _init.next = _loop.execute;
   _loop.next = _body.execute;
   _loop.jump = _next.execute;
-      
+  
+  
   // Finalize, free register.
   register--;
   return _init;

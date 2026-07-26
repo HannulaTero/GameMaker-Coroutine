@@ -43,10 +43,10 @@
 #macro __KORUTIINI_KEYWORD__PAUSE_SET         }), __KorutiiniNode_PAUSE_SET(function() { return
 
 #macro __KORUTIINI_KEYWORD__DELAY             }), __KorutiiniNode_DELAY(function() { return
-#macro __KORUTIINI_KEYWORD__MICROS            }, "<MICROS>"), __KorutiiniNode_STMT(function() {
-#macro __KORUTIINI_KEYWORD__MILLIS            }, "<MILLIS>"), __KorutiiniNode_STMT(function() {
-#macro __KORUTIINI_KEYWORD__FRAMES            }, "<FRAMES>"), __KorutiiniNode_STMT(function() {
-#macro __KORUTIINI_KEYWORD__SECONDS           }, "<SECONDS>"), __KorutiiniNode_STMT(function() {
+#macro __KORUTIINI_KEYWORD__MICROS            }, "micros"), __KorutiiniNode_STMT(function() {
+#macro __KORUTIINI_KEYWORD__MILLIS            }, "millis"), __KorutiiniNode_STMT(function() {
+#macro __KORUTIINI_KEYWORD__FRAMES            }, "frames"), __KorutiiniNode_STMT(function() {
+#macro __KORUTIINI_KEYWORD__SECONDS           }, "seconds"), __KorutiiniNode_STMT(function() {
 
 #macro __KORUTIINI_KEYWORD__AWAIT             }), __KorutiiniNode_AWAIT("COND", function() { return 
 #macro __KORUTIINI_KEYWORD__AWAIT_ASYNC       }), __KorutiiniNode_AWAIT("ASYNC", function() { return 

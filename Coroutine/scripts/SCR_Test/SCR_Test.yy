@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SCR_Test",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SCR_Test",
+  "parent":{
+    "name":"Coroutine",
+    "path":"Coroutine.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

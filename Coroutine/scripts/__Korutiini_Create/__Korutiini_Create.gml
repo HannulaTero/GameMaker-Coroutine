@@ -3,7 +3,7 @@
 /**
 * Creates coroutine prototype, or uses cached version of it.
 * 
-* @param {Function} _funcAST
+* @param {Function} _funcAST  Function which returns Abstract Syntax Tree.
 * @returns {Function}
 */
 function __Korutiini_Create(_funcAST)
@@ -20,7 +20,7 @@ function __Korutiini_Create(_funcAST)
     return prototypes[? _key];
   }
   
-  // Otherwise create a new protoptype, and generate function for it. 
+  // Otherwise create a new prototype, and generate function for it. 
   var _root = _funcAST();
   transform.Dispatch(_root);
   var _prototype = new __KorutiiniPrototype(_root);

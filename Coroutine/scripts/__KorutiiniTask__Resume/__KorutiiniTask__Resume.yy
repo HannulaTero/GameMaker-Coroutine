@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"__KorutiiniTask__Resume",
   "parent":{
-    "name":"CoroutineTask",
-    "path":"folders/Korutiini Runtime/Runtime/CoroutineTask.yy",
+    "name":"KorutiiniTask",
+    "path":"folders/Korutiini Runtime/Runtime/KorutiiniTask.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

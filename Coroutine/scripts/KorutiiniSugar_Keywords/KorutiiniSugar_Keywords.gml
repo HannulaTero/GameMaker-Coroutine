@@ -10,6 +10,9 @@
   You may change the definitions as you wish, keep the definition.
   -> This can be useful, if you have some conflicting macros.
   
+  NOTE! Don't use "korutiini" on same line more than once!
+  -> Builder uses file-name and line-number to identify korutiini
+  
 */
 //
 #endregion
@@ -19,7 +22,7 @@
 #region MAIN HANDLE.
 
 
-#macro korutiini        __KORUTIINISUGAR_KEYWORD__KORUTIINI 
+#macro ko_rutiini       __KORUTIINISUGAR_KEYWORD__KORUTIINI 
 #macro ko_dispatch      __KORUTIINISUGAR_KEYWORD__DISPATCH
 
 
@@ -70,7 +73,7 @@
 
 #macro ko_awaitSubtasks   __KORUTIINISUGAR_KEYWORD__AWAIT_SUBTASKS
 #macro ko_awaitRequests   __KORUTIINISUGAR_KEYWORD__AWAIT_REQUESTS
-#macro ko_awaitLiseners   __KORUTIINISUGAR_KEYWORD__AWAIT_LISTENERS
+#macro ko_awaitListeners  __KORUTIINISUGAR_KEYWORD__AWAIT_LISTENERS
 
 
 #endregion

@@ -10,17 +10,17 @@ function __KorutiiniTransform__Case_DELAY(_node, _next, _break, _continue)
 {
   // Cases for different delay-types.
   static rates = __Korutiini_Mapping(
-    "<MICROS>",   function() { return 1_000_000.0; }, 
-    "<MILLIS>",   function() { return 1_000.0; }, 
-    "<FRAMES>",   function() { return 1.0; }, 
-    "<SECONDS>",  function() { return 1.0; }, 
+    "micros",   function() { return 1_000_000.0; }, 
+    "millis",   function() { return 1_000.0; }, 
+    "frames",   function() { return 1.0; }, 
+    "seconds",  function() { return 1.0; }, 
   );
   
   static units = __Korutiini_Mapping(
-    "<MICROS>",   function() { return time_source_units_seconds; }, 
-    "<MILLIS>",   function() { return time_source_units_seconds; }, 
-    "<FRAMES>",   function() { return time_source_units_frames; }, 
-    "<SECONDS>",  function() { return time_source_units_seconds; }, 
+    "micros",   function() { return time_source_units_seconds; }, 
+    "millis",   function() { return time_source_units_seconds; }, 
+    "frames",   function() { return time_source_units_frames; }, 
+    "seconds",  function() { return time_source_units_seconds; }, 
   );
       
   return {
@@ -36,6 +36,7 @@ function __KorutiiniTransform__Case_DELAY(_node, _next, _break, _continue)
       
       var _unit   = unit;
       var _delay  = __Korutiini_Execute(call) / rate;
+      
       with(KORUTIINI_CURRENT_TASK)
       {
         // Delete from active and yield. 

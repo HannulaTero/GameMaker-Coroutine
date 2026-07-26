@@ -2,6 +2,7 @@
   "$GMNotes":"v1",
   "%Name":"NOTE_Korutiini",
   "name":"NOTE_Korutiini",
+  "openedOnFirstLoad":true,
   "parent":{
     "name":"Korutiini Runtime",
     "path":"folders/Korutiini Runtime.yy",

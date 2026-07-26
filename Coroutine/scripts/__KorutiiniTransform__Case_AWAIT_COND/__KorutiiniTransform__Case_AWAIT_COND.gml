@@ -2,7 +2,6 @@
 
 /**
 * Pauses execution until given condition is met.
-* Usual condition is boolean value, but it can be several other types.
 * 
 * @context __KorutiiniTransform
 */ 
