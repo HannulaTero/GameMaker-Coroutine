@@ -2,6 +2,9 @@
 
 /**
 * Returns keywords for KorutiiniSugar.
+* 
+* User might have decided to change to macros (which is allowed),
+* therefore it must be fetched, so parsing can be done correctly.
 */ 
 function __KorutiiniBuilder_KeywordsSugar()
 {

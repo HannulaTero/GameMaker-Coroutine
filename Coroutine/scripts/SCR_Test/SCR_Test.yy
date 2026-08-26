@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"SCR_Test",
   "parent":{
-    "name":"Coroutine",
-    "path":"Coroutine.yyp",
+    "name":"Korutiini x TestSuite",
+    "path":"folders/Korutiini x TestSuite.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

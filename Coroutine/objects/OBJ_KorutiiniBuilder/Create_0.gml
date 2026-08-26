@@ -8,10 +8,12 @@
 
 
 // The root folder, which is under inspection.
+// -> Initialized with dummy one at start.
 self.root = new FolderCrawler_Folder(undefined, "", "");
 
 
 // What files are expected to be found.
+// -> Initialized with dummy ones at start.
 self.file = {
   keywords  : new FolderCrawler_Folder(undefined, "", ""),
   generated : new FolderCrawler_Folder(undefined, "", ""),
@@ -25,6 +27,8 @@ self.commandLine = new KorutiiniBuilder_CommandLine();
 
 
 // Keyword-related.
+// -> The prefix is what macros use at Korutiin-Sugar.
+// -> Keyowrd user handles must be fetched.
 self.keyword = {
   prefix : "__KORUTIINISUGAR_KEYWORD__",
   labels : __KorutiiniBuilder_KeywordsSugar()
@@ -50,16 +54,16 @@ self.Failed = function(_message)
 //
 //===========================================================
 // 
-#region Start the coroutine.
+#region START COROUTINE - Everything after is coroutine code.
 
 
 self.korutiini = KORUTIINI
   name : "Korutiini Builder",
-  desc : @"
+  desc : (@"
     This crawls through root-path, finds assets using korutiini, 
     parses them and resolves locals, then generates the executable code.
     This only edits single project-file (__KorutiiniSugar_GENERATED).
-  "
+  ")
 
 ON_CANCEL
   show_debug_message("[Korutiini][Builder] Building has failed!");
@@ -107,6 +111,9 @@ IF (path == undefined) THEN
   ASYNC_END
   AWAIT_REQUESTS
 END
+
+
+timeBegin = get_timer();
 
 
 #endregion
@@ -175,7 +182,7 @@ END
 //
 //===========================================================
 // 
-#region Read keyword -labels.
+#region Read user-defined keyword -labels.
 
 
 sourceKeywords = "";
@@ -268,51 +275,119 @@ FOREACH keyword : key, label : value IN this.keyword.labels THEN
   whitespace = string_repeat(" ", 12 - string_length(keyword));
   show_debug_message($">> {keyword}{whitespace} : {label}");
 END
+
+
+#endregion
+//
+//===========================================================
+// 
+#region Load all source-files to RAM to deal with. 
+
+
+// Load all files, tag to file-asset.
+// Even if there is million lines of code, each line being taking 64 characters,
+// that is should still be about 64MB of RAM usage. 
+FOREACH file : value IN this.file.sources THEN
+
+  file.source = "";
+  file.buffer = buffer_create(1, buffer_grow, 1);
   
+  // Read the file.
+  ASYNC_REQUEST 
+    DO_REQUEST return buffer_load_async(
+      file.buffer, file.path, 0, -1
+    );
+    ON_FAILURE
+      this.Failed("Failed to load a source-file.");
+      
+  ASYNC_END
+END
+
+
+#endregion
+//
+//===========================================================
+// 
+#region Load all caches to RAM to deal with. 
+
+
+FOREACH file : value IN this.file.sources THEN
+  
+  // Check whether cache exists.
+  file.cache = { };
+  file.cache.name = filename_change_ext(file.name, ".kocache");
+  file.cache.file = file.root.files[$ file.cache.name];
+  
+  // If doesn't have cache, skip it..
+  IF (file.cache.file == undefined) THEN
+    file.cache = undefined;
+    CONTINUE;
+  END
+  
+  // Otherwise load the cahce.
+  file.cache.source = "";
+  file.cache.buffer = buffer_create(1, buffer_grow, 1);
+  
+  ASYNC_REQUEST 
+    DO_REQUEST return buffer_load_async(
+      file.cache.buffer, file.cache.path, 0, -1
+    );
+  ASYNC_END
+END
+
+
+#endregion
+//
+//===========================================================
+// 
+#region Wait everything to load into RAM.
+
+
+AWAIT_REQUESTS
+
   
 #endregion
 //
 //===========================================================
 // 
-#region Check caches and remove dirty ones.
+#region Filter out all cached.
 
 
 recheck = [ ];
+helper  = buffer_create(32, buffer_fixed, 1);
 FOREACH file : value IN this.file.sources THEN
+
+  // Generate hash for file.
+  // -> This is required anyways when comparing old cache, or creating new ones.
+  file.hash = buffer_md5(file.buffer, 0, buffer_get_size(file.buffer));
   
-  // Check whether there exists cache.
-  cacheName = filename_change_ext(file.name, ".kocache");
-  cacheFile = file.root.files[$ cacheName];
-  IF (cacheFile == undefined) THEN
-    // Cache doesn't exist, push to be rechecked.
+  // Skip if doesn't have cache.
+  IF file.cache == undefined THEN 
     array_push(recheck, file);
-    CONTINUE;
+    CONTINUE
   END
-  
   
   // Get cache hash - stored in first line as comment.
-  cacheOpen = file_text_open_read(cacheFile.path);
-  cacheHash = file_text_readln(cacheOpen);
-  cacheHash = string_delete(cacheHash, 1, 3); // Remove "// "
-  file_text_close(cacheOpen);
-  PASS
+  // This skips first 3 characters, which are comment "// ".
+  buffer_copy(file.cache.buffer, 3, 32, helper, 0);
+  file.cache.hash = buffer_read(helper, buffer_text);
   
   
-  // Compare the hashes - if matches, use cached file.
-  fileHash = md5_file(file.path);
-  IF (fileHash == cacheHash) THEN 
-    array_push(this.file.cached, cacheFile);
-    CONTINUE;
+  // Compare the hashes.
+  // -> Have to recheck file-contents if cache doesn't match.
+  // -> Then cache can also be removed.
+  IF file.hash != file.cache.hash THEN
+    array_push(recheck, file);
+    buffer_delete(file.cache.buffer);
+    file_delete(file.cache.path);
+    CONTINUE
   END
   
-  
-  // Otherwise invalidate the cache, and push file to be processed.
-  // -> Store the hash-value, so new cache can use it.
-  file_delete(cacheFile.path);
-  array_push(recheck, file);
-  file.hash = fileHash;
-  
-END
+END 
+
+
+// Not needed anymore.
+buffer_delete(helper);
 
 
 #endregion
@@ -323,36 +398,28 @@ END
 
 
 array_resize(this.file.sources, 0);
+keywordKorutiini = this.keyword.labels[$ "KORUTIINI"];
 FOREACH file : value IN recheck THEN
   
-  // Read the file.
-  source = "";
-  buffer = buffer_create(1, buffer_grow, 1);
-  ASYNC_REQUEST 
-    DO_REQUEST return buffer_load_async(
-      buffer, file.path, 0, -1
-    );
-    ON_SUCCESS 
-      source = buffer_peek(buffer, 0, buffer_text);
-      buffer_delete(buffer);
-    
-    ON_FAILURE 
-      buffer_delete(buffer);
-      this.Failed($"Loading keywords to buffer failed!");
-    
-  ASYNC_END
-  AWAIT_REQUESTS
+  // Read out the contents.
+  file.source = buffer_read(file.buffer, buffer_text);
   
   
   // Check whether file mentions korutiini anywhere.
   // -> This quick test doesn't consider strings or comments.
-  position = string_pos(this.keyword.labels[$ "KORUTIINI"], source);
-  IF (position != 0) THEN 
+  IF string_pos(keywordKorutiini, file.source) > 0 THEN 
     array_push(this.file.sources, file);
-    file.content = source;
+  ELSE
+    // Otherwise is not point of interest.
+    buffer_delete(file.buffer);
+    file.source = undefined;
   END
   
 END
+
+
+// Not needed anymore.
+array_resize(recheck, 0);
 
 
 #endregion
@@ -363,7 +430,7 @@ END
 
 
 FOREACH file : value IN this.file.sources THEN
-  
+  file.source = file.source;
   
 END
 
@@ -375,7 +442,7 @@ END
 #region Finalization.
   
   
-show_debug_message($"Time taken : {get_timer() / 1000} ms");
+show_debug_message($"Time taken : {(get_timer() - timeBegin) / 1000} ms");
 DELAY 1.0 SECONDS
 game_end();
 

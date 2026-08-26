@@ -24,7 +24,7 @@ function KorutiiniBuilder_CommandLine() constructor
   
   /**
   */ 
-  GetParam = function(_name)
+  static GetParam = function(_name)
   {
     return parameter_string(self.parameters[$ _name] + 1);
   };
@@ -32,7 +32,7 @@ function KorutiiniBuilder_CommandLine() constructor
   
   /**
   */ 
-  Exists = function(_name)
+  static Exists = function(_name)
   {
     return struct_exists(self.parameters, _name);
   };
