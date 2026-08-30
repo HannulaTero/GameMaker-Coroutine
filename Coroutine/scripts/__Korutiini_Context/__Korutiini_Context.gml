@@ -87,6 +87,7 @@ function __KorutiiniRuntime_AsyncListeners()
     asyncListeners[? _type] = ds_map_create();
   });
   
+  
   return context;
 }
 

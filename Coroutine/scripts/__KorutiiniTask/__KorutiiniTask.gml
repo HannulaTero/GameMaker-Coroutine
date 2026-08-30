@@ -59,6 +59,7 @@ function __KorutiiniTask(_prototype, _this=other, _vars=undefined) constructor
   delayed     = false;
   paused      = false;
   
+  
   // Child tasks and async requests/listeners.
   childTasks      = ds_map_create();
   childRequests   = ds_map_create();
@@ -90,12 +91,12 @@ function __KorutiiniTask(_prototype, _this=other, _vars=undefined) constructor
     poolActive[? identifier] = self; 
     delayed = false;
   };
+  
   delaySource = time_source_create(time_source_game, 1, time_source_units_seconds, delayResume);
   
   
   // Activate the coroutine for execution.
   // Do the initialization and setup the variables.
-  // If other coroutine is already in execution, this is subcoroutine.
   onInit();
   if (_vars != undefined) 
   {
@@ -107,6 +108,8 @@ function __KorutiiniTask(_prototype, _this=other, _vars=undefined) constructor
   
   poolActive[? identifier] = self;
   
+  
+  // If other coroutine is already in execution, this is sub-coroutine.
   if (KORUTIINI_CURRENT_TASK != undefined)
   {
     parentTask = KORUTIINI_CURRENT_TASK;

@@ -10,6 +10,7 @@ function __KorutiiniTransform__Case_FINISH(_node, _next, _break, _continue)
 {
   static nop = function() { };
   
+  
   // NOTE! Updates transforms final node.
   final = { 
     next: nop,

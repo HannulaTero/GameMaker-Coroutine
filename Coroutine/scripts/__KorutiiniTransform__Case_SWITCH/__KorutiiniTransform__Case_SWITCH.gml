@@ -11,7 +11,8 @@ function __KorutiiniTransform__Case_SWITCH(_node, _next, _break, _continue)
   var _def = (_node.def != undefined)
     ? Generate(_node.def, _next, _break, _continue)
     : undefined;
-        
+  
+  
   // Solve all cases into jump-table.
   var _table = ds_map_create();
   var _cases = _node.cases;
@@ -22,7 +23,8 @@ function __KorutiiniTransform__Case_SWITCH(_node, _next, _break, _continue)
     var _case = _cases[i];
     var _cond = _case.cond(); // Compile-time, no dynamic cases.
     var _body = Generate(_case.body, _next, _break, _continue);
-        
+    
+    
     // Check whether multiple case-conditions.
     if (is_array(_cond))
     {
@@ -38,7 +40,8 @@ function __KorutiiniTransform__Case_SWITCH(_node, _next, _break, _continue)
         _table[? _cond] = _body.execute;
       }
     }
-        
+    
+    
     // Only accept single case-condition.
     else
     {
@@ -49,10 +52,12 @@ function __KorutiiniTransform__Case_SWITCH(_node, _next, _break, _continue)
       _table[? _cond] = _body.execute;
     }
   }
-      
+  
+  
   // Push dsmap reference for easier cleaning when prototype is destroyed.
   array_push(tables, _table);
-      
+  
+  
   // Create executor.
   return {
     next: _next.execute, 
@@ -65,3 +70,5 @@ function __KorutiiniTransform__Case_SWITCH(_node, _next, _break, _continue)
     }
   };
 }
+
+

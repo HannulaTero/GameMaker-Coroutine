@@ -3,7 +3,7 @@
 #macro KORUTIINI_NAME       ("Korutiini")
 #macro KORUTIINI_DESC       ("Coroutines for GML")
 #macro KORUTIINI_AUTHOR     ("Tero Hannula")
-#macro KORUTIINI_VERSION    ("v2026.07.16.0")
+#macro KORUTIINI_VERSION    ("v2026.08.30.0")
 #macro KORUTIINI_URL        ("https://github.com/HannulaTero/GameMaker-Coroutine")
 
 

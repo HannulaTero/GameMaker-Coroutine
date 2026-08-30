@@ -5,7 +5,7 @@
 */ 
 function KorutiiniTestSuite_SyntaxSugar()
 {
-  var _coroutine = korutiini(_x, _y)
+  var _coroutine = ko_rutiini(_x, _y)
   {
     ko_onLaunch {
       show_debug_message("Launched!");

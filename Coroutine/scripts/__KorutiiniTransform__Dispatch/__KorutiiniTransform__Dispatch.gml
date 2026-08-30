@@ -12,7 +12,8 @@ function __KorutiiniTransform__Dispatch(_root)
   labels    = _root.labels;
   final     = undefined;
   register  = 0;
-    
+  
+  
   _root.graph = Generate(_root.nodes, finalNode, errorBreak, errorContinue);
   _root.execute = _root.graph.execute;
   _root.final = final;

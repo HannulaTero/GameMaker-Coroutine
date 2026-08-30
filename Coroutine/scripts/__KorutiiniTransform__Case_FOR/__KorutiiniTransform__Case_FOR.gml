@@ -17,7 +17,8 @@ function __KorutiiniTransform__Case_FOR(_node, _next, _break, _continue)
       KORUTIINI_CURRENT_EXECUTE = next;
     }
   }
-      
+  
+  
   // Loop condition, whether break out.
   var _cond = {
     next: undefined,
@@ -28,7 +29,8 @@ function __KorutiiniTransform__Case_FOR(_node, _next, _break, _continue)
       KORUTIINI_CURRENT_EXECUTE = __Korutiini_Execute(cond) ? next : jump;
     }
   };
-      
+  
+  
   // Loop iteration.
   var _iter = {
     next: undefined,
@@ -39,7 +41,8 @@ function __KorutiiniTransform__Case_FOR(_node, _next, _break, _continue)
       KORUTIINI_CURRENT_EXECUTE = next;
     }
   };
-      
+  
+  
   // Solve body and then patch, as loop target must be known beforehand.
   var _body = Generate(_node.body, _iter, _next, _iter);
   _init.next = _cond.execute;

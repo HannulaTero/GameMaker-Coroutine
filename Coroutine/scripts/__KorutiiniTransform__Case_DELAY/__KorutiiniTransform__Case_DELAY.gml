@@ -16,13 +16,15 @@ function __KorutiiniTransform__Case_DELAY(_node, _next, _break, _continue)
     "seconds",  function() { return 1.0; }, 
   );
   
+  
   static units = __Korutiini_Mapping(
     "micros",   function() { return time_source_units_seconds; }, 
     "millis",   function() { return time_source_units_seconds; }, 
     "frames",   function() { return time_source_units_frames; }, 
     "seconds",  function() { return time_source_units_seconds; }, 
   );
-      
+  
+  
   return {
     next: _next.execute,
     call: _node.call,

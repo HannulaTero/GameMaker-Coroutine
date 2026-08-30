@@ -12,7 +12,8 @@ function __KorutiiniTransform__Case_IF(_node, _next, _break, _continue)
   var _else = (_node.nodeElse != undefined)
     ? Generate(_node.nodeElse, _next, _break, _continue)
     : _next;
-      
+  
+  
   return {
     next: _then.execute, 
     jump: _else.execute,

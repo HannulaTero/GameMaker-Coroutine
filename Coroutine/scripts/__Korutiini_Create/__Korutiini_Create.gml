@@ -13,12 +13,14 @@ function __Korutiini_Create(_funcAST)
   static transform  = new __KorutiiniTransform();
   static prototypes = __KorutiiniRuntime_CachePrototypes();
   
+  
   // Pick coroutine prototype from cache.
   var _key = method_get_index(_funcAST);
   if (ds_map_exists(prototypes, _key))
   {
     return prototypes[? _key];
   }
+  
   
   // Otherwise create a new prototype, and generate function for it. 
   var _root = _funcAST();

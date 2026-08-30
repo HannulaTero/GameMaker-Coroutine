@@ -16,7 +16,8 @@ function __KorutiiniTransform__Case_WHILE(_node, _next, _break, _continue)
       KORUTIINI_CURRENT_EXECUTE = __Korutiini_Execute(cond) ? next : jump;
     }
   };
-      
+  
+  
   // Solve body and then patch, as loop target must be known beforehand.
   var _body = Generate(_node.body, _loop, _next, _loop);
   _loop.next = _body.execute;

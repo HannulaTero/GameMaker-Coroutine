@@ -20,7 +20,8 @@ function __KorutiiniTransform__Case_AWAIT_KORUTIINI(_node, _next, _break, _conti
       KORUTIINI_CURRENT_YIELDED = true;
     }
   };
-      
+  
+  
   return {
     next: _wait.execute,
     call: _node.call,

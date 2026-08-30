@@ -5,6 +5,7 @@
 */
 
 
+
 /**
 * No operation, this is used as a marker instead!
 * 
@@ -15,6 +16,7 @@ function __KorutiiniNode_NOP()
   gml_pragma("forceinline"); 
   return undefined;
 }
+
 
 
 /**
@@ -29,6 +31,7 @@ function __KorutiiniNode_NODE(_name)
 }
 
 
+
 /**
 * 
 * @returns {Struct}
@@ -38,6 +41,7 @@ function __KorutiiniNode_FINISH()
   gml_pragma("forceinline"); 
   return { name: "FINISH" }; 
 }
+
 
 
 /**
@@ -55,6 +59,7 @@ function __KorutiiniNode_BLOCK(_nodes)
 }
 
 
+
 /**
 * 
 * @param {Function} _call
@@ -68,6 +73,7 @@ function __KorutiiniNode_STMT(_call)
     call: method(undefined, _call) 
   }; 
 }
+
 
 
 /**
@@ -85,6 +91,7 @@ function __KorutiiniNode_LABEL(_label)
 }
 
 
+
 /**
 * 
 * @returns {Struct}
@@ -96,6 +103,7 @@ function __KorutiiniNode_YIELD()
 }
 
 
+
 /**
 * 
 * @returns {Struct}
@@ -105,6 +113,7 @@ function __KorutiiniNode_PAUSE()
   gml_pragma("forceinline"); 
   return { name: "PAUSE" };
 }
+
 
 
 /**
@@ -122,6 +131,7 @@ function __KorutiiniNode_SET(_call)
 }
 
 
+
 /**
 * 
 * @param {Function} _call
@@ -137,6 +147,7 @@ function __KorutiiniNode_YIELD_SET(_call)
 }
 
 
+
 /**
 * 
 * @param {Function} _call
@@ -150,6 +161,7 @@ function __KorutiiniNode_PAUSE_SET(_call)
     call: method(undefined, _call)
   };
 }
+
 
 
 /**
@@ -169,6 +181,7 @@ function __KorutiiniNode_DELAY(_call, _type)
 }
 
 
+
 /**
 * 
 * @param {String}   _type
@@ -185,6 +198,7 @@ function __KorutiiniNode_AWAIT(_type, _call)
 }
 
 
+
 /**
 * 
 * @returns {Struct}
@@ -194,6 +208,7 @@ function __KorutiiniNode_AWAIT_SUBTASKS()
   gml_pragma("forceinline"); 
   return { name: "AWAIT_SUBTASKS" }; 
 }
+
 
 
 /**
@@ -207,6 +222,7 @@ function __KorutiiniNode_AWAIT_REQUESTS()
 }
 
 
+
 /**
 * 
 * @returns {Struct}
@@ -216,6 +232,7 @@ function __KorutiiniNode_AWAIT_LISTENERS()
   gml_pragma("forceinline"); 
   return { name: "AWAIT_LISTENERS" }; 
 }
+
 
 
 /**
@@ -267,6 +284,7 @@ function __KorutiiniNode_IF_CHAIN()
 }
 
 
+
 /**
 * 
 * @param {Function} _cond
@@ -283,6 +301,7 @@ function __KorutiiniNode_IF(_cond, _then, _else=undefined)
     nodeElse: _else,
   }; 
 }
+
 
 
 /**
@@ -322,6 +341,7 @@ function __KorutiiniNode_SWITCH()
 }
 
 
+
 /**
 * 
 * @param {Struct} _body
@@ -335,6 +355,7 @@ function __KorutiiniNode_LOOP(_body)
     body: _body,
   }; 
 }
+
 
 
 /**
@@ -354,6 +375,7 @@ function __KorutiiniNode_WHILE(_cond, _body)
 }
 
 
+
 /**
 * 
 * @param {Function} _call
@@ -369,6 +391,7 @@ function __KorutiiniNode_REPEAT(_call, _body)
     body: _body,
   }; 
 }
+
 
 
 /**
@@ -390,6 +413,7 @@ function __KorutiiniNode_DO(_body, _cond)
 }
 
 
+
 /**
 * 
 * @param {Function} _init
@@ -409,6 +433,7 @@ function __KorutiiniNode_FOR(_init, _cond, _iter, _body)
     body: _body,
   }; 
 }
+
 
 
 /**

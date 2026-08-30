@@ -19,20 +19,24 @@ call_later(
     {
       instance_activate_object(__OBJ_Korutiini_Manager);
     }
+    
     if (instance_exists(__OBJ_Korutiini_Timer) == false)
     {
       instance_activate_object(__OBJ_Korutiini_Timer);
     }
+    
       
     // If activation failed, recreate them.
     if (instance_exists(__OBJ_Korutiini_Manager) == false)
     {
       instance_create_depth(0, 0, 0, __OBJ_Korutiini_Manager);
     }
+    
     if (instance_exists(__OBJ_Korutiini_Timer) == false)
     {
       instance_create_depth(0, 0, 0, __OBJ_Korutiini_Timer);
     }
+    
   }, true
 );
 
