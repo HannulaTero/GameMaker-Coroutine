@@ -460,12 +460,57 @@ END
 AWAIT_SUBTASKS
 
 
-// 
-
-
 // Not needed anymore.
 buffer_delete(temp.helper);
 array_resize(temp.sources, 0);
+
+
+#endregion
+//
+//===========================================================
+// 
+#region Transform the extracted parts.
+
+
+FOREACH file : value IN sources THEN
+  // TODO.
+END
+AWAIT_SUBTASKS
+
+
+#endregion
+//
+//===========================================================
+// 
+#region Save the new caches.
+
+
+
+#endregion
+//
+//===========================================================
+// 
+#region Get the final generated content.
+
+
+generated = buffer_create(32, buffer_grow, 1);
+buffer_seek(generated, buffer_seek_start, 1);
+
+
+// Get the already cached.
+FOREACH file : value IN fileValidCaches THEN
+  temp.size = buffer_get_size(file.buffer);
+  buffer_copy(file.buffer, 0, temp.size, generated, buffer_tell(generated));
+  buffer_seek(generated, buffer_seek_relative, temp.size);
+END
+AWAIT_SUBTASKS
+
+
+// Get the newly generated results.
+FOREACH file : value IN sources THEN
+  // TODO.
+END
+AWAIT_SUBTASKS
 
 
 #endregion
