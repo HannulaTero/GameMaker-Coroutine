@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"SCR_KorutiiniBuilder_Scanner",
+  "%Name":"KorutiiniBuilder_Message",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"SCR_KorutiiniBuilder_Scanner",
+  "name":"KorutiiniBuilder_Message",
   "parent":{
     "name":"Korutiini Builder",
     "path":"folders/Korutiini Builder.yy",

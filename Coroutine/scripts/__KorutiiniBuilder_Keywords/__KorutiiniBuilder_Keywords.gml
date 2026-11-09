@@ -5,10 +5,13 @@
 * 
 * User might have decided to change to macros (which is allowed),
 * therefore it must be fetched, so parsing can be done correctly.
+* -> Sugar Keywords are updated during building process.
 */ 
-function __KorutiiniBuilder_KeywordsSugar()
+function __KorutiiniBuilder_Keywords()
 {
-  return {
+  static keywords = {
+    
+    // Korutiini Sugar keywords
     "KORUTIINI"       : "",
     "DISPATCH"        : "",
     "ON_INIT"         : "",
@@ -41,5 +44,24 @@ function __KorutiiniBuilder_KeywordsSugar()
     "CANCEL"          : "",
     "GOTO"            : "",
     "PRINT"           : "",
+    
+    // GML keywords.
+    "IF"        : "if",
+    "ELSE"      : "else",
+    "SWITCH"    : "switch",
+    "CASE"      : "case",
+    "DEFAULT"   : "default",
+    "FOR"       : "for",
+    "WHILE"     : "while",
+    "WITH"      : "with",
+    "DO"        : "do",
+    "UNTIL"     : "until",
+    "REPEAT"    : "repeat",
+    "CONTINUE"  : "continue",
+    "BREAK"     : "break",
+    "RETURN"    : "return",
+    "EXIT"      : "exit",
   };
+  
+  return keywords;
 }

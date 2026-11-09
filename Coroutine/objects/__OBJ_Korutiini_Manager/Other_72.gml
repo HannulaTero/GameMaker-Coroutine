@@ -31,16 +31,20 @@ with(asyncRequests[? async_load[? "id"]])
   {
     switch(_status)
     {
-      case 200: 
+      case 200: {
         onSuccess(self);
         Destroy();
         break;
-      case 404:
+      }
+      case 404: {
         Failure();
         break;
-      default:
+      }
+      default: {
+        var _request = async_load[? "id"];
         show_debug_message($"Async Save/Load request[{_request}]: Unknown status '{_status}'");
         break;
+      }
     }
   }
 }

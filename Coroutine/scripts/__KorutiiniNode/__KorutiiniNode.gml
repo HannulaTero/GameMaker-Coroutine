@@ -378,6 +378,24 @@ function __KorutiiniNode_WHILE(_cond, _body)
 
 /**
 * 
+* @param {Function} _cond
+* @param {Struct}   _body
+* @returns {Struct}
+*/
+function __KorutiiniNode_WITH(_cond, _body) 
+{ 
+  gml_pragma("forceinline"); 
+  return {
+    name: "WITH", 
+    cond: method(undefined, _cond),
+    body: _body,
+  }; 
+}
+
+
+
+/**
+* 
 * @param {Function} _call
 * @param {Struct}   _body
 * @returns {Struct}

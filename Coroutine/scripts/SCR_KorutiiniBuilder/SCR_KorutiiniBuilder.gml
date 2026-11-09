@@ -29,7 +29,7 @@ KORUTIINI
   name : "Korutiini Builder - Initialize",
 
 ON_CANCEL
-  show_debug_message("[Korutiini][Builder] Initialization has failed!");
+  KorutiiniBuilder_Message("Initialization has failed!");
 
 
 BEGIN
@@ -59,11 +59,16 @@ fileSources     = [ ];
 fileValidCaches = [ ];
 
 
+// The resulting generated content.
+generated = buffer_create(32, buffer_grow, 1);
+buffer_seek(generated, buffer_seek_start, 1);
+
+
 // Keyword-related.
 // -> The prefix is what macros use at Korutiin-Sugar.
 // -> Keyowrd user handles must be fetched.
 keywordPrefix = "__KORUTIINISUGAR_KEYWORD__";
-keywordLabels = __KorutiiniBuilder_KeywordsSugar();
+keywordLabels = __KorutiiniBuilder_Keywords();
 
 keyword_KORUTIINI = "<undefined-keyword>";
 
@@ -275,13 +280,16 @@ END
 #region Inform which keywords have been found. Set convenience accessess.
 
 
-show_debug_message("Found following labels for keywords: ");
+
+temp.text = "";
 
 FOREACH keyword : key, label : value IN keywordLabels THEN
   temp.count = string_length(keyword);
   temp.space = string_repeat(" ", 12 - temp.count);
-  show_debug_message($">> {keyword}{temp.space} : {label}");
+  temp.text += ($">> {keyword}{temp.space} : {label}");
 END
+
+KorutiiniBuilder_Message($"Found following labels for keywords: {temp.text}");
 
 
 // For convenience.
@@ -412,7 +420,7 @@ array_resize(fileSources, 0);
 #region Check the target files whether they use korutiini.
 
 
-temp.sources = [ ];
+sources = [ ];
 
 FOREACH file : value IN temp.recheck THEN
   
@@ -423,7 +431,7 @@ FOREACH file : value IN temp.recheck THEN
   // Check whether file mentions korutiini anywhere.
   // -> This quick test doesn't consider strings or comments.
   IF string_pos(keyword_KORUTIINI, file.source) > 0 THEN 
-    array_push(temp.sources, file);
+    array_push(sources, file);
     CONTINUE;
   END
   
@@ -442,40 +450,14 @@ array_resize(temp.recheck, 0);
 //
 //===========================================================
 // 
-#region Extract parts of sources, which use korutiini.
-
-
-// Preparations - trying to match korutiini-keyword.
-temp.length = string_byte_length(keyword_KORUTIINI);
-temp.helper = buffer_create(temp.length, buffer_fixed, 1);
-buffer_poke(temp.helper, 0, buffer_text, keyword_KORUTIINI);
-buffer_seek(temp.helper, buffer_seek_start, 0);
+#region Extract and transforms parts of sources, which use korutiini.
 
 
 // Find proper parts, which use coroutine.
-sources = [ ];
-FOREACH file : value IN temp.sources THEN
-  KorutiiniBuilder_FindKorutiiniUsages(sources, file, temp.helper);
-END
-AWAIT_SUBTASKS
-
-
-// Not needed anymore.
-buffer_delete(temp.helper);
-array_resize(temp.sources, 0);
-
-
-#endregion
-//
-//===========================================================
-// 
-#region Transform the extracted parts.
-
-
 FOREACH file : value IN sources THEN
-  // TODO.
-END
-AWAIT_SUBTASKS
+  KorutiiniBuilder_ExtractAndTransform(sources, file);
+  AWAIT_SUBTASKS
+END 
 
 
 #endregion
@@ -485,16 +467,24 @@ AWAIT_SUBTASKS
 #region Save the new caches.
 
 
+FOREACH file : value IN sources THEN
+  ASYNC_REQUEST 
+    DO_REQUEST 
+      temp.size = buffer_get_size(file.generated);
+      temp.path = filename_change_ext(file.path, ".kocache");
+      buffer_save_async(file.generated, temp.path, 0, temp.size);
+    ON_FAILURE
+      KorutiiniBuilder_Warning("Saving cache failed.");
+  ASYNC_END
+END 
+AWAIT_REQUESTS
+
 
 #endregion
 //
 //===========================================================
 // 
-#region Get the final generated content.
-
-
-generated = buffer_create(32, buffer_grow, 1);
-buffer_seek(generated, buffer_seek_start, 1);
+#region Gather the final generated content.
 
 
 // Get the already cached.
@@ -502,15 +492,32 @@ FOREACH file : value IN fileValidCaches THEN
   temp.size = buffer_get_size(file.buffer);
   buffer_copy(file.buffer, 0, temp.size, generated, buffer_tell(generated));
   buffer_seek(generated, buffer_seek_relative, temp.size);
+  buffer_delete(file.buffer);
+  file.source = undefined;
 END
 AWAIT_SUBTASKS
 
 
 // Get the newly generated results.
 FOREACH file : value IN sources THEN
-  // TODO.
+  temp.size = buffer_get_size(file.generated);
+  buffer_copy(file.generated, 0, temp.size, generated, buffer_tell(generated));
+  buffer_seek(generated, buffer_seek_relative, temp.size);
+  buffer_delete(file.buffer);
+  file.source = undefined;
 END
 AWAIT_SUBTASKS
+
+
+// Save the final generated content.
+ASYNC_REQUEST 
+  DO_REQUEST 
+    temp.size = buffer_get_size(generated);
+    return buffer_save_async(generated, fileGenerated.path, 0, temp.size);
+  ON_FAILURE
+    KorutiiniBuilder_Failure("Saving builder result failed.");
+ASYNC_END
+AWAIT_REQUESTS
 
 
 #endregion
@@ -521,7 +528,7 @@ AWAIT_SUBTASKS
 
 
 var _time = (get_timer() - timeBegin) / 1000;
-show_debug_message($"[Korutiini][Builder] Finished! Time taken : {_time} ms");
+KorutiiniBuilder_Message($"Finished! Time taken : {_time} ms");
 game_end();
 
 

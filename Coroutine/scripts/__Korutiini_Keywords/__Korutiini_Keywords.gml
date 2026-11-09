@@ -67,6 +67,7 @@
 
 #macro __KORUTIINI_KEYWORD__LOOP              }), __KorutiiniNode_LOOP(__KorutiiniNode_BLOCK([ __KorutiiniNode_STMT(function() {
 #macro __KORUTIINI_KEYWORD__WHILE             }), __KorutiiniNode_WHILE((function() { return
+#macro __KORUTIINI_KEYWORD__WITH              }), __KorutiiniNode_WITH((function() { return
 #macro __KORUTIINI_KEYWORD__REPEAT            }), __KorutiiniNode_REPEAT((function() { return
 #macro __KORUTIINI_KEYWORD__DO                }), __KorutiiniNode_DO(__KorutiiniNode_BLOCK([ __KorutiiniNode_STMT(function() {
 #macro __KORUTIINI_KEYWORD__UNTIL             }) ]), ([ (function() { return

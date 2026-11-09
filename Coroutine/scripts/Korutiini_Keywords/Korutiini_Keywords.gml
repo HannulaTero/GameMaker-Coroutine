@@ -116,6 +116,7 @@
 
 
 #macro LOOP             __KORUTIINI_KEYWORD__LOOP
+#macro WITH             __KORUTIINI_KEYWORD__WITH
 #macro WHILE            __KORUTIINI_KEYWORD__WHILE
 #macro REPEAT           __KORUTIINI_KEYWORD__REPEAT
 #macro DO               __KORUTIINI_KEYWORD__DO

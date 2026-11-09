@@ -53,6 +53,7 @@ function __KorutiiniTransform() constructor
     "STMT",             __KorutiiniTransform__Case_STMT,
     "SWITCH",           __KorutiiniTransform__Case_SWITCH,
     "WHILE",            __KorutiiniTransform__Case_WHILE,
+    "WITH",             __KorutiiniTransform__Case_WITH,
     "YIELD",            __KorutiiniTransform__Case_YIELD,
     "YIELD_SET",        __KorutiiniTransform__Case_YIELD_SET,
   );

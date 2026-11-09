@@ -10,20 +10,24 @@ with(asyncRequests[? async_load[? "id"]])
   // Trigger request based on status.
   switch(async_load[? "status"])
   {
-    case "1": 
+    case "1": {
       onPending(self);
       break;
-    case "2": 
+    }
+    case "2": {
       onSuccess(self);
       Destroy();
       break;
+    }
     case "0": 
-    case "3": 
+    case "3": {
       Failure();
       break;
-    default:
+    }
+    default: {
       throw($"Async Social: Unknown status '{async_load[? "status"]}'.");
       break;
+    }
   }
 }
 
