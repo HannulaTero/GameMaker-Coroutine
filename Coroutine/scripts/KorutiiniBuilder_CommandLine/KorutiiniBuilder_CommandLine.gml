@@ -15,6 +15,7 @@ function KorutiiniBuilder_CommandLine() constructor
   
   
   /**
+  * Returns parameter-index for given name.
   */ 
   static GetIndex = function(_name)
   {
@@ -23,14 +24,16 @@ function KorutiiniBuilder_CommandLine() constructor
   
   
   /**
+  * Returns argument for given parameter-name.
   */ 
-  static GetParam = function(_name)
+  static GetParam = function(_name, _argNumber=0)
   {
-    return parameter_string(self.parameters[$ _name] + 1);
+    return parameter_string(self.parameters[$ _name] + _argNumber + 1);
   };
   
   
   /**
+  * Returns whether parameter exists.
   */ 
   static Exists = function(_name)
   {

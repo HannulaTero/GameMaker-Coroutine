@@ -5,6 +5,9 @@
 * Assumes that ends in valid string, as otherwise GML compiler 
 * would not let game to compile. And this tokenizer works as preproc.
 * 
+* @param {Id.Source} _tokens
+* @param {Id.Source} _source
+* returns {Undefined}
 */ 
 function KorutiiniBuilderScanner_GetStringSingle(_tokens, _source)
 {

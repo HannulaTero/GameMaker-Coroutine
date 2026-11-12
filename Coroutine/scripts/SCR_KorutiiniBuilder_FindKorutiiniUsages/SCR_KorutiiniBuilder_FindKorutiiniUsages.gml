@@ -1,14 +1,17 @@
 
 
 /**
+* Returns whether given file contains usages of Korutiini.
+* This handles strings and comments.
 * 
 * @param {Array}                      _target   Results are pushed here.
-* @param {Struct.FolderCrawler_File}  _file     Modified FC-File, containing buffer etc.
-* @param {Id.Buffer}                  _helper   Contains bytes to match KORUTIINI-keyword.
+* @param {Struct.FolderCrawler_File}  _file     Modified FolderCrawlerFile-struct, containing keys for buffer etc. 
+* @param {Id.Buffer}                  _helper   Contains bytes to match KORUTIINI -keyword (defined by user).
 * @ignore
 */ 
 function KorutiiniBuilder_FindKorutiiniUsages(_target, _file, _helper)
 {
+// Define reusable coroutine.
 static prototype = KORUTIINI BEGIN 
   
   // Iterate through whole buffer.
@@ -63,10 +66,12 @@ static prototype = KORUTIINI BEGIN
       buffer_read(helper, buffer_u8) == buffer_read(file.buffer, buffer_u8)
     THEN END
     
+    
     // DEBUG if matched partially.
     IF buffer_tell(helper) > 3 THEN
       show_debug_message($"Match partially: {buffer_tell(helper)}");
     END
+    
     
     // If matched in full.
     IF buffer_tell(helper) == buffer_get_size(helper) THEN

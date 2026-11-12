@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"KorutiiniBuilderScanner_IsOperatorBegin",
+  "%Name":"KorutiiniBuilderScanner_GetNumber",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"KorutiiniBuilderScanner_IsOperatorBegin",
+  "name":"KorutiiniBuilderScanner_GetNumber",
   "parent":{
     "name":"Scanner",
     "path":"folders/Korutiini Builder/Scanner.yy",

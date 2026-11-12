@@ -5,5 +5,5 @@
 */ 
 function KorutiiniBuilder_Warning(_message)
 {
-  show_debug_message($"[Korutiini][Builder][Warning]\n{_message}\n\n");
+  show_debug_message($"[Korutiini][Builder][WARNING]\n{_message}\n\n");
 }

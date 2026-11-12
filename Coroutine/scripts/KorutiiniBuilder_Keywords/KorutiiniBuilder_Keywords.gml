@@ -7,7 +7,7 @@
 * therefore it must be fetched, so parsing can be done correctly.
 * -> Sugar Keywords are updated during building process.
 */ 
-function __KorutiiniBuilder_Keywords()
+function KorutiiniBuilder_Keywords()
 {
   static keywords = {
     

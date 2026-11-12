@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"KorutiiniBuilder_Failure",
   "parent":{
-    "name":"Korutiini Builder",
-    "path":"folders/Korutiini Builder.yy",
+    "name":"Utility",
+    "path":"folders/Korutiini Builder/Utility.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

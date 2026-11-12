@@ -1,12 +1,13 @@
 
 
 /**
-* Checks whether byte is operator, or possible a beginning of larger one.
+* Checks whether byte beginning of an operator.
 * 
 * @param {Real} _byte
 */ 
-function KorutiiniBuilderScanner_IsOperatorBegin(_byte)
+function KorutiiniBuilderScanner_IsBeginOperator(_byte)
 {
+  // Create lookup-table.
   static lookup = method_call(function()
   {
     var _chars = "";

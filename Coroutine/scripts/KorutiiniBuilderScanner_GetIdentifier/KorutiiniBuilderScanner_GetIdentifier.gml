@@ -5,6 +5,7 @@
 * 
 * @param {Id.Source} _tokens
 * @param {Id.Source} _source
+* returns {Undefined}
 */ 
 function KorutiiniBuilderScanner_GetIdentifier(_tokens, _source)
 {

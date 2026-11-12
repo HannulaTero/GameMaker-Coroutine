@@ -1,7 +1,7 @@
 
 
 /**
-* 
+* Logging builder messages.
 */ 
 function KorutiiniBuilder_Message(_message)
 {

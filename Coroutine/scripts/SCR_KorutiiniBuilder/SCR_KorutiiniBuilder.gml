@@ -5,11 +5,12 @@
 /*
   
   Coroutine will modify file-structs of FolderCrawler.
-  -> Mostly adds "buffer", "source", "hash", "cache"
+  -> Mostly adds "buffer", "source", "hash", "cache", "generated"
     -> Buffer is loaded contents of the file.
     -> Source is buffer loaded as string.
     -> Hash is MD5 hash of the buffer.
     -> Cache is reference to other file.
+    -> Generated is buffer with the modified source.
   -> For keywords it also does "lines" & "tokens"
   
   
@@ -61,14 +62,14 @@ fileValidCaches = [ ];
 
 // The resulting generated content.
 generated = buffer_create(32, buffer_grow, 1);
-buffer_seek(generated, buffer_seek_start, 1);
+buffer_seek(generated, buffer_seek_start, 0);
 
 
 // Keyword-related.
 // -> The prefix is what macros use at Korutiin-Sugar.
 // -> Keyowrd user handles must be fetched.
 keywordPrefix = "__KORUTIINISUGAR_KEYWORD__";
-keywordLabels = __KorutiiniBuilder_Keywords();
+keywordLabels = KorutiiniBuilder_Keywords();
 
 keyword_KORUTIINI = "<undefined-keyword>";
 
@@ -238,7 +239,7 @@ END
 // Expects "#macro LABEL KEYWORD" -> three tokens.
 FOREACH tokens : value IN fileKeywords.tokens THEN 
   
-  // Skip over the non-macro-definitions.
+  // Skip over the lines with not expected structure.
   IF (array_length(tokens) < 3) || (tokens[0] != "#macro") THEN
     CONTINUE
   END
@@ -280,7 +281,6 @@ END
 #region Inform which keywords have been found. Set convenience accessess.
 
 
-
 temp.text = "";
 
 FOREACH keyword : key, label : value IN keywordLabels THEN
@@ -304,7 +304,7 @@ keyword_KORUTIINI = keywordLabels[$ "KORUTIINI"];
 
 
 // Load all files, tag to file-asset.
-// Even if there is million lines of code, each line being taking 64 characters,
+// Even if there is million lines of code and each line takes 64 characters,
 // that is should still be about 64MB of RAM usage. 
 FOREACH file : value IN fileSources THEN
 
@@ -357,7 +357,7 @@ END
 //
 //===========================================================
 // 
-#region Wait everything to load into RAM.
+#region Wait both sources and caches to be loaded into RAM.
 
 
 AWAIT_REQUESTS
@@ -387,8 +387,12 @@ FOREACH file : value IN fileSources THEN
   
   // Get cache hash - stored in first line as comment.
   // This skips first 3 characters, which are comment "// ".
-  buffer_copy(file.cache.buffer, 3, 32, temp.helper, 0);
-  file.cache.hash = buffer_read(temp.helper, buffer_text);
+  IF buffer_get_size(file.cache.buffer) >= (32 + 3) THEN
+    buffer_copy(file.cache.buffer, 3, 32, temp.helper, 0);
+    file.cache.hash = buffer_read(temp.helper, buffer_text);
+  ELSE
+    file.cache.hash = undefined;
+  END 
   
   
   // Compare the hashes.
@@ -430,6 +434,7 @@ FOREACH file : value IN temp.recheck THEN
   
   // Check whether file mentions korutiini anywhere.
   // -> This quick test doesn't consider strings or comments.
+  // -> Alternatively "KorutiiniBuilder_FindKorutiiniUsages" could be used.
   IF string_pos(keyword_KORUTIINI, file.source) > 0 THEN 
     array_push(sources, file);
     CONTINUE;
@@ -455,7 +460,7 @@ array_resize(temp.recheck, 0);
 
 // Find proper parts, which use coroutine.
 FOREACH file : value IN sources THEN
-  KorutiiniBuilder_ExtractAndTransform(sources, file);
+  KorutiiniBuilder_ExtractAndTransform(file);
   AWAIT_SUBTASKS
 END 
 
@@ -474,7 +479,7 @@ FOREACH file : value IN sources THEN
       temp.path = filename_change_ext(file.path, ".kocache");
       buffer_save_async(file.generated, temp.path, 0, temp.size);
     ON_FAILURE
-      KorutiiniBuilder_Warning("Saving cache failed.");
+      KorutiiniBuilder_Warning($"Saving cache failed for: {file.path}.");
   ASYNC_END
 END 
 AWAIT_REQUESTS
@@ -495,7 +500,6 @@ FOREACH file : value IN fileValidCaches THEN
   buffer_delete(file.buffer);
   file.source = undefined;
 END
-AWAIT_SUBTASKS
 
 
 // Get the newly generated results.
@@ -506,7 +510,6 @@ FOREACH file : value IN sources THEN
   buffer_delete(file.buffer);
   file.source = undefined;
 END
-AWAIT_SUBTASKS
 
 
 // Save the final generated content.
@@ -515,7 +518,7 @@ ASYNC_REQUEST
     temp.size = buffer_get_size(generated);
     return buffer_save_async(generated, fileGenerated.path, 0, temp.size);
   ON_FAILURE
-    KorutiiniBuilder_Failure("Saving builder result failed.");
+    KorutiiniBuilder_Failure("Saving builder result failed!");
 ASYNC_END
 AWAIT_REQUESTS
 
